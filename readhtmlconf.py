@@ -119,6 +119,7 @@ def read_man_conf(csv_man_path):
 
 
 def read_conf(json_path):
+    txt=''
     try:
         with open(json_path, "r") as f:
             txt = f.read()
