@@ -1,0 +1,60 @@
+app
+
+<w xml:id="Il1266w3">
+  <app resp="#1hd">
+    <rdg varSeq="1">prist</rdg>
+    <rdg varSeq="2">
+      <subst>
+        <del rend="cross">prist</del>
+        <add place="inl">prent</add>
+      </subst>
+    </rdg>
+    <rdg varSeq="3">prent</rdg>
+  </app>
+</w>
+
+<div class="w" id="Il1266w3">
+    <span class="app">
+        <span class="rdg_1">prist</span>
+
+        <a href="#" class="rdg_2">
+            <span class="delcross">prist</span>
+            <span class="addinl">prent</span>
+        </a>
+
+        <span class="rdg_3">prent</span>
+    </span>
+</div>
+
+<div class="w" id="xIl1266w3">
+    <span class="app_int">
+        <span class="rdg_1">prist</span>
+
+        <span class="rdg_2">
+            <span class="del_intcross">prist</span>
+            <span class="add_intinl">prent</span>
+        </span>
+
+        <a href="#" class="rdg_3">prent</a>
+    </span>
+</div>
+-------------------------------------
+rs
+<rs type="nationality" ref="#GRU">
+  <w xml:id="Il1166w2">greu</w>
+</rs>
+
+<rs type="allegory" ref="#ONG">
+  <w xml:id="Il1304w2">ongre</w>
+</rs>
+
+dip NON FA NULLA
+
+inter
+
+<span class="rs_int_nationality">
+<div class="w" id="xIl1166w2">greu</div>
+</span>
+<span class="rs_int_allegory">
+<div class="w" id="xIl1304w2">ongre</div>
+</span>
