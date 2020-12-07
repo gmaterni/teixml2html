@@ -213,7 +213,7 @@ class Xml2Html(object):
             sys.exit()
         return attrs
 
-    # ritorna attrs {} in una strr che inizia, se esisotno,
+    # ritorna attrs {} in una str che inizia, se esisotno,
     # con class=".."  id=".." ...
     def attrs2html(self, attrs):
         ks = []
