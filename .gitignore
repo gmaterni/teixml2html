@@ -2,6 +2,7 @@ html/
 xsl/
 xml/
 log/
+bin/
 .vscode/
 .history/
 __pycache__/
