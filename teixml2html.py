@@ -11,17 +11,23 @@ import sys
 import copy
 import argparse
 from bs4 import BeautifulSoup
-from readhtmlconf import read_tags_conf,read_conf
+from readhtmlconf import read_tags_conf, read_conf
 from htmlbuilder import HtmlBuilder
 from ualog import Log
 from uainput import Inp
 
+__date__ = "15-12-2020"
+__version__ = "0.0.1"
+__author__ = "Marta Materni"
 
 def pp(data):
     if data is None:
         return ""
     s = pprint.pformat(data, indent=2, width=80)
     return s+os.linesep
+__date__ = "15-12-2020"
+__version__ = "0.0.1"
+__author__ = "Marta Materni"
 
 
 loginfo = Log()
@@ -31,7 +37,7 @@ inp = Inp()
 
 class Xml2Html(object):
 
-    def __init__(self, xml_path, html_path, csv_path,json_path,deb):
+    def __init__(self, xml_path, html_path, csv_path, json_path, deb):
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.err.log", 1)
         inp.enable(deb)
@@ -39,12 +45,13 @@ class Xml2Html(object):
         self.xml_path = xml_path
         self.html_path = html_path
         self.tags_conf = read_tags_conf(csv_path)
+        js=self.tags_conf.get("before_id",{})
+        self.before_id=js.get("tag","")
         self.conf = read_conf(json_path)
         #
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
         # self.xx = False
-       
 
     def node_liv(self, node):
         d = 0
@@ -163,7 +170,7 @@ class Xml2Html(object):
         except Exception as e:
             logerr.set_out(1)
             logerr.log(e)
-            logerr.log("text_format")
+            logerr.log("text_format()")
             logerr.log("text:", text)
             logerr.log("pars:", pars)
             sys.exit()
@@ -206,7 +213,7 @@ class Xml2Html(object):
                 attrs[k] = c_attrs[k]
         except Exception as e:
             logerr.log(e)
-            logerr.log("attrs_builder")
+            logerr.log("attrs_builder()")
             logerr.log("x_items:", x_items)
             logerr.log("c_keys:", c_keys)
             logerr.log("c_attrs:", c_attrs)
@@ -224,6 +231,9 @@ class Xml2Html(object):
         for k in attrs.keys():
             if k not in ['id', 'class']:
                 ks.append(k)
+        id=attrs.get('id',None)
+        if id is not None:
+            attrs['id']=f'{self.before_id}{id}'
         ls = [f'{k}="{attrs[k]}"' for k in ks]
         return " ".join(ls)
 
@@ -288,19 +298,21 @@ class Xml2Html(object):
         #
         if html_attrs_str.find('%') > -1:
             html_attrs_str = self.text_format(html_attrs_str, x_items)
-        #
+        # formatta c_text itilizzando ext_items (items estsesi + text)
         if c_text.find('%') > -1:
             x_text_is_par = self.text_is_text_params(c_text)
             c_text = self.text_format(c_text, ext_items)
+            # text è stato utilizzato come parametro
             if x_text_is_par:
                 x_text = ''
+        # formatta c_text utilizzando c_params
         if c_text.find('%') > -1:
             c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
-        ##################### _XXX_
-        if c_tag.find('_x') >-1:
-            c_tag=f'{c_tag}_{x_data["tag"]}'
+        # 
+        if c_tag.find('_x') > -1:
+            c_tag = f'{c_tag}_{x_data["tag"]}'
             print(c_tag)
             inp.inp("!")
         ####################
@@ -342,12 +354,11 @@ class Xml2Html(object):
             inp.inp()
         ################################
 
-    def setting_pars_html(self,html):
-        pars=self.conf.get("html_params",{})
-        for k,v in pars.items():
-            html=html.replace(k,v)
+    def setting_pars_html(self, html):
+        pars = self.conf.get("html_params", {})
+        for k, v in pars.items():
+            html = html.replace(k, v)
         return html
-
 
     def write_html(self):
         self.hb.init()
@@ -358,7 +369,7 @@ class Xml2Html(object):
         self.hb.end()
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
-        html=self.setting_pars_html(html)
+        html = self.setting_pars_html(html)
         with open(self.html_path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
@@ -366,8 +377,8 @@ class Xml2Html(object):
         # html su una riga versione per il debug
         # file_name.html => file_name_X.html
         html = self.hb.html_format()
-        html=self.setting_pars_html(html)
-        path=self.html_path.replace(".html","_X.html")
+        html = self.setting_pars_html(html)
+        path = self.html_path.replace(".html", "_X.html")
         with open(path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
@@ -381,15 +392,16 @@ class Xml2Html(object):
         os.chmod(self.html_path, 0o666)
         """
 
-def do_mauin(xml, html, tags, conf,deb=False):
-    Xml2Html(xml, html, tags, conf,deb).write_html()
+
+def do_mauin(xml, html, tags, conf, deb=False):
+    Xml2Html(xml, html, tags, conf, deb).write_html()
     print("ok")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
-        # print("release: %s  %s" % (__version__, __date__))
+        print("release: %s  %s" % (__version__, __date__))
         parser.print_help()
         sys.exit()
     parser.add_argument('-d',
@@ -420,7 +432,7 @@ if __name__ == "__main__":
                         metavar="",
                         help="-o <file_out.html>")
     args = parser.parse_args()
-    if args.html== args.xml:
+    if args.html == args.xml:
         print("Name File output errato")
         sys.exit(0)
-    do_mauin(args.xml, args.html, args.tag, args.cnf,args.deb)
+    do_mauin(args.xml, args.html, args.tag, args.cnf, args.deb)
