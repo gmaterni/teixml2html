@@ -85,7 +85,7 @@ class HtmlBuilder(object):
         self.clsopn(0)
         return self
 
-    # ultimo tag costrito
+    # ultimo tag costruito
     def tag_last(self):
         return self.node_lst[-1:][0]
 
@@ -94,7 +94,7 @@ class HtmlBuilder(object):
         s = os.linesep.join(self.node_lst)
         return s
 
-    # html su una sola riga con spazu fra i tag eliinati
+    # html su una sola riga eliminati spazi tra i tag
     def html_onerow(self):
         ls=[x.strip() for x in self.node_lst]
         s = "".join(ls)

@@ -1,6 +1,5 @@
 {
     "html_params": {
-        "MAN": "tor"
+        "%MAN%": "tor"
     },
-    "befotre_id": "i"
 }

@@ -1,35 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from pdb import set_trace
 import os
 import re
 import sys
-from pdb import set_trace
 from lxml import etree
 import pprint
 import sys
 import copy
 import argparse
-from bs4 import BeautifulSoup
-from readhtmlconf import read_tags_conf, read_conf
+from readhtmlconf import read_html_conf
+from readjson import read_json
 from htmlbuilder import HtmlBuilder
 from ualog import Log
 from uainput import Inp
 
 __date__ = "15-12-2020"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "Marta Materni"
+
 
 def pp(data):
     if data is None:
         return ""
-    s = pprint.pformat(data, indent=2, width=80)
+    s = pprint.pformat(data, indent=2, width=30)
     return s+os.linesep
-__date__ = "15-12-2020"
-__version__ = "0.0.1"
-__author__ = "Marta Materni"
 
 
+logconf = Log()
 loginfo = Log()
 logerr = Log()
 inp = Inp()
@@ -38,16 +37,21 @@ inp = Inp()
 class Xml2Html(object):
 
     def __init__(self, xml_path, html_path, csv_path, json_path, deb):
+        logconf.open("log/teixml2html.cnf.log", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.err.log", 1)
         inp.enable(deb)
         #
         self.xml_path = xml_path
         self.html_path = html_path
-        self.tags_conf = read_tags_conf(csv_path)
-        js=self.tags_conf.get("before_id",{})
-        self.before_id=js.get("tag","")
-        self.conf = read_conf(json_path)
+        # lettura confiurazioni
+        self.man_conf = read_json(json_path)
+        logconf.log(">> man_coonf",pp(self.man_conf)).prn(0)
+        self.html_conf = read_html_conf(csv_path)
+        logconf.log(">> html_conf",pp(self.html_conf)).prn(0)
+        #precede id per diplomatia e interpretativa
+        rd = self.html_conf.get("before_id",{})
+        self.before_id = rd.get('tag',"")
         #
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
@@ -231,9 +235,9 @@ class Xml2Html(object):
         for k in attrs.keys():
             if k not in ['id', 'class']:
                 ks.append(k)
-        id=attrs.get('id',None)
+        id = attrs.get('id', None)
         if id is not None:
-            attrs['id']=f'{self.before_id}{id}'
+            attrs['id'] = f'{self.before_id}{id}'
         ls = [f'{k}="{attrs[k]}"' for k in ks]
         return " ".join(ls)
 
@@ -243,9 +247,9 @@ class Xml2Html(object):
     # la key è quella ottenuta dal tag xml e l'eventuale attributo
     def get_conf_data(self, x_data):
         xml_tag = x_data['tag']
-        row_data = self.tags_conf.get(xml_tag, None)
+        row_data = self.html_conf.get(xml_tag, None)
         if row_data is None:
-            row_data = self.tags_conf.get('x', {})
+            row_data = self.html_conf.get('x', {})
         tag = row_data.get('tag', f"_x_{xml_tag}")
         p = tag.find('+')
         if p > -1:
@@ -257,9 +261,9 @@ class Xml2Html(object):
             lsv = [x_items[k] for k in lsk if k in x_items.keys()]
             attrs_val = '+'.join(lsv)
             tag_csv = xml_tag+'+'+attrs_val
-            row_data = self.tags_conf.get(tag_csv, None)
+            row_data = self.html_conf.get(tag_csv, None)
             if row_data is None:
-                row_data = self.tags_conf.get('x+y', None)
+                row_data = self.html_conf.get('x+y', None)
         else:
             tag_csv = xml_tag
         self.store_xml_data[tag_csv] = x_data
@@ -310,10 +314,10 @@ class Xml2Html(object):
             c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
-        # 
+        #
         if c_tag.find('_x') > -1:
             c_tag = f'{c_tag}_{x_data["tag"]}'
-            print(c_tag)
+            loginfo.log(c_tag).prn()
             inp.inp("!")
         ####################
         html_data = {
@@ -354,8 +358,8 @@ class Xml2Html(object):
             inp.inp()
         ################################
 
-    def setting_pars_html(self, html):
-        pars = self.conf.get("html_params", {})
+    def set_html_pramas(self, html):
+        pars = self.man_conf.get("html_params", {})
         for k, v in pars.items():
             html = html.replace(k, v)
         return html
@@ -367,17 +371,18 @@ class Xml2Html(object):
             self.html_append(nd)
         self.hb.del_tags('XXX')
         self.hb.end()
+        #
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
-        html = self.setting_pars_html(html)
+        html = self.set_html_pramas(html)
         with open(self.html_path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
-
-        # html su una riga versione per il debug
+        #
+        # html formattao versione per il debug
         # file_name.html => file_name_X.html
         html = self.hb.html_format()
-        html = self.setting_pars_html(html)
+        html = self.set_html_pramas(html)
         path = self.html_path.replace(".html", "_X.html")
         with open(path, "w+") as f:
             f.write(html)

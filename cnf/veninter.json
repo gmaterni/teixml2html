@@ -1,6 +1,5 @@
 {
     "html_params": {
-        "MAN": "ven"
+        "%MAN%": "ven"
     },
-    "befotre_id": "i"
 }

@@ -1,6 +1,5 @@
 {
     "html_params": {
-        "MAN": "par"
+        "%MAN%": "par"
     },
-    "brfotre_id": "d"
 }

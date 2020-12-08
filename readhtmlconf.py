@@ -4,10 +4,8 @@ import os
 import sys
 from ualog import Log
 import traceback 
-import json
 # from pdb import set_trace
 TAG_COL_NUM=7
-MAN_COL_NUM=3
 
 logerr=Log()
 logerr.open("log/readhtmlconf.err.log",1)
@@ -76,59 +74,9 @@ def tags_cvs2json(csv):
             sys.exit()
     return js
 
-"""
-par_name|par_val
-"""
-def man_cvs2json(csv):
-    lsb=['','','','','','','']
-    js = {}
-    for row in csv:
-        if row.strip()=="":
-            continue
-        try:
-            row= row.replace(os.linesep,'')
-            flds = row.split('|')
-            if len(flds)<MAN_COL_NUM:
-                le=len(flds)
-                flds.extend(lsb[0:MAN_COL_NUM-le])
-            flds=[x.strip() for x in flds]
-            par_name = flds[0]
-            par_val = flds[1]
-            js[par_name] =par_val
-        except Exception as e:
-            s=traceback.format_exc()
-            logerr.log("man_csv2json")
-            logerr.log(s)
-            logerr.log(str(e))
-            logerr.log(row)
-            sys.exit()
-    return js
-
-
-def read_tags_conf(csv_path):
+def read_html_conf(csv_path):
     with open(csv_path, "r+") as f:
         csv = f.readlines()
     js = tags_cvs2json(csv)
     return js
 
-def read_man_conf(csv_man_path):
-    with open(csv_man_path, "r+") as f:
-        csv = f.readlines()
-    js = man_cvs2json(csv)
-    return js
-
-
-def read_conf(json_path):
-    txt=''
-    try:
-        with open(json_path, "r") as f:
-            txt = f.read()
-        js = json.loads(txt)
-    except Exception as e:
-        s=traceback.format_exc()
-        logerr.log("read_conf")
-        logerr.log(s)
-        logerr.log(str(e))
-        logerr.log(txt)
-        sys.exit()
-    return js

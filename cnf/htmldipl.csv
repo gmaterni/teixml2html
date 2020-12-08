@@ -1,9 +1,10 @@
 xml_tag|tag|keys|attrs|text|params|parent
+before_id|d
 x|_x_
 x+y|_xy_
 
 tei|body
-wdiv|div|type,ref|class:div_text
+div|div|type,ref|class:div_text
 pb|div|id,n|class:pb
 cb|div|id|class:cb|%n%
 lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>

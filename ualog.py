@@ -7,7 +7,11 @@ from pdb import set_trace
 """
     self.out > 0 print attivato globalmente
     self.oout <1        disattivato
-    prn(1)              attivato
+    
+    prn()/prn()          attivato localmente anche  
+                         se distattivato globalmente
+    prn(0)               disattivato localmente
+                         ma resta valido il settaggio globale
 """
 class Log(object):
 
@@ -45,7 +49,7 @@ class Log(object):
     def log(self, *args):
         self.open_fie()
         ls=["None" if x is None else str(x) for x in args]
-        s=", ".join(ls)
+        s=f"{os.linesep}".join(ls)
         self.f.write(s)
         self.f.write(os.linesep)
         self.f.flush()
