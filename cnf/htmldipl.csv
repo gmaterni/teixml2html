@@ -79,5 +79,9 @@ ptr|a|id,type|class:ptr note,href:#,target_note:%target%|%n%|
 
 teimed_note|div|id|class:teimed_note
 
-space|span||class:degl
+space|space+type|
+space+reserved-line|span||class:reserved-line|[ligne blanche réservée]
+space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
+
+
 unclear|span||class:unclear

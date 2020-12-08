@@ -1,43 +1,88 @@
-xml_tag|tag|keys|attrs|text|text_pars|cmd
+xml_tag|tag|keys|attrs|text|params|parent
+before_id|d
 x|_x_
 x+y|_xy_
+
 tei|body
 div|div|type,ref|class:div_text
 pb|div|id|class:pb
-cb|div|id|class:cb|%n%||templ
-lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>||templ
-l|div|id,n|class:l|<span class="lnum">.%id_num%</span>||templ
+cb|div|id|class:cb|%n%
+lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
+l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
 w|div|id|class:w
+
+xml_tag|tag|keys|attrs|text|params|parent
+
 pc|pc+resp
-pc+#ed|span|id|class:pc_ed
-pc+#1hd|span|id|class:pc_1hd
-pc+#1hd-r|span|id|class:pc_1hd_r
-pc+#2nd|span|id|class:pc_2hd
+pc+#ed|span|id|class:pc_ed_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+pc+#1hd|span|id|class:pc_1hd_int
+pc+#1hd-r|span|id|class:pc_1hd_r_int
+pc+#2nd|span|id|class:pc_2hd_int
+
 hi|hi+rend
-hi+init-flour|span||class:hi_flour
-hi+init-ill|span||class:hi_ill
-hi+init-high|span||class:hi_high
+hi+init-flour|span||class:hi_flour_int
+hi+init-ill|span||class:hi_ill_int
+hi+init-high|span||class:hi_high_int
+
 c|c+ana
-c+#e-ton|span||class:diacr_int||e:é|repl
-c+#hiat|span||class:diacr_int||i:ï,u:ü,e:é|repl
-c+#ced-dipl|_x_x+ced-dipl
-c+#diacr-desamb|span||class:diacr_int||a:à,o:ò,u:ù,e:è,A:à,E:è,I:ì,O:ò,U:ù|repl
-c+#lram-v|span||class:ramis_int||V:u,v:u,j:ì,J:j|repl
-c+#lram-c|span||class:ramis_int||V:v,J:j,u:v,i:j|repl
+c+#e-ton|span||class:diacr_int|%%text%%|e:é
+c+#hiat|span||class:diacr_int|%%text%%|i:ï,u:ü,e:ë
+c+#ced-dipl|span||class:diacr_int|%%text%%|ç:ç
+c+#affr|span||class:diacr_int|%%text%%|c:ç
+c+#diacr-desamb|span||class:diacr_int|%%text%%|a:à,o:ò,u:ù,e:è,A:à,E:è,I:ì,O:ò,U:ù
+c+#lram-v|span||class:ramis_int|%%text%%|V:u,v:u,j:ì,J:i
+c+#lram-c|span||class:ramis_int|%%text%%|V:v,J:j,u:v,i:j
+
 choice|XXX
-sicic|sic
-corr|cor
+sic|span||class:sic_int
+corr|span||class:corr|%text%<a href="#" class="corr"><span class="tooltiptext">%text%</span></a>
+
 forename|div||class:forename
 name|div||class:name
 persname|div||class:persname_int
 placename|div||class:placename
-expan|span||class:class="abrev_int"
-ex|span||class:ex|||
+geogname|div||class:geogname
+geogfeat|div||class:geogfeat
+rolename|XXX
 
-add|_xx_||class:add||
-del|_xx_||class:del|||
-reg|_xx_||class:reg|||
-subst|_xx_||class:subst|||
+expan|span||class:abrev_int
+ex|span||class:ex
 
-span|span||class:_x_class
-teimed_note|span||class:teimed_note
+subst|XXX
+
+del|del+rend|_XXX_ (hand)
+del+exp|span||class:del_intexp
+del+eras|span||class:del_interas
+del+cross|span||class:del_intcross
+del+canc|span||class:del_intcanc
+del+transf|span||class:del_inttransf
+
+add|add+place+hand
+add+inl|span||class:add_intinl
+add+inl+#2hd|span|hand|class:add_intinl
+add+interl|span||class:add_intinterl
+add+interl+#2hd|span|hand|class:add_intinterl
+add+marg|span||class:add_intmarg
+add+sup|span||class:add_intsup
+
+app|span||class:app_int
+rdg|ddg+varSeq
+rdg+1|span||class:rdg_1
+rdg+2|span||class:rdg_2
+rdg+3|a||href;#,class:rdg_3
+
+rs|span||class:rs_int_%type%
+
+span|span|from,to,type
+
+note|span>a||class:annotaz|<a href="#">
+
+ptr|a|id,type|class:ptr note,href:#,target_note:%target%|%n%
+
+teimed_note|div|id|class:teimed_note
+
+space|space+type|
+space+reserved-line|span||class:reserved-line|[ligne blanche réservée]
+space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
+
+unclear|span||class:unclear

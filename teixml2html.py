@@ -269,7 +269,7 @@ class Xml2Html(object):
         self.store_xml_data[tag_csv] = x_data
         return row_data
 
-    def html_data(self, x_data):
+    def build_html_tag(self, x_data):
         x_items = x_data['items']
         x_text = x_data['text']
         c_data = self. get_conf_data(x_data)
@@ -295,13 +295,15 @@ class Xml2Html(object):
         id=x_data['id']       
         if id=="kl446w3":
             self.xx=True
-        if self.xx:
             # set_trace()
         """
         ext_items = self.items_extend(x_data, c_data)
-        #
+        # formatta attr utilizzando x_items
         if html_attrs_str.find('%') > -1:
             html_attrs_str = self.text_format(html_attrs_str, x_items)
+            # formatta attrs utilizzando c_params
+            if html_attrs_str.find('%') > -1:
+                html_attrs_str = self.text_format(html_attrs_str, c_params)
         # formatta c_text itilizzando ext_items (items estsesi + text)
         if c_text.find('%') > -1:
             x_text_is_par = self.text_is_text_params(c_text)
@@ -309,9 +311,9 @@ class Xml2Html(object):
             # text è stato utilizzato come parametro
             if x_text_is_par:
                 x_text = ''
-        # formatta c_text utilizzando c_params
-        if c_text.find('%') > -1:
-            c_text = self.text_format(c_text, c_params)
+            # formatta c_text utilizzando c_params
+            if c_text.find('%') > -1:
+                c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
         #
@@ -340,7 +342,7 @@ class Xml2Html(object):
         x_liv = x_data['liv']
         is_parent = x_data['is_parent']
         x_tail = x_data['tail']
-        h_data = self.html_data(x_data)
+        h_data = self.build_html_tag(x_data)
         h_tag = h_data['tag']
         h_text = h_data['text']
         h_attrs = h_data['attrs']
