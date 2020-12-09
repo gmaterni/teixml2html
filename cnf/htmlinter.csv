@@ -9,15 +9,15 @@ pb|div|id|class:pb
 cb|div|id|class:cb|%n%
 lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
 l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
-w|div|id|class:w
+w|div|id|class:w %ana%_int
 
 xml_tag|tag|keys|attrs|text|params|parent
 
 pc|pc+resp
 pc+#ed|span|id|class:pc_ed_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
-pc+#1hd|span|id|class:pc_1hd_int
-pc+#1hd-r|span|id|class:pc_1hd_r_int
-pc+#2nd|span|id|class:pc_2hd_int
+pc+#1hd|span|id|class:pc_1hd_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+pc+#1hd-r|span|id|class:pc_1hd_r_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+pc+#2hd|span|id|class:pc_2hd_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
 
 hi|hi+rend
 hi+init-flour|span||class:hi_flour_int
@@ -30,7 +30,7 @@ c+#hiat|span||class:diacr_int|%%text%%|i:ï,u:ü,e:ë
 c+#ced-dipl|span||class:diacr_int|%%text%%|ç:ç
 c+#affr|span||class:diacr_int|%%text%%|c:ç
 c+#diacr-desamb|span||class:diacr_int|%%text%%|a:à,o:ò,u:ù,e:è,A:à,E:è,I:ì,O:ò,U:ù
-c+#lram-v|span||class:ramis_int|%%text%%|V:u,v:u,j:ì,J:i
+c+#lram-v|span||class:ramis_int|%%text%%|V:u,v:u,j:i,J:i
 c+#lram-c|span||class:ramis_int|%%text%%|V:v,J:j,u:v,i:j
 
 choice|XXX
@@ -49,13 +49,7 @@ expan|span||class:abrev_int
 ex|span||class:ex
 
 subst|XXX
-
-del|del+rend|_XXX_ (hand)
-del+exp|span||class:del_intexp
-del+eras|span||class:del_interas
-del+cross|span||class:del_intcross
-del+canc|span||class:del_intcanc
-del+transf|span||class:del_inttransf
+del|XXX
 
 add|add+place+hand
 add+inl|span||class:add_intinl
@@ -69,7 +63,7 @@ app|span||class:app_int
 rdg|ddg+varSeq
 rdg+1|span||class:rdg_1
 rdg+2|span||class:rdg_2
-rdg+3|a||href;#,class:rdg_3
+rdg+3|a||href:#,class:rdg_3
 
 rs|span||class:rs_int_%type%
 
@@ -84,5 +78,6 @@ teimed_note|div|id|class:teimed_note
 space|space+type|
 space+reserved-line|span||class:reserved-line|[ligne blanche réservée]
 space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
+space+#degl|XXX|
 
 unclear|span||class:unclear

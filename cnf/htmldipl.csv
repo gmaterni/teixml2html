@@ -9,7 +9,7 @@ pb|div|id,n|class:pb
 cb|div|id|class:cb|%n%
 lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
 l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
-w|div|id|class:w
+w|div|id|class:w %ana%
 
 pc|pc+resp
 pc+#ed|span|id|class:pc_ed
@@ -23,13 +23,13 @@ hi+init-ill|span||class:hi_ill
 hi+init-high|span||class:hi_high
 
 c|c+ana
-c+#e-ton|span||lass:diacr|%%text%%|e:e
-c+#hiat|span||class:diacr|%%text%%|i:i,u:u,e:e
-c+#ced-dipl|span||class:diacr|%%text%%|ç:ç
-c+#affr|span||class:diacr|%%text%%|c:c
-c+#diacr-desamb|span||class:diacr|%%text%%|a:a,o:o,u:u,e:e,A:A,E:E,I:I,O:O,U:U
-c+#lram-v|span||class:ramis|%%text%%|V:V,v:v,J:J,j:j
-c+#lram-c|span||class:ramis|%%text%%|V:V,J:J,u:u,i:i
+c+#e-ton|span||class:diacr
+c+#hiat|span||class:diacr
+c+#ced-dipl|span||class:diacr
+c+#affr|span||class:diacr
+c+#diacr-desamb|span||class:diacr
+c+#lram-v|span||class:ramis
+c+#lram-c|span||class:ramis
 
 choice|XXX|
 sic|span||class:sic
@@ -37,9 +37,9 @@ corr|XXX
 
 forename|XXX
 name|XXX
-persname|XXX
-placename|XXX
-geogname|XXX
+persname|div
+placename|div
+geogname|div
 geogfeat|XXX
 rolename|XXX
 
@@ -48,8 +48,9 @@ ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="
 
 subst|XXX
 
-del|del+rend
+del|del+rend+hand
 del+exp|span||class:delexp
+del+exp+2hhd|span||class:delexp
 del+eras|span||class:deleras
 del+cross|span||class:delcross
 del+canc|span||class:delcanc
@@ -82,6 +83,7 @@ teimed_note|div|id|class:teimed_note
 space|space+type|
 space+reserved-line|span||class:reserved-line|[ligne blanche réservée]
 space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
+space+#degl|span||class:degl|&nbsp;
 
 
 unclear|span||class:unclear

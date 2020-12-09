@@ -55,7 +55,8 @@ class Xml2Html(object):
         #
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
-        # self.xx = False
+        ## self.inp_x = False
+    
 
     def node_liv(self, node):
         d = 0
@@ -179,6 +180,13 @@ class Xml2Html(object):
             logerr.log("pars:", pars)
             sys.exit()
 
+    # elimina parametri non settati
+    def clear_params(self, text):
+        ms = re.findall("[%]\w+[%]", text)
+        for x in ms:
+            text = text.replace(f'{x}', "")
+        return text
+
     # parent x_data.items +
     # x.data.items +
     # csv_data.attrs +
@@ -224,7 +232,7 @@ class Xml2Html(object):
             sys.exit()
         return attrs
 
-    # ritorna attrs {} in una str che inizia, se esisotno,
+    # ritorna una str che inizia, se esisotno,
     # con class=".."  id=".." ...
     def attrs2html(self, attrs):
         ks = []
@@ -235,14 +243,17 @@ class Xml2Html(object):
         for k in attrs.keys():
             if k not in ['id', 'class']:
                 ks.append(k)
-        id = attrs.get('id', None)
-        if id is not None:
-            attrs['id'] = f'{self.before_id}{id}'
-        ls = [f'{k}="{attrs[k]}"' for k in ks]
+        ls=[]
+        for k in ks:
+            v = attrs[k]
+            if k=='id':
+                v= f'{self.before_id}{v}'
+            s=f'{k}="{v}"'
+            ls.append(s)
         return " ".join(ls)
 
-    # ritorna  dati della row di <tag>.csvindividuata
-    # dall tag# o tag+attr di x_data del file xml
+    # ritorna dati della row di <tag>.csvindividuata
+    # dall tag o tag+attr di x_data del file xml
     # memorizza  i dati in store_csv_data
     # la key è quella ottenuta dal tag xml e l'eventuale attributo
     def get_conf_data(self, x_data):
@@ -254,9 +265,9 @@ class Xml2Html(object):
         p = tag.find('+')
         if p > -1:
             x_items = x_data['items']
-            # tag|tag+att1_name+attr2_name+..
+            # tag|tag + att1_name + attr2_name+..
             # x_items[attr<n>_name]  => [attr1_val,attr2_val]
-            # # tag+attr1_val+att2_vap+ ..
+            # #tag + attr1_val + att2_vap + ..
             lsk = tag.split('+')[1:]
             lsv = [x_items[k] for k in lsk if k in x_items.keys()]
             attrs_val = '+'.join(lsv)
@@ -273,6 +284,12 @@ class Xml2Html(object):
         x_items = x_data['items']
         x_text = x_data['text']
         c_data = self. get_conf_data(x_data)
+        ##############
+        id=x_data.get('id',"")
+        if id.find("Il902w3") > -1:
+            inp.inp("!")
+            pass
+        ################
         ################################
         if inp.prn:
             loginfo.log("============").prn()
@@ -290,13 +307,6 @@ class Xml2Html(object):
         #
         html_attrs = self.attrs_builder(x_items, c_keys, c_attrs)
         html_attrs_str = self.attrs2html(html_attrs)
-        #  XXX_
-        """
-        id=x_data['id']       
-        if id=="kl446w3":
-            self.xx=True
-            # set_trace()
-        """
         ext_items = self.items_extend(x_data, c_data)
         # formatta attr utilizzando x_items
         if html_attrs_str.find('%') > -1:
@@ -304,6 +314,11 @@ class Xml2Html(object):
             # formatta attrs utilizzando c_params
             if html_attrs_str.find('%') > -1:
                 html_attrs_str = self.text_format(html_attrs_str, c_params)
+                """
+                # elimina parametri non settati
+                if html_attrs_str.find('%') > -1:
+                    html_attrs_str = self.clear_params(html_attrs_str)
+                """
         # formatta c_text itilizzando ext_items (items estsesi + text)
         if c_text.find('%') > -1:
             x_text_is_par = self.text_is_text_params(c_text)
