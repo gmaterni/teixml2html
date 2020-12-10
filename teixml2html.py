@@ -29,6 +29,8 @@ def pp(data):
 
 
 logconf = Log()
+logdeb = Log()
+
 loginfo = Log()
 logerr = Log()
 inp = Inp()
@@ -37,6 +39,7 @@ inp = Inp()
 class Xml2Html(object):
 
     def __init__(self, xml_path, html_path, csv_path, json_path, deb):
+        logdeb.open("log/teixml2html.deb.log", 0)
         logconf.open("log/teixml2html.cnf.log", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.err.log", 1)
@@ -56,7 +59,7 @@ class Xml2Html(object):
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
         ## self.inp_x = False
-    
+        self.ok_deb=False
 
     def node_liv(self, node):
         d = 0
@@ -180,12 +183,26 @@ class Xml2Html(object):
             logerr.log("pars:", pars)
             sys.exit()
 
-    # elimina parametri non settati
-    def clear_params(self, text):
+    # formatta html_attr_str se il parametro 
+    # non esiste lo rimuove
+    # aggiusta gli argommenti di class
+    def attrs_format(self, text, pars):
         ms = re.findall("[%]\w+[%]", text)
-        for x in ms:
-            text = text.replace(f'{x}', "")
+        ks = [x.replace('%', '') for x in ms]
+        for k in ks:
+            v = pars.get(k,'')
+            text = text.replace(f'%{k}%', v)
+        text=text.replace(' "','"')
+        text=text.replace(' _int','')
+        p0=text.find('class')
+        if p0> -1:
+            p1=text.find('"',p0+5)
+            p2=text.find('"',p1+1)
+            s0=text[:p2]
+            s1=text[p2:]
+            text=s0.replace('#','')+s1
         return text
+
 
     # parent x_data.items +
     # x.data.items +
@@ -257,6 +274,12 @@ class Xml2Html(object):
     # memorizza  i dati in store_csv_data
     # la key è quella ottenuta dal tag xml e l'eventuale attributo
     def get_conf_data(self, x_data):
+        """
+        if x_data.get('id',"").find("Il902w3") > -1:
+            self.ok_deb=True
+        if self.ok_deb:
+            set_trace()
+        """
         xml_tag = x_data['tag']
         row_data = self.html_conf.get(xml_tag, None)
         if row_data is None:
@@ -273,6 +296,9 @@ class Xml2Html(object):
             attrs_val = '+'.join(lsv)
             tag_csv = xml_tag+'+'+attrs_val
             row_data = self.html_conf.get(tag_csv, None)
+            ############
+            # logdeb.log(tag_csv).prn()
+            #############
             if row_data is None:
                 row_data = self.html_conf.get('x+y', None)
         else:
@@ -287,7 +313,7 @@ class Xml2Html(object):
         ##############
         id=x_data.get('id',"")
         if id.find("Il902w3") > -1:
-            inp.inp("!")
+            # inp.inp("!")
             pass
         ################
         ################################
@@ -304,21 +330,14 @@ class Xml2Html(object):
         c_attrs = c_data.get('attrs', {})
         c_text = c_data.get('text', "")
         c_params = c_data.get('params', {})
-        #
         html_attrs = self.attrs_builder(x_items, c_keys, c_attrs)
         html_attrs_str = self.attrs2html(html_attrs)
         ext_items = self.items_extend(x_data, c_data)
+        #
         # formatta attr utilizzando x_items
         if html_attrs_str.find('%') > -1:
-            html_attrs_str = self.text_format(html_attrs_str, x_items)
-            # formatta attrs utilizzando c_params
-            if html_attrs_str.find('%') > -1:
-                html_attrs_str = self.text_format(html_attrs_str, c_params)
-                """
-                # elimina parametri non settati
-                if html_attrs_str.find('%') > -1:
-                    html_attrs_str = self.clear_params(html_attrs_str)
-                """
+            html_attrs_str = self.attrs_format(html_attrs_str, x_items)
+        #
         # formatta c_text itilizzando ext_items (items estsesi + text)
         if c_text.find('%') > -1:
             x_text_is_par = self.text_is_text_params(c_text)
@@ -334,7 +353,7 @@ class Xml2Html(object):
         #
         if c_tag.find('_x') > -1:
             c_tag = f'{c_tag}_{x_data["tag"]}'
-            loginfo.log(c_tag).prn()
+            logerr.log(c_tag).prn()
             inp.inp("!")
         ####################
         html_data = {

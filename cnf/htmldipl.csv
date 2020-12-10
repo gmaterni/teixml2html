@@ -15,12 +15,13 @@ pc|pc+resp
 pc+#ed|span|id|class:pc_ed
 pc+#1hd|span|id|class:pc_1hd
 pc+#1hd-r|span|id|class:pc_1hd_r
-pc+#2nd|span|id|class:pc_2hd
+pc+#2hd|span|id|class:pc_2hd
 
 hi|hi+rend
 hi+init-flour|span||class:hi_flour
 hi+init-ill|span||class:hi_ill
 hi+init-high|span||class:hi_high
+hi+maj-dipl|span||class:hi
 
 c|c+ana
 c+#e-ton|span||class:diacr
@@ -37,9 +38,9 @@ corr|XXX
 
 forename|XXX
 name|XXX
-persname|div
-placename|div
-geogname|div
+persname|div||class:persname
+placename|div||class:placename
+geogname|div||class:geogname
 geogfeat|XXX
 rolename|XXX
 
@@ -50,7 +51,7 @@ subst|XXX
 
 del|del+rend+hand
 del+exp|span||class:delexp
-del+exp+2hhd|span||class:delexp
+del+exp+#2hd|span||class:delexp
 del+eras|span||class:deleras
 del+cross|span||class:delcross
 del+canc|span||class:delcanc
@@ -85,5 +86,7 @@ space+reserved-line|span||class:reserved-line|[ligne blanche réservée]
 space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
 space+#degl|span||class:degl|&nbsp;
 
-
 unclear|span||class:unclear
+
+damage|spanx
+supplied|spanx

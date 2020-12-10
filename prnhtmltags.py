@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-
+import sys
 COL_NUM=7
 BLK='                                                                                            '
 
@@ -46,5 +46,5 @@ def read_csv_tags(csv_path):
 
 
 if __name__ == "__main__":
-    tags_path = "csv/htmltagsdip.csv"
+    tags_path = sys.argv[1]
     read_csv_tags(tags_path)
