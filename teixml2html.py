@@ -29,8 +29,6 @@ def pp(data):
 
 
 logconf = Log()
-logdeb = Log()
-
 loginfo = Log()
 logerr = Log()
 inp = Inp()
@@ -39,7 +37,6 @@ inp = Inp()
 class Xml2Html(object):
 
     def __init__(self, xml_path, html_path, csv_path, json_path, deb):
-        logdeb.open("log/teixml2html.deb.log", 0)
         logconf.open("log/teixml2html.cnf.log", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.err.log", 1)
@@ -59,6 +56,7 @@ class Xml2Html(object):
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
         ## self.inp_x = False
+        self.ctrl_tag=""
         self.ok_deb=False
 
     def node_liv(self, node):
@@ -91,7 +89,7 @@ class Xml2Html(object):
         tag = tag if type(nd.tag) is str else "XXX"
         p = tag.rfind('}')
         if p > 1:
-            logerr.log("Error in T xml")
+            logerr.log("Error in  xml")
             logerr.log(nd.tag)
             sys.exyt()
         return tag.strip()
@@ -125,7 +123,7 @@ class Xml2Html(object):
         tail = tail.strip().replace(os.linesep, '')
         return tail
 
-    """
+    
     def node_val(self, nd):
         ls = []
         for x in nd.itertext():
@@ -134,7 +132,7 @@ class Xml2Html(object):
         texts = ' '.join(ls)
         s = re.sub(r"\s{2,}", ' ', texts)
         return s
-    """
+    
 
     def node_is_parent(self, nd):
         cs = nd.getchildren()
@@ -154,16 +152,10 @@ class Xml2Html(object):
             'text': self.node_text(nd),
             'items': items,
             # 'keys': self.node_keys(nd),
-            # 'val':self.node_val(nd),
+            'val':self.node_val(nd),
             'is_parent': self.node_is_parent(nd)
         }
 
-    # controla se 'text' è nei parametri di  text
-    # individuati dat %parametro%
-    def text_is_text_params(self, text):
-        ms = re.findall("[%]\w+[%]", text)
-        ks = [x.replace('%', '') for x in ms]
-        return 'text' in ks
 
     # formatta text utilizzado attrs
     # pqrw={'k0':'val0','k1':'val1', ..}
@@ -177,11 +169,12 @@ class Xml2Html(object):
             return text
         except Exception as e:
             logerr.set_out(1)
+            logerr.log(os.linesep,"Error","text_format()")
             logerr.log(e)
-            logerr.log("text_format()")
-            logerr.log("text:", text)
-            logerr.log("pars:", pars)
+            logerr.log(f"text:{text}")
+            logerr.log(f"pars: {pars}")
             sys.exit()
+    
 
     # formatta html_attr_str se il parametro 
     # non esiste lo rimuove
@@ -192,6 +185,9 @@ class Xml2Html(object):
         for k in ks:
             v = pars.get(k,'')
             text = text.replace(f'%{k}%', v)
+        return text
+
+    def class_adjust(self,text):
         text=text.replace(' "','"')
         text=text.replace(' _int','')
         p0=text.find('class')
@@ -203,11 +199,9 @@ class Xml2Html(object):
             text=s0.replace('#','')+s1
         return text
 
-
     # parent x_data.items +
     # x.data.items +
-    # csv_data.attrs +
-    # text:text
+    # csv_data.attrs 
     def items_extend(self, x_data, csv_data,):
         attrs = {}
         # parent x_data items
@@ -225,10 +219,6 @@ class Xml2Html(object):
         c_attrs = csv_data.get('attrs', {})
         for k, v in c_attrs.items():
             attrs[k] = v
-        # text:text
-        text = x_data.get('text', '')
-        if text != '':
-            attrs['text'] = text
         return attrs
 
     # seleziona gli elemnti di x_items individuati da c_kets
@@ -242,9 +232,9 @@ class Xml2Html(object):
                 attrs[k] = c_attrs[k]
         except Exception as e:
             logerr.log(e)
-            logerr.log("attrs_builder()")
+            logerr.log(os.linesep,"ERROR","attrs_builder()")
             logerr.log("x_items:", x_items)
-            logerr.log("c_keys:", c_keys)
+            logerr.log("c_keys: ", c_keys)
             logerr.log("c_attrs:", c_attrs)
             sys.exit()
         return attrs
@@ -274,48 +264,41 @@ class Xml2Html(object):
     # memorizza  i dati in store_csv_data
     # la key è quella ottenuta dal tag xml e l'eventuale attributo
     def get_conf_data(self, x_data):
-        """
-        if x_data.get('id',"").find("Il902w3") > -1:
-            self.ok_deb=True
-        if self.ok_deb:
-            set_trace()
-        """
         xml_tag = x_data['tag']
         row_data = self.html_conf.get(xml_tag, None)
         if row_data is None:
             row_data = self.html_conf.get('x', {})
-        tag = row_data.get('tag', f"_x_{xml_tag}")
-        p = tag.find('+')
-        if p > -1:
-            x_items = x_data['items']
-            # tag|tag + att1_name + attr2_name+..
-            # x_items[attr<n>_name]  => [attr1_val,attr2_val]
-            # #tag + attr1_val + att2_vap + ..
-            lsk = tag.split('+')[1:]
-            lsv = [x_items[k] for k in lsk if k in x_items.keys()]
-            attrs_val = '+'.join(lsv)
-            tag_csv = xml_tag+'+'+attrs_val
-            row_data = self.html_conf.get(tag_csv, None)
-            ############
-            # logdeb.log(tag_csv).prn()
-            #############
-            if row_data is None:
-                row_data = self.html_conf.get('x+y', None)
+            csv_tag=xml_tag
+            self.ctrl_tag=f'_x_{csv_tag}'
         else:
-            tag_csv = xml_tag
-        self.store_xml_data[tag_csv] = x_data
+            tag = row_data.get('tag', f"_x_{xml_tag}")
+            p = tag.find('+')
+            if p > -1:
+                x_items = x_data['items']
+                # tag|tag + att1_name + attr2_name+..
+                # x_items[attr<n>_name]  => [attr1_val,attr2_val]
+                # #tag + attr1_val + att2_vap + ..
+                lsk = tag.split('+')[1:]
+                lsv = [x_items[k] for k in lsk if k in x_items.keys()]
+                attrs_val = '+'.join(lsv)
+                csv_tag = xml_tag+'+'+attrs_val
+                row_data = self.html_conf.get(csv_tag, None)
+                if row_data is None:
+                    row_data = self.html_conf.get('x+y', None)
+                    self.ctrl_tag=f'_xy_{csv_tag}'
+                else:
+                    self.ctrl_tag=csv_tag
+            else:
+                csv_tag = xml_tag
+                self.ctrl_tag=csv_tag
+        self.store_xml_data[csv_tag] = x_data
         return row_data
+   
 
     def build_html_tag(self, x_data):
         x_items = x_data['items']
         x_text = x_data['text']
         c_data = self. get_conf_data(x_data)
-        ##############
-        id=x_data.get('id',"")
-        if id.find("Il902w3") > -1:
-            # inp.inp("!")
-            pass
-        ################
         ################################
         if inp.prn:
             loginfo.log("============").prn()
@@ -337,23 +320,25 @@ class Xml2Html(object):
         # formatta attr utilizzando x_items
         if html_attrs_str.find('%') > -1:
             html_attrs_str = self.attrs_format(html_attrs_str, x_items)
+            html_attrs_str = self.class_adjust(html_attrs_str)
         #
-        # formatta c_text itilizzando ext_items (items estsesi + text)
+        # formatta c_text itilizzando ext_items (items estseso)
         if c_text.find('%') > -1:
-            x_text_is_par = self.text_is_text_params(c_text)
             c_text = self.text_format(c_text, ext_items)
-            # text è stato utilizzato come parametro
-            if x_text_is_par:
-                x_text = ''
+            #
+            # formatta utilizzando text
+            if c_text.find('%text%') > -1:
+                c_text = c_text.replace('%text%', x_text)
+                x_text=''
+            #
             # formatta c_text utilizzando c_params
             if c_text.find('%') > -1:
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
         #
-        if c_tag.find('_x') > -1:
-            c_tag = f'{c_tag}_{x_data["tag"]}'
-            logerr.log(c_tag).prn()
+        if self.ctrl_tag.find('_x') > -1:
+            logerr.log(self.ctrl_tag).prn()
             inp.inp("!")
         ####################
         html_data = {
@@ -436,7 +421,7 @@ class Xml2Html(object):
 
 def do_mauin(xml, html, tags, conf, deb=False):
     Xml2Html(xml, html, tags, conf, deb).write_html()
-    print("ok")
+    # print("ok")
 
 
 if __name__ == "__main__":

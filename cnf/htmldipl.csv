@@ -24,6 +24,7 @@ hi+init-high|span||class:hi_high
 hi+maj-dipl|span||class:hi
 
 c|c+ana
+c+e-ton|span||class:diacr
 c+#e-ton|span||class:diacr
 c+#hiat|span||class:diacr
 c+#ced-dipl|span||class:diacr
@@ -46,6 +47,12 @@ rolename|XXX
 
 expan|span||class:abbrev %corresp%
 ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="css/abr/%MAN%/%corresp%.jpg"/></span>%text%</a>||expan
+<a class="ex_ref" href="#">
+    <span class="ex_tooltip">
+        <img src="css/abr/%MAN%/%corresp%.jpg"/>
+    </span>
+    %text%
+</a>||expan
 
 subst|XXX
 
