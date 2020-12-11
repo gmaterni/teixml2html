@@ -17,14 +17,14 @@ from ualog import Log
 from uainput import Inp
 
 __date__ = "15-12-2020"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __author__ = "Marta Materni"
 
 
 def pp(data):
     if data is None:
         return ""
-    s = pprint.pformat(data, indent=2, width=30)
+    s = pprint.pformat(data, indent=2, width=120)
     return s+os.linesep
 
 
@@ -54,8 +54,8 @@ class Xml2Html(object):
         self.before_id = rd.get('tag',"")
         #
         self.hb = HtmlBuilder()
-        self.store_xml_data = {}
-        self.is_child_text = False
+        self.xml_data_dict = {}
+        self.tag_stack=[False for i in range(1,20)]
         # tag per controlo erroi
         self.ctrl_tag=""
 
@@ -206,9 +206,9 @@ class Xml2Html(object):
     def items_extend(self, x_data, csv_data,):
         attrs = {}
         # parent x_data items
-        c_parent = csv_data.get('parent', None)
-        if c_parent is not None:
-            x_data_parent = self.store_xml_data.get(c_parent, None)
+        csv_tag_parent = csv_data.get('parent', None)
+        if csv_tag_parent is not None:
+            x_data_parent = self.xml_data_dict.get(csv_tag_parent, None)
             if x_data_parent is not None:
                 items = x_data_parent.get('items', {})
                 attrs = copy.deepcopy(items)
@@ -292,11 +292,11 @@ class Xml2Html(object):
             else:
                 csv_tag = xml_tag
                 self.ctrl_tag=csv_tag
-        self.store_xml_data[csv_tag] = x_data
+        self.xml_data_dict[csv_tag] = x_data
         return row_data
    
 
-    def build_child_text(self,tag, attrs, text, tail):
+    def build_child(self,tag, attrs, text, tail):
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
@@ -304,6 +304,8 @@ class Xml2Html(object):
     def build_html_tag(self, x_data):
         x_items = x_data['items']
         x_text = x_data['text']
+        x_liv = x_data['liv']
+        self.tag_stack[x_liv] = False
         c_data = self. get_conf_data(x_data)
         ################################
         if inp.prn:
@@ -338,7 +340,7 @@ class Xml2Html(object):
                     c_text = c_text.replace('%text%', x_text)
                     x_text=''
                 else:
-                    self.is_child_text=True
+                    self.tag_stack[x_liv]=True
             #
             # formatta c_text utilizzando c_params
             if c_text.find('%') > -1:
@@ -374,20 +376,19 @@ class Xml2Html(object):
         h_tag = h_data['tag']
         h_text = h_data['text']
         h_attrs = h_data['attrs']
-
-        # se il predene è un parent che deve contenelo
-        if self.is_child_text:
-            txt_child=self.build_child_text(h_tag,h_attrs, h_text, x_tail)
-            tag_last=self.hb.html_tag_last()
-            tag_last.replace('%text',txt_child)
+        #
+        # se il predene è un parent contenitor
+        is_container=self.tag_stack[x_liv-1]
+        if is_container:
+            child=self.build_child(h_tag,h_attrs, h_text, x_tail)
+            s =self.hb.html_tag_last()
+            content=s.replace('%text%',child)
+            self.hb.upd_html_tag_last(content)
             h_tag='XXX'
-            self.parebt=False
-
         if x_is_parent:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, x_tail)
         else:
-            self.hb.ovc(x_liv, h_tag, h_attrs, h_text, x_tail)
-        
+            self.hb.ovc(x_liv, h_tag, h_attrs, h_text, x_tail)      
         ################################
         if inp.prn:
             loginfo.log(">> html node").prn()

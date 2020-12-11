@@ -84,9 +84,14 @@ class HtmlBuilder(object):
         self.clsopn(0)
         return self
 
-    # ultimo tag costruito
+    # ultimo tag 
     def html_tag_last(self):
         return self.node_lst[-1:][0]
+
+    # modifica ultimo tag costruito
+    def upd_html_tag_last(self,tag):
+        last=len(self.node_lst)-1
+        self.node_lst[last]=tag
 
     # html identato
     def html_format(self):
