@@ -55,9 +55,10 @@ class Xml2Html(object):
         #
         self.hb = HtmlBuilder()
         self.store_xml_data = {}
-        ## self.inp_x = False
+        self.is_child_text = False
+        # tag per controlo erroi
         self.ctrl_tag=""
-        self.ok_deb=False
+
 
     def node_liv(self, node):
         d = 0
@@ -295,6 +296,11 @@ class Xml2Html(object):
         return row_data
    
 
+    def build_child_text(self,tag, attrs, text, tail):
+        t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
+        return t
+
+
     def build_html_tag(self, x_data):
         x_items = x_data['items']
         x_text = x_data['text']
@@ -328,8 +334,11 @@ class Xml2Html(object):
             #
             # formatta utilizzando text
             if c_text.find('%text%') > -1:
-                c_text = c_text.replace('%text%', x_text)
-                x_text=''
+                if x_data.get('is_parent',None) is False:   
+                    c_text = c_text.replace('%text%', x_text)
+                    x_text=''
+                else:
+                    self.is_child_text=True
             #
             # formatta c_text utilizzando c_params
             if c_text.find('%') > -1:
@@ -359,20 +368,30 @@ class Xml2Html(object):
         x_data = self.get_node_data(nd)
         x_tag = x_data['tag']
         x_liv = x_data['liv']
-        is_parent = x_data['is_parent']
+        x_is_parent = x_data['is_parent']
         x_tail = x_data['tail']
         h_data = self.build_html_tag(x_data)
         h_tag = h_data['tag']
         h_text = h_data['text']
         h_attrs = h_data['attrs']
-        if is_parent:
+
+        # se il predene è un parent che deve contenelo
+        if self.is_child_text:
+            txt_child=self.build_child_text(h_tag,h_attrs, h_text, x_tail)
+            tag_last=self.hb.html_tag_last()
+            tag_last.replace('%text',txt_child)
+            h_tag='XXX'
+            self.parebt=False
+
+        if x_is_parent:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, x_tail)
         else:
             self.hb.ovc(x_liv, h_tag, h_attrs, h_text, x_tail)
+        
         ################################
         if inp.prn:
             loginfo.log(">> html node").prn()
-            loginfo.log(self.hb.tag_last()).prn()
+            loginfo.log(self.hb.html_tag_last()).prn()
         inp.inp(x_tag)
         if inp.equals('?'):
             print(self.hb.html_format())
@@ -408,15 +427,6 @@ class Xml2Html(object):
         with open(path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
-
-        """
-        soup = BeautifulSoup(html,"html.parser")
-        html=soup.prettify(formatter="html5")
-        h_path=self.html_path.replace('.html','F.html')
-        with open(h_path, "w+") as f:
-            f.write(html)
-        os.chmod(self.html_path, 0o666)
-        """
 
 
 def do_mauin(xml, html, tags, conf, deb=False):

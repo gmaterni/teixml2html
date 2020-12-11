@@ -26,6 +26,7 @@ class HtmlBuilder(object):
             self.node_lst.append(decl)
         return self
 
+
     def opn(self, liv, tag, attrs, text, tail):
         self.clsopn(liv)
         self.livx = liv
@@ -33,8 +34,8 @@ class HtmlBuilder(object):
         self.tail_stack[liv] = tail
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
-        if tag.find('>')>-1:
-            tag=tag.split('>')[0]
+        if tag.find('>') > -1:
+            tag = tag.split('>')[0]
         t = f'{sp}<{tag}{b}{attrs}>{text}'
         self.node_lst.append(t)
         return self
@@ -44,8 +45,8 @@ class HtmlBuilder(object):
             self.livx = liv - 1
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
-        if tag.find('>')>-1:
-            tag=tag.split('>')[0]
+        if tag.find('>') > -1:
+            tag = tag.split('>')[0]
         if text != '':
             t = f'{sp}<{tag}{b}{attrs}>{text}</{tag}>{tail}'
         else:
@@ -60,16 +61,15 @@ class HtmlBuilder(object):
             tag = self.tag_stack[i]
             tail = self.tail_stack[i]
             sp = self.sp(i)
-            if tag.find('>')>-1:
-                ts=tag.split('>')
-                tag=ts[0]                
-                tag_child=f'</{ts[1]}>' 
-            else:               
-                tag_child=''
+            if tag.find('>') > -1:
+                ts = tag.split('>')
+                tag = ts[0]
+                tag_child = f'</{ts[1]}>'
+            else:
+                tag_child = ''
             t = f'{sp}{tag_child}</{tag}>{tail}'
             self.node_lst.append(t)
         return True
-
 
     # rimuove tutte le righe che contengono tag
     def del_tags(self, tag):
@@ -79,14 +79,13 @@ class HtmlBuilder(object):
                 ls.append(nd)
         self.node_lst = ls
 
-
     # chiusura con ultimo tag
     def end(self):
         self.clsopn(0)
         return self
 
     # ultimo tag costruito
-    def tag_last(self):
+    def html_tag_last(self):
         return self.node_lst[-1:][0]
 
     # html identato
@@ -96,8 +95,6 @@ class HtmlBuilder(object):
 
     # html su una sola riga eliminati spazi tra i tag
     def html_onerow(self):
-        ls=[x.strip() for x in self.node_lst]
+        ls = [x.strip() for x in self.node_lst]
         s = "".join(ls)
         return s
-
-
