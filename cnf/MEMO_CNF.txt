@@ -16,12 +16,10 @@ app
 <div class="w" id="Il1266w3">
     <span class="app">
         <span class="rdg_1">prist</span>
-
         <a href="#" class="rdg_2">
             <span class="delcross">prist</span>
             <span class="addinl">prent</span>
         </a>
-
         <span class="rdg_3">prent</span>
     </span>
 </div>

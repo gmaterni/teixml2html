@@ -11,8 +11,6 @@ lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
 l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
 w|div|id|class:w %ana%_int
 
-xml_tag|tag|keys|attrs|text|params|parent
-
 pc|pc+resp
 pc+#ed|span|id|class:pc_ed_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
 pc+#1hd|span|id|class:pc_1hd_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
@@ -23,8 +21,10 @@ hi|hi+rend
 hi+init-flour|span||class:hi_flour_int
 hi+init-ill|span||class:hi_ill_int
 hi+init-high|span||class:hi_high_int
+hi+maj-dipl|span||class:hi_int
 
 c|c+ana
+c+e-ton|span||class:diacr_int|%%text%%|e:é
 c+#e-ton|span||class:diacr_int|%%text%%|e:é
 c+#hiat|span||class:diacr_int|%%text%%|i:ï,u:ü,e:ë
 c+#ced-dipl|span||class:diacr_int|%%text%%|ç:ç

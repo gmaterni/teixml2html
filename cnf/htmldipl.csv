@@ -47,12 +47,6 @@ rolename|XXX
 
 expan|span||class:abbrev %corresp%
 ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="css/abr/%MAN%/%corresp%.jpg"/></span>%text%</a>||expan
-<a class="ex_ref" href="#">
-    <span class="ex_tooltip">
-        <img src="css/abr/%MAN%/%corresp%.jpg"/>
-    </span>
-    %text%
-</a>
 
 subst|XXX
 
