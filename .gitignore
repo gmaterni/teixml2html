@@ -2,7 +2,7 @@ html/
 xsl/
 xml/
 log/
-bin/s
+bin/
 *.sh
 .vscode/
 .history/
