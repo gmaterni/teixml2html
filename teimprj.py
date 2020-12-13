@@ -70,7 +70,7 @@ def do_main(src_path):
 
 
 def prn_es():
-    s="""
+    s = """
 teimprj.py <file.json>
 
 es. file progetto  json
