@@ -6,7 +6,7 @@ import argparse
 import sys
 import pprint
 from ualog import Log
-# from pdb import set_trace
+from pdb import set_trace
 
 __date__ = "12-12-2020"
 __version__ = "0.0.1"
@@ -197,7 +197,7 @@ class XmlSplitEps(object):
             # sottoalberi episodi
             # controllo inizio pagina
             pbcb = self.begin_pag_dupl(nd)
-            print(pbcb)
+            # print(pbcb)
             if pbcb is not None:
                 pb = pbcb[0]
                 cb = pbcb[1]
@@ -244,6 +244,6 @@ if __name__ == "__main__":
         dest="ou",
         required=True,
         metavar="",
-        help="-o <dir out>")
+        help="-o <dir out/manoscirtto> (xml/<manoscritto>/manoscritto)")
     args = parser.parse_args()
     do_main(args.src, args.ou)
