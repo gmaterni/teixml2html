@@ -153,7 +153,7 @@ class Xml2Html(object):
             'text': self.node_text(nd),
             'items': items,
             # 'keys': self.node_keys(nd),
-            'val':self.node_val(nd),
+            # 'val':self.node_val(nd),
             'is_parent': self.node_is_parent(nd)
         }
 
@@ -296,7 +296,7 @@ class Xml2Html(object):
         return row_data
    
 
-    def build_child(self,tag, attrs, text, tail):
+    def build_content(self,tag, attrs, text, tail):
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
@@ -377,12 +377,12 @@ class Xml2Html(object):
         h_text = h_data['text']
         h_attrs = h_data['attrs']
         #
-        # se il predene è un parent contenitor
+        # se il precedente è un parent contenitor
         is_container=self.tag_stack[x_liv-1]
         if is_container:
-            child=self.build_child(h_tag,h_attrs, h_text, x_tail)
+            content=self.build_content(h_tag,h_attrs, h_text, x_tail)
             s =self.hb.html_tag_last()
-            content=s.replace('%text%',child)
+            content=s.replace('%text%',content)
             self.hb.upd_html_tag_last(content)
             h_tag='XXX'
         if x_is_parent:
