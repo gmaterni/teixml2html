@@ -11,6 +11,7 @@ logerr.open("log/readjson.err.log",1)
 
 
 def read_file_json(json_path):
+    print("--------------")
     txt=''
     try:
         with open(json_path, "r") as f:
@@ -27,13 +28,16 @@ def read_file_json(json_path):
 
 def parse_json(js):
     for k,v in js.items():
-        if isinstance(v,str) is False:
+        if isinstance(v,dict):
+            parse_json(v)
             continue
-        if v.find('$')> -1:
-            jsx=read_file_json(path)
-            path=v.replace('$','')
-            js[k]=jsx
-            jsx=parse_json(jsx)
+        if isinstance(v,str):
+            if v.find('$')> -1:
+                path=v.replace('$',"")
+                jsx=read_file_json(path)
+                path=v.replace('$','')
+                js[k]=jsx
+                jsx=parse_json(jsx)
     return js
 
 
@@ -43,3 +47,4 @@ def read_json(json_path):
     return js
     
 
+#read_json("cnf/test0.json")

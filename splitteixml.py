@@ -9,7 +9,7 @@ from ualog import Log
 from pdb import set_trace
 
 __date__ = "12-12-2020"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "Marta Materni"
 
 
@@ -23,12 +23,14 @@ def pp_data(data):
 
 class XmlSplitEps(object):
 
-    def __init__(self, path_in, name_ou):
-        self.path_in = path_in
-        self.name_ou = name_ou
-        path_err = name_ou + "_eps_err_.log"
+    def __init__(self, path_input, dir_out, sigla_man):
+        self.path_in = path_input
+        self.dir_out = dir_out
+        self.sigla_man=sigla_man
+        path_err = dir_out + "_eps_err_.log"
         logerr.open(path_err, out=1)
 
+    # write xml/par/eps<n>
     def write_eps_xml(self, nd, name_ou):
         try:
             src = etree.tostring(nd,
@@ -45,17 +47,21 @@ class XmlSplitEps(object):
             logerr.log(s)
             # print(s)
 
+    # write xml/par/par.xml
     def writ_eps_xml_lst(self, eps_lst, xml_path):
         xml_src = os.linesep.join(eps_lst)
         with open(xml_path, "w+") as fw:
             fw.write(xml_src)
         os.chmod(xml_path, 0o666)
+        #print("xml_path",xml_path)
 
+    # write xml/par/par.txt
     def writ_eps_num_lst(self, eps_lst, txt_path):
         txt = os.linesep.join(eps_lst)
         with open(txt_path, "w+") as fw:
             fw.write(txt)
         os.chmod(txt_path, 0o666)
+        # print("eps_lst",txt_path)
 
     # <div type="episode" ref="#ep1">
     def node_src(self, nd):
@@ -80,18 +86,15 @@ class XmlSplitEps(object):
         return attrs
 
     def eps_name(self, eps):
-        f = self.name_ou
+        f = self.dir_out
         dir = os.path.dirname(f)
         name = eps
         path = os.path.join(dir, name)
         return path
 
     def fl_name(self, ext):
-        f = self.name_ou
-        bn = os.path.basename(f)
-        dir = os.path.dirname(f)
-        name = bn + ext
-        path = os.path.join(dir, name)
+        name = self.sigla_man + ext
+        path = os.path.join(self.dir_out, name)
         return path
 
     def get_notes(self):
@@ -120,7 +123,7 @@ class XmlSplitEps(object):
         tag = self.node_tag(nd)
         ks = self.node_attrs(nd)
         s = pp_data(ks)
-        print(tag + "  " + s)
+        # print(tag + "  " + s)
 
     def get_child(self, nd, tag=None):
         child = None
@@ -193,7 +196,7 @@ class XmlSplitEps(object):
             # file testo con lista episodi
             eps_num = ks['ref'].replace('#', '')
             eps_num_lst.append(eps_num)
-            print(eps_num)
+            # print(eps_num)
             # sottoalberi episodi
             # controllo inizio pagina
             pbcb = self.begin_pag_dupl(nd)
@@ -215,17 +218,27 @@ class XmlSplitEps(object):
         eps_lst.append(s)
         eps_lst.append('</TEI>')
 
+        # lista eps<n> in file xml
+        # xml/par/<mano>.xml 
         xml_path = self.fl_name(".xml")
         self.writ_eps_xml_lst(eps_lst, xml_path)
 
+        # lista eps<n> in file txt
+        # xml/par/<mano>.TXT 
         txt_path = self.fl_name(".txt")
         self.writ_eps_num_lst(eps_num_lst, txt_path)
 
 
-def do_main(path_in, name_ou):
-    xmlspl = XmlSplitEps(path_in, name_ou)
+def do_main(path_in, dir_out, sigla_man):
+    xmlspl = XmlSplitEps(path_in, dir_out,sigla_man)
     xmlspl.split_eps()
 
+"""
+es.
+dir input: xml/par/file.xml
+dir out  : xml/par/par
+sigla_man: par
+"""
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -244,6 +257,12 @@ if __name__ == "__main__":
         dest="ou",
         required=True,
         metavar="",
-        help="-o <dir out/manoscirtto> (xml/<manoscritto>/manoscritto)")
+        help="-o <dir out/<sigla>/")
+    parser.add_argument(
+        '-m',
+        dest="man",
+        required=True,
+        metavar="",
+        help="-m <sigla_maoscritto>")
     args = parser.parse_args()
-    do_main(args.src, args.ou)
+    do_main(args.src, args.ou, args.man)
