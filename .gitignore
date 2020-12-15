@@ -3,6 +3,7 @@ xsl/
 xml/
 log/
 bin/
+wrk/
 *.sh
 .vscode/
 .history/

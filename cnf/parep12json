@@ -1,3 +1,0 @@
-{
-"tx":"teixml2html.py -i xml/par/ep12.xml -o html/par/txt/ep12.html -t cnf/htmldipl.csv -c cnf/pardipl.json -d"
-}
