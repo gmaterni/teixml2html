@@ -11,7 +11,6 @@ logerr.open("log/readjson.err.log",1)
 
 
 def read_file_json(json_path):
-    print("--------------")
     txt=''
     try:
         with open(json_path, "r") as f:

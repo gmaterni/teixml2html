@@ -13,7 +13,7 @@ class HtmlBuilder(object):
     def __init__(self):
         self.indent = 2
         self.livx = -1
-        self.node_lst = []
+        self.tag_lst = []
         self.tag_stack = ['' for i in range(20)]
         self.tail_stack = ['' for i in range(20)]
 
@@ -23,7 +23,7 @@ class HtmlBuilder(object):
    # <!DOCTYPE html>
     def init(self, decl=""):
         if decl != "":
-            self.node_lst.append(decl)
+            self.tag_lst.append(decl)
         return self
 
 
@@ -37,7 +37,7 @@ class HtmlBuilder(object):
         if tag.find('>') > -1:
             tag = tag.split('>')[0]
         t = f'{sp}<{tag}{b}{attrs}>{text}'
-        self.node_lst.append(t)
+        self.tag_lst.append(t)
         return self
 
     def ovc(self, liv, tag, attrs, text, tail):
@@ -51,7 +51,7 @@ class HtmlBuilder(object):
             t = f'{sp}<{tag}{b}{attrs}>{text}</{tag}>{tail}'
         else:
             t = f'{sp}<{tag}{b}{attrs}/>{tail}'
-        self.node_lst.append(t)
+        self.tag_lst.append(t)
         return self
 
     def clsopn(self, liv):
@@ -68,16 +68,16 @@ class HtmlBuilder(object):
             else:
                 tag_child = ''
             t = f'{sp}{tag_child}</{tag}>{tail}'
-            self.node_lst.append(t)
+            self.tag_lst.append(t)
         return True
 
     # rimuove tutte le righe che contengono tag
     def del_tags(self, tag):
         ls = []
-        for nd in self.node_lst:
+        for nd in self.tag_lst:
             if nd.find(tag) < 0:
                 ls.append(nd)
-        self.node_lst = ls
+        self.tag_lst = ls
 
     # chiusura con ultimo tag
     def end(self):
@@ -85,21 +85,25 @@ class HtmlBuilder(object):
         return self
 
     # ultimo tag 
-    def html_tag_last(self):
-        return self.node_lst[-1:][0]
+    def tag_last(self):
+        return self.tag_lst[-1:][0]
+
+    # lista dei tag
+    def get_tag_lst(self):
+        return self.tag_lst
 
     # modifica ultimo tag costruito
-    def upd_html_tag_last(self,tag):
-        last=len(self.node_lst)-1
-        self.node_lst[last]=tag
+    def upd_tag_last(self,tag):
+        last=len(self.tag_lst)-1
+        self.tag_lst[last]=tag
 
     # html identato
     def html_format(self):
-        s = os.linesep.join(self.node_lst)
+        s = os.linesep.join(self.tag_lst)
         return s
 
     # html su una sola riga eliminati spazi tra i tag
     def html_onerow(self):
-        ls = [x.strip() for x in self.node_lst]
+        ls = [x.strip() for x in self.tag_lst]
         s = "".join(ls)
         return s

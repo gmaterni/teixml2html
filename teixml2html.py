@@ -56,8 +56,8 @@ class Xml2Html(object):
         self.hb = HtmlBuilder()
         self.xml_data_dict = {}
         self.tag_stack=[False for i in range(1,20)]
-        # tag per controlo erroi
-        self.ctrl_tag=""
+        # tag per controlo errori
+        self.csv_tag_err=""
 
 
     def node_liv(self, node):
@@ -90,7 +90,7 @@ class Xml2Html(object):
         tag = tag if type(nd.tag) is str else "XXX"
         p = tag.rfind('}')
         if p > 1:
-            logerr.log("Error in  xml")
+            logerr.log("ERROR in  xml")
             logerr.log(nd.tag)
             sys.exyt()
         return tag.strip()
@@ -141,10 +141,11 @@ class Xml2Html(object):
         return l > 0
 
     def get_node_data(self, nd):
-        id = self.node_id(nd)
-        id_num = self.node_id_num(id)
         items = self.node_items(nd)
-        items['id_num'] = id_num
+        id = self.node_id(nd)
+        if id !='':
+            id_num = self.node_id_num(id)
+            items['id_num'] = id_num
         return {
             'id': id,
             'liv': self.node_liv(nd),
@@ -262,15 +263,15 @@ class Xml2Html(object):
 
     # ritorna dati della row di <tag>.csvindividuata
     # dall tag o tag+attr di x_data del file xml
-    # memorizza  i dati in store_csv_data
-    # la key è quella ottenuta dal tag xml e l'eventuale attributo
+    # memorizza x_data  in xml_data_dict
+    # la key è quella ottenuta dal tag xml e l'eventuale/i attributo
     def get_conf_data(self, x_data):
         xml_tag = x_data['tag']
         row_data = self.html_conf.get(xml_tag, None)
         if row_data is None:
             row_data = self.html_conf.get('x', {})
             csv_tag=xml_tag
-            self.ctrl_tag=f'_x_{csv_tag}'
+            self.csv_tag_err=f'_x_{csv_tag}'
         else:
             tag = row_data.get('tag', f"_x_{xml_tag}")
             p = tag.find('+')
@@ -286,12 +287,12 @@ class Xml2Html(object):
                 row_data = self.html_conf.get(csv_tag, None)
                 if row_data is None:
                     row_data = self.html_conf.get('x+y', None)
-                    self.ctrl_tag=f'_xy_{csv_tag}'
+                    self.csv_tag_err=f'_xy_{csv_tag}'
                 else:
-                    self.ctrl_tag=csv_tag
+                    self.csv_tag_err=csv_tag
             else:
                 csv_tag = xml_tag
-                self.ctrl_tag=csv_tag
+                self.csv_tag_err=csv_tag
         self.xml_data_dict[csv_tag] = x_data
         return row_data
    
@@ -300,6 +301,14 @@ class Xml2Html(object):
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
+    # ultimo tag w
+    def html_tag_last_id(self):
+        h=''
+        for i in range(1,10):
+            h=self.hb.get_tag_lst()[-i:][0]
+            if h.find('id') >-1:
+                break
+        return h
 
     def build_html_tag(self, x_data):
         x_items = x_data['items']
@@ -330,11 +339,11 @@ class Xml2Html(object):
             html_attrs_str = self.attrs_format(html_attrs_str, x_items)
             html_attrs_str = self.class_adjust(html_attrs_str)
         #
-        # formatta c_text itilizzando ext_items (items estseso)
+        # formatta c_text itilizzando ext_items (items esteso)
         if c_text.find('%') > -1:
             c_text = self.text_format(c_text, ext_items)
             #
-            # formatta utilizzando text
+            # formatta c_text utilizzando text
             if c_text.find('%text%') > -1:
                 if x_data.get('is_parent',None) is False:   
                     c_text = c_text.replace('%text%', x_text)
@@ -348,8 +357,15 @@ class Xml2Html(object):
         #
         html_text = x_text+c_text
         #
-        if self.ctrl_tag.find('_x') > -1:
-            logerr.log(self.ctrl_tag).prn()
+        if self.csv_tag_err.find('_x') > -1:
+            ht=self.html_tag_last_id().strip()
+            logerr.log("").prn()
+            logerr.log(ht).prn()
+            xs0=x_data['tag']
+            xs1=pp(x_data['items']).strip()
+            xs1=xs1.replace("{",'').replace('}','').replace(' ','')
+            s=f'xml:{xs0} {xs1}  csv:{self.csv_tag_err}'
+            logerr.log(s).prn()
             inp.inp("!")
         ####################
         html_data = {
@@ -381,9 +397,9 @@ class Xml2Html(object):
         is_container=self.tag_stack[x_liv-1]
         if is_container:
             content=self.build_content(h_tag,h_attrs, h_text, x_tail)
-            s =self.hb.html_tag_last()
+            s =self.hb.tag_last()
             content=s.replace('%text%',content)
-            self.hb.upd_html_tag_last(content)
+            self.hb.upd_tag_last(content)
             h_tag='XXX'
         if x_is_parent:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, x_tail)
@@ -392,7 +408,7 @@ class Xml2Html(object):
         ################################
         if inp.prn:
             loginfo.log(">> html node").prn()
-            loginfo.log(self.hb.html_tag_last()).prn()
+            loginfo.log(self.hb.tag_last()).prn()
         inp.inp(x_tag)
         if inp.equals('?'):
             print(self.hb.html_format())
@@ -420,7 +436,7 @@ class Xml2Html(object):
             f.write(html)
         os.chmod(self.html_path, 0o666)
         #
-        # html formattao versione per il debug
+        # html formattato versione per il debug
         # file_name.html => file_name_X.html
         html = self.hb.html_format()
         html = self.set_html_pramas(html)
@@ -428,6 +444,7 @@ class Xml2Html(object):
         with open(path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
+        return self.html_path
 
 
 def do_mauin(xml, html, tags, conf, deb=False):

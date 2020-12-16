@@ -81,3 +81,13 @@ space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
 space+#degl|XXX|
 
 unclear|span||class:unclear
+
+gap|span||class:gap
+
+supplied|supplied+reason+cert
+supplied+evident-omission|span||class:supplied_eo_int
+supplied+damage+yes|span||class:supplied_dy_int
+supplied+damage+no|span||class:supplied_dn_int
+
+damage|spanx
+

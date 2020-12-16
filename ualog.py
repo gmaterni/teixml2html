@@ -5,6 +5,9 @@ import os
 from pdb import set_trace
 
 """
+    Log("w")     modalità wrie
+    Log("a")      modlaità append
+
     self.out > 0 print attivato globalmente
     self.oout <1        disattivato
     
@@ -15,9 +18,10 @@ from pdb import set_trace
 """
 class Log(object):
 
-    def __init__(self):
+    def __init__(self,aappend_write='w'):
         self.used = False
         self.path_log =None
+        self.aw=aappend_write
         self.out = 0
         self.f = None
         self.msg=''
@@ -38,7 +42,7 @@ class Log(object):
         if self.used:
             return
         self.used = True
-        self.f = open(self.path_log, "w")
+        self.f = open(self.path_log, self.aw)
         os.chmod(self.path_log, 0o666)
 
     def prn(self,out=1):

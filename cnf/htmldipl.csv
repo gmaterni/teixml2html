@@ -88,6 +88,11 @@ space+reserved-initial|span||class:reserved-initial|&nbsp;&nbsp;
 space+#degl|span||class:degl|&nbsp;
 
 unclear|span||class:unclear
+gap|span||class:gap
+
+supplied|supplied+reason+cert
+supplied+evident-omission|span||class:supplied_eo
+supplied+damage+yes|span||class:supplied_dy
+supplied+damage+no|span||class:supplied_dn
 
 damage|spanx
-supplied|spanx
