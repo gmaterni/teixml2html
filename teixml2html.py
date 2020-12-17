@@ -46,6 +46,7 @@ class Xml2Html(object):
         self.html_conf = None
         self.before_id = None
         self.hb = None
+        self.span_lst=[]
         self.xml_data_dict = None
         self.tag_stack = None
         self.csv_tag_err = None
@@ -402,6 +403,8 @@ class Xml2Html(object):
             inp.inp()
         ################################
 
+    # utilizzando il file json formatta i parametri residui
+    # ne ìl cas specifico il nome del manoscrittp %MAN%
     def set_html_pramas(self, html):
         pars = self.man_conf.get("html_params", {})
         for k, v in pars.items():
