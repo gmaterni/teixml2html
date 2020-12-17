@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from pdb import set_trace
 import os
 import json
 import sys
@@ -16,7 +17,7 @@ def pp(data):
 
 
 __date__ = "13-12-2020"
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __author__ = "Marta Materni"
 
 logerr = Log()
@@ -27,23 +28,40 @@ class PrjMgr(object):
     def __init__(self):
         logerr.open("log/teimprj.err.log", 1)
 
-    def execute(self, x):
-        print(x)
-        s = os.system(x)
-        if s != 0:
-            logerr.log("Error execute:", x)
-            logerr.log(s)
-            sys.exit()
+    def files_of_dir(self,dr,ext):
+        files=[]
+        try:
+            for f in os.listdir(dr):
+                fpath=os.path.join(dr,f)
+                if os.path.isfile(fpath) is False:
+                    continue
+                if ext != "" :
+                    name=os.path.basename(fpath)
+                    if name.find(ext) <0:
+                        continue
+                files.append(fpath)
+        except Exception as e:
+            logerr.log(e)
+            logerr.log(f'dir:{dr}  ext:{ext}')
+            sys.exit(0)
+        return files
 
-    def execute_programs(self, exs):
-        for x in exs:
-            print(x)
-            s = os.system(x)
-            if s != 0:
-                logerr.log("Error execute:", x)
-                logerr.log(s)
-                sys.exit()
-
+   
+    def rm(self, de_lst):
+        for de in de_lst:
+            sp=de.split('|')
+            dr=sp[0]
+            ext="" if len(sp)==1 else sp[1]
+            files=self.files_of_dir(dr,ext)
+            try:
+                for fpath in files:
+                    print(fpath)
+                    os.remove(fpath)
+            except Exception as e:
+                logerr.log(e)
+                logerr.log(f'dir:{dr}  ext:{ext}')
+                sys.exit(0)
+    
     def merge_files(self, merge):
         out = merge.get("out", None)
         if out is None:
@@ -63,21 +81,37 @@ class PrjMgr(object):
         print(out)
         os.chmod(out, 0o666)
 
+
+    def execute_program(self, x):
+        print(x)
+        s = os.system(x)
+        if s != 0:
+            logerr.log("Error execute:", x)
+            logerr.log(s)
+            sys.exit()
+
+    def execute_programs(self, exs):
+        for x in exs:
+            print(x)
+            s = os.system(x)
+            if s != 0:
+                logerr.log("Error execute:", x)
+                logerr.log(s)
+                sys.exit()
+
     def parse_json(self, js):
         for k, v in js.items():
-            if isinstance(v, dict):
-                self.parse_json(v)
-                continue
             if k == "exe":
                 self.execute_programs(v)
-            if k in ["files","out"]:
-                pass
             elif k == "merge":
                 self.merge_files(v)
+            elif k == "rm":
+                 self.rm(v)
+            elif k in ["files","out"]:
+                pass
             else:
                 if isinstance(v, str):
-                    self.execute(v)
-                    pass
+                    self.execute_program(v)
 
     def parse(self, in_path):
         with open(in_path, "r") as f:

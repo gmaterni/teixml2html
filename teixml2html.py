@@ -448,7 +448,7 @@ class Xml2Html(object):
         # file_name.html => file_name_X.html
         html = self.hb.html_format()
         html = self.set_html_pramas(html)
-        path = self.html_path.replace(".html", "_X.html")
+        path = self.html_path.replace(".html", "_F.html")
         with open(path, "w+") as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)

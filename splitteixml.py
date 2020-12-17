@@ -9,7 +9,7 @@ from ualog import Log
 from pdb import set_trace
 
 __date__ = "12-12-2020"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __author__ = "Marta Materni"
 
 
@@ -21,12 +21,19 @@ def pp_data(data):
     return s
 
 
+"""
+splitta path_xml_in negli episodi ci scribe in dir_out
+produce <man>.xml con l'elenco degli episodi e scrive in dir_out
+produce <man>.tzt con l'elenco degli episodi e scrice i dir_out 
+"""
+
+
 class XmlSplitEps(object):
 
-    def __init__(self, path_input, dir_out, sigla_man):
-        self.path_in = path_input
+    def __init__(self, path_xml_in, dir_out, sigla_man):
+        self.path_xml_in = path_xml_in
         self.dir_out = dir_out
-        self.sigla_man=sigla_man
+        self.sigla_man = sigla_man
         path_err = dir_out + "_eps_err_.log"
         logerr.open(path_err, out=1)
 
@@ -53,7 +60,7 @@ class XmlSplitEps(object):
         with open(xml_path, "w+") as fw:
             fw.write(xml_src)
         os.chmod(xml_path, 0o666)
-        #print("xml_path",xml_path)
+        # print("xml_path",xml_path)
 
     # write xml/par/par.txt
     def writ_eps_num_lst(self, eps_lst, txt_path):
@@ -98,7 +105,7 @@ class XmlSplitEps(object):
         return path
 
     def get_notes(self):
-        root = etree.parse(self.path_in)
+        root = etree.parse(self.path_xml_in)
         nds = root.findall('teimed_note')
         ls = []
         for nd in nds:
@@ -181,7 +188,7 @@ class XmlSplitEps(object):
         return pb_cb
 
     def split_eps(self):
-        root = etree.parse(self.path_in)
+        root = etree.parse(self.path_xml_in)
         # root.attrib["{http://www.w3.org/XML/1998/namespace}id"] = xml_id
         ls = root.findall('div')
         eps_lst = []
@@ -219,24 +226,25 @@ class XmlSplitEps(object):
         eps_lst.append('</TEI>')
 
         # lista eps<n> in file xml
-        # xml/par/<mano>.xml 
+        # xml/par/<mano>.xml
         xml_path = self.fl_name(".xml")
         self.writ_eps_xml_lst(eps_lst, xml_path)
 
         # lista eps<n> in file txt
-        # xml/par/<mano>.TXT 
+        # xml/par/<mano>.TXT
         txt_path = self.fl_name(".txt")
         self.writ_eps_num_lst(eps_num_lst, txt_path)
 
 
 def do_main(path_in, dir_out, sigla_man):
-    xmlspl = XmlSplitEps(path_in, dir_out,sigla_man)
+    xmlspl = XmlSplitEps(path_in, dir_out, sigla_man)
     xmlspl.split_eps()
+
 
 """
 es.
 dir input: xml/par/file.xml
-dir out  : xml/par/par
+dir out  : xml/par/par/
 sigla_man: par
 """
 

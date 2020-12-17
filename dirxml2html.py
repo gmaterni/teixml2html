@@ -2,23 +2,21 @@
 import os
 import sys
 
-def do_main(dr,dip_int):
-    # cwd = os.getcwd()
+def do_main(xml_dir,html_dir,dip_int):
     di='dipl' if dip_int=='d' else 'inter'
     csv=f"cnf/html{di}.csv"
-    for f in os.listdir(dr):
-        xml=os.path.join(dr,f)
+    for f in os.listdir(xml_dir):
+        xml=os.path.join(xml_dir,f)
         if os.path.isfile(xml) is False:
             continue
         xml_name=os.path.basename(xml)
         if xml_name.endswith('xml') is False:
             continue
-        s=xml_name.replace('.xml','.html')
-        x=os.path.dirname(xml)
-        mano=x.split('/')[-1:][0]  
-        html_name=f'A{dip_int}{mano}_{s}'
-        html_path=os.path.join("html/x",html_name)
+        html_name=xml_name.replace('.xml',f'{dip_int}.html')
+        html_path=os.path.join(html_dir,html_name)
         #
+        dir_name_xml=os.path.dirname(xml)
+        mano=dir_name_xml.split('/')[-1:][0]  
         json=f"cnf/{mano}.json"
         print(xml)
         prg=f"teixml2html.py -i {xml} -o {html_path} -t {csv} -c {json}"
@@ -26,8 +24,10 @@ def do_main(dr,dip_int):
         if rt != 0:
             sys.exit()
         print("-------")
+
 if __name__ == '__main__':
-    d=sys.argv[1]
-    dip_int=sys.argv[2]
-    do_main(d,dip_int)
+    xml_dir=sys.argv[1]
+    html_dir=sys.argv[2]
+    dip_int=sys.argv[3]
+    do_main(xml_dir,html_dir,dip_int)
 
