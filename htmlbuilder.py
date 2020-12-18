@@ -34,6 +34,8 @@ class HtmlBuilder(object):
         self.tail_stack[liv] = tail
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
+        # gestione tag interno aperoo 
+        # es. span>a implica di chiudere </a></span>
         if tag.find('>') > -1:
             tag = tag.split('>')[0]
         t = f'{sp}<{tag}{b}{attrs}>{text}'
@@ -45,10 +47,14 @@ class HtmlBuilder(object):
             self.livx = liv - 1
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
-        if tag.find('>') > -1:
-            tag = tag.split('>')[0]
+        if tag.find('>') > -1:            
+            ts= tag.split('>')
+            tag=ts[0]
+            tag_child = f'</{ts[1]}>'
+        else:
+            tag_child=""
         if text != '':
-            t = f'{sp}<{tag}{b}{attrs}>{text}</{tag}>{tail}'
+            t = f'{sp}<{tag}{b}{attrs}>{text}{tag_child}</{tag}>{tail}'
         else:
             t = f'{sp}<{tag}{b}{attrs}/>{tail}'
         self.tag_lst.append(t)

@@ -76,7 +76,7 @@ rs|XXX
 
 span|span|from,to,type
 
-note|span>a||class:annotaz|<a href="#">
+note|span>a||class:annotaz|<a href="#">%text%
 
 ptr|a|id,type|class:ptr note,href:#,target_note:%target%|%n%|
 
