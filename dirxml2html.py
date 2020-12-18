@@ -26,6 +26,9 @@ def do_main(xml_dir,html_dir,dip_int):
         print("-------")
 
 if __name__ == '__main__':
+    if len(sys.argv)==1:
+        print("xml_path html_path d/i")
+        sys.exit()s
     xml_dir=sys.argv[1]
     html_dir=sys.argv[2]
     dip_int=sys.argv[3]

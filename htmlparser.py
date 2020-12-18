@@ -5,20 +5,14 @@ from pdb import set_trace
 import os
 import re
 import sys
-from lxml import etree
+from lxml.html import etree
 import pprint
 import sys
-import copy
 import argparse
-from readhtmlconf import read_html_conf
-from readjson import read_json
-from htmlbuilder import HtmlBuilder
 from ualog import Log
 from uainput import Inp
+from io import StringIO
 
-__date__ = "15-12-2020"
-__version__ = "0.0.3"
-__author__ = "Marta Materni"
 
 
 def pp(data):
@@ -49,11 +43,16 @@ class HtmlParse(object):
 
 
     def node_items(self, nd):
-        kvs = nd.items()
+        lst = nd.items()
         js = {}
-        for kv in kvs:
-            v = kv[1]
-            js[k] = v
+        try:
+            for x in lst:
+                k=x[0]
+                v=x[1]
+                js[k]=v
+        except Exception as e:
+            logerr.log(e).prn()
+            sys,exit()
         return js
 
     def node_tag(self, nd):
@@ -103,8 +102,10 @@ class HtmlParse(object):
 
     def get_node_data(self, nd):
         items = self.node_items(nd)
+        # print(items)
+        #set_trace()
         return {
-            'id': id,
+            # 'id': id,
             'liv': self.node_liv(nd),
             'tag': self.node_tag(nd).lower(),
             'tail': self.node_tail(nd),
@@ -118,8 +119,19 @@ class HtmlParse(object):
     def parse(self, html_path, deb=False):
         inp.enable(deb)        
         self.html_path = html_path
+        with open(self.html_path,"r+") as f:
+            h=f.read()
+        html=StringIO(h)
         try:
-            root = etree.parse(self.html_path)
+            # p = etree.HTMLParser(encoding='utf-8')
+            # p.parser.UseForeignDTD(True)
+            # root = etree.parse(self.html_path,p)
+            # root = etree.HTML(h, p)
+            # root = etree.parse(html,p)
+
+            parser = etree.HTMLParser()     
+            root   = etree.parse(StringIO(h), parser)
+
         except Exception as e:
             logerr.log(e)
             sys.exit()
@@ -141,7 +153,6 @@ def do_mauin(html,deb):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
-        print("release: %s  %s" % (__version__, __date__))
         parser.print_help()
         sys.exit()
     parser.add_argument('-d',

@@ -46,5 +46,7 @@ def read_csv_tags(csv_path):
 
 
 if __name__ == "__main__":
+    if len(sts.argv)==1:
+        print("htmltag.csv")
     tags_path = sys.argv[1]
     read_csv_tags(tags_path)

@@ -289,14 +289,6 @@ class Xml2Html(object):
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
-    # ultimo tag w
-    def html_tag_last_id(self):
-        h = ''
-        for i in range(1, 10):
-            h = self.hb.get_tag_lst()[-i:][0]
-            if h.find('id') > -1:
-                break
-        return h
 
     def build_html_tag(self, x_data):
         x_items = x_data['items']
@@ -346,9 +338,15 @@ class Xml2Html(object):
         html_text = x_text+c_text
         #
         if self.csv_tag_err.find('_x') > -1:
-            ht = self.html_tag_last_id().strip()
+            # ultimo tag w
+            h_w_last = ''
+            for i in range(1, 10):
+                h_w_last = self.hb.get_tag_lst()[-i:][0]
+                if h_w_last.find('id') > -1:
+                    break
             logerr.log("").prn()
-            logerr.log(ht).prn()
+            logerr.log(h_w_last).prn()
+            #
             xs0 = x_data['tag']
             xs1 = pp(x_data['items']).strip()
             xs1 = xs1.replace("{", '').replace('}', '').replace(' ', '')

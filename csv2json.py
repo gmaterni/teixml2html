@@ -12,6 +12,6 @@ def do_main(csv_path, json_path):
         f.write(js)
 
 if __name__ == "__main__":
-    csv_path = "cnf/htmltagsdip.csv"
-    json_path = "cnf/test0.json"
+    csv_path = "cnf/htmldipl.csv"
+    json_path = "wrk/htmldipl.json"
     do_main(csv_path, json_path)
