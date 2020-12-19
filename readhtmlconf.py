@@ -7,7 +7,7 @@ import traceback
 # from pdb import set_trace
 TAG_COL_NUM=7
 
-logerr=Log()
+logerr=Log("a")
 logerr.open("log/readhtmlconf.err.log",1)
 
 """

@@ -17,8 +17,8 @@ from htmloverflow import HtmlOvweflow
 from ualog import Log
 from uainput import Inp
 
-__date__ = "15-12-2020"
-__version__ = "0.0.4"
+__date__ = "19-12-2020"
+__version__ = "0.0.5"
 __author__ = "Marta Materni"
 
 
@@ -29,9 +29,9 @@ def pp(data):
     return s+os.linesep
 
 
-logconf = Log()
-loginfo = Log()
-logerr = Log()
+logconf = Log("w")
+loginfo = Log("a")
+logerr = Log("a")
 inp = Inp()
 
 class Xml2Html(object):
@@ -287,7 +287,7 @@ class Xml2Html(object):
             ls.append(s)
         return " ".join(ls)
 
-    def get_conf_data(self, x_data):
+    def get_row_conf_data(self, x_data):
         """ ritorna dati della row di <tag>.csvindividuata
             dall tag o tag+attr di x_data del file xml
             memorizza x_data  in xml_data_dict
@@ -346,7 +346,7 @@ class Xml2Html(object):
         x_text = x_data['text']
         x_liv = x_data['liv']
         self.is_container_stack[x_liv] = False
-        c_data = self. get_conf_data(x_data)
+        c_data = self. get_row_conf_data(x_data)
         ################################
         if inp.prn:
             loginfo.log("============").prn()
@@ -383,7 +383,7 @@ class Xml2Html(object):
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
-        #
+        # errori nella gestione del files csv dei tag html
         if self.csv_tag_err.find('_x') > -1:
             # ultimo tag w
             h_w_last = ''
@@ -483,7 +483,7 @@ class Xml2Html(object):
         self.xml_data_lst=[]
         self.xml_path = xml_path
         self.html_path = html_path
-        # lettura confiurazioni
+        # lettura configurazioni
         self.man_conf = read_json(json_path)
         logconf.log(">> man_coonf", pp(self.man_conf)).prn(0)
         self.html_conf = read_html_conf(csv_path)
@@ -507,12 +507,17 @@ class Xml2Html(object):
             self.html_append(nd)
         self.hb.del_tags('XXX')
         self.hb.end()
-        #
-        # TODO gestione degli overflow
+        #############################
+        """gestisce il settaggio degli overflow
+        modifica il parametro html_lst
+
+        Returns:
+            [type]: [description]
+        """        
         html_lst=self.hb.get_tag_lst()
-        html_over=HtmlOvweflow(self.xml_data_lst,html_lst)
-        lst=html_over.set_overflow()
-        #
+        html_over=HtmlOvweflow(self.xml_data_lst,html_lst,self.html_conf)
+        html_over.set_overflow()
+        ############################
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)

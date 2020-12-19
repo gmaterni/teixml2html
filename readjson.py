@@ -6,7 +6,7 @@ from ualog import Log
 import traceback 
 import json
 
-logerr=Log()
+logerr=Log("a")
 logerr.open("log/readjson.err.log",1)
 
 

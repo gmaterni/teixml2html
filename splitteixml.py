@@ -13,7 +13,7 @@ __version__ = "0.0.3"
 __author__ = "Marta Materni"
 
 
-logerr = Log()
+logerr = Log("a")
 
 
 def pp_data(data):

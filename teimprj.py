@@ -16,11 +16,11 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "13-12-2020"
-__version__ = "0.2.3"
+__date__ = "19-12-2020"
+__version__ = "0.2.4"
 __author__ = "Marta Materni"
 
-logerr = Log()
+logerr = Log("a")
 
 
 class PrjMgr(object):
@@ -28,16 +28,16 @@ class PrjMgr(object):
     def __init__(self):
         logerr.open("log/teimprj.err.log", 1)
 
-    def files_of_dir(self,dr,ext):
-        files=[]
+    def files_of_dir(self, dr, ext):
+        files = []
         try:
             for f in os.listdir(dr):
-                fpath=os.path.join(dr,f)
+                fpath = os.path.join(dr, f)
                 if os.path.isfile(fpath) is False:
                     continue
-                if ext != "" :
-                    name=os.path.basename(fpath)
-                    if name.find(ext) <0:
+                if ext != "":
+                    name = os.path.basename(fpath)
+                    if name.find(ext) < 0:
                         continue
                 files.append(fpath)
         except Exception as e:
@@ -46,13 +46,18 @@ class PrjMgr(object):
             sys.exit(0)
         return files
 
-   
     def rm(self, de_lst):
+        """cancella tutti i files elencatto i de_lst
+        ogni riga a la forma dir|pattern
+
+        Args:
+            de_lst (list): elenco files da cancellare 
+        """
         for de in de_lst:
-            sp=de.split('|')
-            dr=sp[0]
-            ext="" if len(sp)==1 else sp[1]
-            files=self.files_of_dir(dr,ext)
+            sp = de.split('|')
+            dr = sp[0]
+            ext = "" if len(sp) == 1 else sp[1]
+            files = self.files_of_dir(dr, ext)
             try:
                 for fpath in files:
                     print(fpath)
@@ -61,7 +66,7 @@ class PrjMgr(object):
                 logerr.log(e)
                 logerr.log(f'dir:{dr}  ext:{ext}')
                 sys.exit(0)
-    
+
     def merge_files(self, merge):
         out = merge.get("out", None)
         if out is None:
@@ -80,7 +85,6 @@ class PrjMgr(object):
         fout.close()
         print(out)
         os.chmod(out, 0o666)
-
 
     def execute_program(self, x):
         print(x)
@@ -106,8 +110,8 @@ class PrjMgr(object):
             elif k == "merge":
                 self.merge_files(v)
             elif k == "rm":
-                 self.rm(v)
-            elif k in ["files","out"]:
+                self.rm(v)
+            elif k in ["files", "out"]:
                 pass
             else:
                 if isinstance(v, str):
@@ -141,7 +145,13 @@ def prn_es():
                 "./eps/fl_par1_ep16.txt",
                 "./eps/fl_par1_ep17.txt",
             ]
-        }
+        },
+        "rm": [
+            "./xml/par|.xml",
+            "./xml/tor",
+            "./xml/tou",
+            "./xml/ven"
+        ]
     }
     print(pp(js))
 

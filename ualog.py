@@ -2,11 +2,11 @@
 # coding: utf-8
 # import datetime
 import os
-from pdb import set_trace
+# from pdb import set_trace
 
 """
     Log("w")     modalità wrie
-    Log("a")      modlaità append
+    Log("a")       modlaità append
 
     self.out > 0 print attivato globalmente
     self.oout <1        disattivato

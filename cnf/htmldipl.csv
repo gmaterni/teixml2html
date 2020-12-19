@@ -4,6 +4,7 @@ x|_x_
 x+y|_xy_
 
 tei|body
+
 div|div|type,ref|class:div_text
 pb|div|id,n|class:pb
 cb|div|id|class:cb|%n%
@@ -95,4 +96,7 @@ supplied+evident-omission|span||class:supplied_eo
 supplied+damage+yes|span||class:supplied_dy
 supplied+damage+no|span||class:supplied_dn
 
-damage|spanx
+directspeech|tei_direct|
+monologue|tei_monologue|
+
+damage|spanx|
