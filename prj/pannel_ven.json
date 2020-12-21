@@ -1,0 +1,10 @@
+{
+    "include": {
+        "host": "html/txt_pannel.html",
+        "dest": "html/ven/txt/ven.html",
+        "files": [
+            "EPISODE_LIST_DIPL|html/ven/txt/ven_listd.html",
+            "EPISODE_LIST_INTER|html/ven/txt/ven_listi.html"
+                 ]
+    }
+}

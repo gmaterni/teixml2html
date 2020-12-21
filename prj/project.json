@@ -1,0 +1,12 @@
+{
+    "exe": [
+        "teimprj.py prj//splitxml.json",
+        "teimprj.py prj//dirxml2html_di.json",
+        "teimprj.py prj//pannel_list.json",
+        "teimprj.py prj//pannel_par.json",
+        "teimprj.py prj//pannel_tor.json",
+        "teimprj.py prj//pannel_tou.json",
+        "teimprj.py prj//pannel_ven.json"
+
+    ]
+}

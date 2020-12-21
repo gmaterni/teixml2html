@@ -1,0 +1,10 @@
+{
+    "include": {
+        "host": "html/txt_pannel.html",
+        "dest": "html/par/txt/par.html",
+        "files": [
+            "EPISODE_LIST_DIPL|html/par/txt/par_listd.html",
+            "EPISODE_LIST_INTER|html/par/txt/par_listi.html"
+                 ]
+    }
+}

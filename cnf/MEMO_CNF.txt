@@ -29,10 +29,20 @@ supplie_d_dno
 
 
 
+gap [..
+
+damage
+supplied
+addname XXX
 
 
 
-
+.tei_directspeech 
+.tei_direct_beg_int 
+.tei_monologue 
+.tei_episode_beg_int 
+.tei_capitalize_afp 
+.tei_capitalize_afp_int 
 
 
 

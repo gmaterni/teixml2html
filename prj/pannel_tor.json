@@ -1,0 +1,10 @@
+{
+    "include": {
+        "host": "html/txt_pannel.html",
+        "dest": "html/tor/txt/tor.html",
+        "files": [
+            "EPISODE_LIST_DIPL|html/tor/txt/tor_listd.html",
+            "EPISODE_LIST_INTER|html/tor/txt/tor_listi.html"
+                 ]
+    }
+}

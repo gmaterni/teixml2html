@@ -17,13 +17,13 @@ da includere in
 txt_pannel.html
 
 files per l'esecuzione nella dir
-bin/
+prj//
 ----------------------------------
 esecuzione  le fasi del projetto
 (per semplicità tutti gli scritti fanno riferimento
 al manoscritto par)
 ----------------------------------
-bin/splitxml.json
+prj//splitxml.json
 
 estraee dal file:
 xml/florpar.xml
@@ -35,7 +35,7 @@ xml/par/ep2.xml
 produce lista degli episdofi da includre successivamente
 xml/par/par_list.xml
 ----------------------------------------
-bin/dirxml2html_di.json
+prj//dirxml2html_di.json
 
 per ogni dir dei manoscritti (par,tor,tou,ven, ..)
 trasforma da xml a html i singoli episodi
@@ -56,7 +56,7 @@ html/par/txt/ep1d_F.html
 interpretativa
 html/par/txt/ep1i_F.html
 ---------------------------------------
-bin/pannel_list.json
+prj//pannel_list.json
 
 produce per ogni manoscritto (par,tor,..)
 la lista degli episodi per la
@@ -67,7 +67,7 @@ xml/par/par_list.xml => html/par/txt/par_listd.html
 interpretativa
 xml/par/par_list.xml => html/par/txt/par_listi.html
 ---------------------------------------
-bin/pannel_par.json
+prj//pannel_par.json
 
 nel file:
 html/txt_pannel.html
@@ -81,23 +81,23 @@ scrive il  file contenente le intestazioni e l'elenco
 html/par/txt/par.html
 
 ============================
-bin/prohect.json
+prj//prohect.json
 
 {
     "exe": [
-        "teimprj.py bin/splitxml.json",
-        "teimprj.py bin/dirxml2html_di.json",
-        "teimprj.py bin/pannel_list.json",
-        "teimprj.py bin/pannel_par.json",
-        "teimprj.py bin/pannel_tor.json",
-        "teimprj.py bin/pannel_tou.json",
-        "teimprj.py bin/pannel_ven.json"
+        "teimprj.py prj//splitxml.json",
+        "teimprj.py prj//dirxml2html_di.json",
+        "teimprj.py prj//pannel_list.json",
+        "teimprj.py prj//pannel_par.json",
+        "teimprj.py prj//pannel_tor.json",
+        "teimprj.py prj//pannel_tou.json",
+        "teimprj.py prj//pannel_ven.json"
 
     ]
 }
 
 -----------------------------------------
-bin/splitxml.json
+prj//splitxml.json
 
 {
     "exe": [
@@ -109,7 +109,7 @@ bin/splitxml.json
     ]
 }
 --------------------------------------------
-bin/dirxml2html_di.json
+prj//dirxml2html_di.json
 
 {
     "exe": [
@@ -121,7 +121,7 @@ bin/dirxml2html_di.json
 }
 
 --------------------------------------------
-bin/pannel_list.json
+prj//pannel_list.json
 
 {
     "exe": [
@@ -140,7 +140,7 @@ bin/pannel_list.json
     ]
 }
 ------------------------------------------------
-bin/pannel_par.json
+prj//pannel_par.json
 
 {
     "include": {

@@ -88,7 +88,7 @@ class HtmlOvweflow(object):
             txt_end=''
             if flg == 0:
                 txt_start=c_params.get('start','')
-                cls = f"beg_{clazz}"
+                cls = f"start_{clazz}"
             elif flg == 2:
                 txt_end=c_params.get('end','')
                 cls = f"end_{clazz}"

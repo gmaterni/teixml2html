@@ -1,0 +1,8 @@
+{
+    "exe": [
+"dirxml2html.py xml/par html/par/txt i"  ,
+"dirxml2html.py xml/tor html/tor/txt i"  ,
+"dirxml2html.py xml/tou html/tou/txt i"  ,
+"dirxml2html.py xml/ven html/ven/txt i"  
+    ]
+}

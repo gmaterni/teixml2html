@@ -1,0 +1,10 @@
+{
+    "include": {
+        "host": "html/txt_pannel.html",
+        "dest": "html/tou/txt/tou.html",
+        "files": [
+            "EPISODE_LIST_DIPL|html/tou/txt/tou_listd.html",
+            "EPISODE_LIST_INTER|html/tou/txt/tou_listi.html"
+                 ]
+    }
+}
