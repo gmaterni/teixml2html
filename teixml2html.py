@@ -247,13 +247,14 @@ class Xml2Html(object):
         """
         attrs = {}
         try:
+            # set_trace()
             for k in c_keys:
                 attrs[k] = x_items[k]
             for k in c_attrs.keys():
                 attrs[k] = c_attrs[k]
         except Exception as e:
+            logerr.log(os.linesep, "ERROR: attrs_builder()")
             logerr.log(e)
-            logerr.log(os.linesep, "ERROR", "attrs_builder()")
             logerr.log("x_items:", x_items)
             logerr.log("c_keys: ", c_keys)
             logerr.log("c_attrs:", c_attrs)
@@ -385,20 +386,10 @@ class Xml2Html(object):
         html_text = x_text+c_text
         # errori nella gestione del files csv dei tag html
         if self.csv_tag_err.find('_x') > -1:
-            # ultimo tag w
-            h_w_last = ''
-            for i in range(1, 10):
-                h_w_last = self.hb.get_tag_lst()[-i:][0]
-                if h_w_last.find('id') > -1:
-                    break
-            logerr.log("").prn()
-            logerr.log(h_w_last).prn()
-            #
-            xs0 = x_data['tag']
-            xs1 = pp(x_data['items']).strip()
-            xs1 = xs1.replace("{", '').replace('}', '').replace(' ', '')
-            s = f'xml:{xs0} {xs1}  csv:{self.csv_tag_err}'
-            logerr.log(s).prn()
+            logerr.log("ERRORO in csv").prn()
+            logerr.log("xml:",pp(x_data))
+            s = f'csv: {self.csv_tag_err}'
+            logerr.log(s,os.linesep).prn()
             inp.inp("!")
         ####################
         html_data = {

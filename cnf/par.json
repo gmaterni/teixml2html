@@ -1,5 +1,6 @@
 {
 "html_params": {
     "%MAN%": "par",
-    "damageyes":"damage_dy"
+    "<null>":"",
+    "</null>":""
 }}

@@ -1,7 +1,9 @@
 xml_tag|tag|keys|attrs|text|params|parent
 before_id|d
+
 x|_x_
 x+y|_xy_
+null|null
 
 tei|body
 
@@ -96,7 +98,7 @@ supplied+evident-omission|span||class:supplied_eo
 supplied+damage+yes|span||class:supplied_dy
 supplied+damage+no|span||class:supplied_dn
 
-directspeech|tei_direct|
-monologue|tei_monologue|
+directspeech|tei_direct||||start:«,end:»
+monologue|tei_monologue||||start:",end:"
 
 damage|spanx|

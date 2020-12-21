@@ -16,8 +16,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "19-12-2020"
-__version__ = "0.2.4"
+__date__ = "20-12-2020"
+__version__ = "0.3.0"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -27,6 +27,32 @@ class PrjMgr(object):
 
     def __init__(self):
         logerr.open("log/teimprj.err.log", 1)
+
+    def include_files(self, js):
+        """nel file host sostitusce ogni parametro
+        con il file ad esso collegato
+
+        Args:
+            js ([type]): [description]
+        """
+        file_host = js.get("host", None)
+        file_dest = js.get("dest", None)
+        par_path_list = js.get("files")
+        with open(file_host, "rt") as f:
+            host = f.read()
+        #
+        for par_path in par_path_list:
+            sp = par_path.split('|')
+            param = sp[0]
+            path = sp[1]
+            print(param, path)
+            with open(path, "rt") as f:
+                txt = f.read()
+            host = host.replace(param, txt)
+        #
+        with open(file_dest, "w+") as f:
+            f.write(host)
+        os.chmod(file_dest, 0o666)
 
     def files_of_dir(self, dr, ext):
         files = []
@@ -109,18 +135,25 @@ class PrjMgr(object):
                 self.execute_programs(v)
             elif k == "merge":
                 self.merge_files(v)
+            elif k == "include":
+                self.include_files(v)
             elif k == "rm":
                 self.rm(v)
-            elif k in ["files", "out"]:
+            elif k in ["files", "out", "host", "dest"]:
                 pass
             else:
                 if isinstance(v, str):
                     self.execute_program(v)
 
     def parse(self, in_path):
-        with open(in_path, "r") as f:
-            txt = f.read()
-        js = json.loads(txt)
+        try:
+            with open(in_path, "r") as f:
+                txt = f.read()
+            js = json.loads(txt)
+        except Exception as e:
+            logerr.log("json ERROR")
+            logerr.log(e)
+            sys.exit()
         self.parse_json(js)
 
 
@@ -151,7 +184,15 @@ def prn_es():
             "./xml/tor",
             "./xml/tou",
             "./xml/ven"
-        ]
+        ],
+        "include": {
+            "host": "html/txt_pannel.html",
+            "dest": "html/par/txt/par.html",
+            "files": [
+                "EPISODE_LIST_DIPL|html/par/txt/par_listd.html",
+                "EPISODE_LIST_INTER|html/par/txt/par_listi.html"
+            ]
+        }
     }
     print(pp(js))
 

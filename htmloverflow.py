@@ -57,14 +57,14 @@ class HtmlOvweflow(object):
                 }
                 self.span_lst.append(item)
 
-    # tei_direct_beg_int  
-    # tei_episode_beg_int
     def add_html_class(self, flg, rh, tp):
         """ aggiunge una classe alle righe html in funzione del flag
         e del type
         <span from="Gl23w1" to="Gl98w6" type="directspeech"/>
         modifica da from a to secondo typt
-                <div class="w aggl-s" id="dGl2w1">Si</div>s
+        
+        <div class="w aggl-s" id="dGl2w1">Si</div>s
+        
         <span class="pc_ed" id="dGl44pc1">,</span>
 
         Args:
@@ -74,6 +74,7 @@ class HtmlOvweflow(object):
 
         Returns:
             str: riga html odificata
+
         """
         try:
             c_data=self.html_conf.get(tp,None)
@@ -82,9 +83,14 @@ class HtmlOvweflow(object):
             clazz=c_data.get('tag',None)
             if clazz is None :
                 raise Exception(f"type:{tp} Error tag in csv")
+            c_params=c_data.get('params',{})
+            txt_start=''
+            txt_end=''
             if flg == 0:
+                txt_start=c_params.get('start','')
                 cls = f"beg_{clazz}"
             elif flg == 2:
+                txt_end=c_params.get('end','')
                 cls = f"end_{clazz}"
             else:
                 cls = clazz
@@ -98,6 +104,10 @@ class HtmlOvweflow(object):
                 raise Exception("Error in html")
             p1=rh.find('"',p0)
             s=rh[0:p1]+" "+cls+rh[p1:]
+            if txt_start !='':
+                s=s.replace('>',f'>{txt_start}',1)
+            if txt_end !='':
+                s=s.replace('</',f'{txt_end}</',1)
             return s
         except Exception as e:
             logerr.log(e)

@@ -8,8 +8,8 @@ import pprint
 from ualog import Log
 from pdb import set_trace
 
-__date__ = "12-12-2020"
-__version__ = "0.0.3"
+__date__ = "20-12-2020"
+__version__ = "0.0.4"
 __author__ = "Marta Materni"
 
 
@@ -23,8 +23,8 @@ def pp_data(data):
 
 """
 splitta path_xml_in negli episodi ci scribe in dir_out
-produce <man>.xml con l'elenco degli episodi e scrive in dir_out
-produce <man>.tzt con l'elenco degli episodi e scrice i dir_out 
+produce <man>_list.xml con l'elenco degli episodi e scrive in dir_out
+produce <man>_list.txt con l'elenco degli episodi e scrice i dir_out 
 """
 
 
@@ -92,15 +92,15 @@ class XmlSplitEps(object):
             attrs[k] = v
         return attrs
 
-    def eps_name(self, eps):
+    def build_episode_name(self, eps):
         f = self.dir_out
         dir = os.path.dirname(f)
         name = eps
         path = os.path.join(dir, name)
         return path
 
-    def fl_name(self, ext):
-        name = self.sigla_man + ext
+    def build_list_name(self, ext):
+        name = self.sigla_man + "_list" + ext
         path = os.path.join(self.dir_out, name)
         return path
 
@@ -193,7 +193,7 @@ class XmlSplitEps(object):
         ls = root.findall('div')
         eps_lst = []
         eps_num_lst = []
-        eps_lst.append('<TEI>')
+        eps_lst.append('<null>')
         for nd in ls:
             ks = self.node_attrs(nd)
             src = self.node_src(nd)
@@ -217,22 +217,20 @@ class XmlSplitEps(object):
                 self.prn_node(ch)
                 ch.addprevious(pb)
                 ch.addprevious(cb)
-
-            xml_path = self.eps_name(eps_num + '.xml')
+            xml_path = self.build_episode_name(eps_num + '.xml')
             self.write_eps_xml(nd, xml_path)
-
         s = self.get_notes()
         eps_lst.append(s)
-        eps_lst.append('</TEI>')
+        eps_lst.append('</null>')
 
         # lista eps<n> in file xml
         # xml/par/<mano>.xml
-        xml_path = self.fl_name(".xml")
+        xml_path = self.build_list_name(".xml")
         self.writ_eps_xml_lst(eps_lst, xml_path)
 
         # lista eps<n> in file txt
         # xml/par/<mano>.TXT
-        txt_path = self.fl_name(".txt")
+        txt_path = self.build_list_name(".txt")
         self.writ_eps_num_lst(eps_num_lst, txt_path)
 
 

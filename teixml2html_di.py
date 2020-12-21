@@ -6,21 +6,40 @@ import sys
 import argparse
 from teixml2html import Xml2Html
 
-__date__ = "15-15-2020"
-__version__ = "0.0.1"
+__date__ = "20-12-2020"
+__version__ = "0.0.2"
 __author__ = "Marta Materni"
 
 
-def do_mauin(xml, html, tagsd, tagsi, conf, deb=False):
-    # set_trace()
+def do_mauin(xml, html_name, tagsd, tagsi, conf, deb=False):
+    """invoca teixml2html.py 
+    con tagsd per la diplomatica
+    produce un file hatml_named.html (aggiunge d) e hatml_named_F.html
+    
+    con tagsi per la interpretativa
+    produce un file hatml_namei.html (aggiunge i) e hatml_nameiF.html
+
+    unisce hatml_named.htm l e hatml_namei.html in html_name.html
+
+    cancella html_named.html e html_namei.html
+
+
+    Args:
+        xml ([type]): [description]
+        html ([type]): [description]
+        tagsd ([type]): [description]
+        tagsi ([type]): [description]
+        conf ([type]): [description]
+        deb (bool, optional): [description]. Defaults to False.
+    """
     xt = Xml2Html()
-    html_d = html.replace(".html", "d.html")
+    html_d = html_name.replace(".html", "d.html")
     path_hd=xt.write_html(xml, html_d, tagsd, conf, deb)
     #
-    html_i = html.replace(".html", "i.html")
+    html_i = html_name.replace(".html", "i.html")
     path_hi=xt.write_html(xml, html_i, tagsi, conf, deb)
     #
-    fout = open(html, "w+")
+    fout = open(html_name, "w+")
     with open(path_hd, "rt") as f:
         txt = f.read()
         fout.write(txt)
@@ -29,7 +48,7 @@ def do_mauin(xml, html, tagsd, tagsi, conf, deb=False):
         txt = f.read()
         fout.write(txt)
     fout.close()
-    os.chmod(html, 0o666)
+    os.chmod(html_name, 0o666)
     os.remove(path_hd)
     os.remove(path_hi)
 
