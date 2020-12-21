@@ -17,16 +17,18 @@ def pp(data):
 
 
 __date__ = "20-12-2020"
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
+loginfo = Log("a")
 
 
 class PrjMgr(object):
 
     def __init__(self):
         logerr.open("log/teimprj.err.log", 1)
+        loginfo.open("log/teimprj.log", 1)
 
     def include_files(self, js):
         """nel file host sostitusce ogni parametro
@@ -45,7 +47,8 @@ class PrjMgr(object):
             sp = par_path.split('|')
             param = sp[0]
             path = sp[1]
-            print(param, path)
+            loginfo.log(param)
+            loginfo.log(path)
             with open(path, "rt") as f:
                 txt = f.read()
             host = host.replace(param, txt)
@@ -86,7 +89,7 @@ class PrjMgr(object):
             files = self.files_of_dir(dr, ext)
             try:
                 for fpath in files:
-                    print(fpath)
+                    loginfo.log(fpath)
                     os.remove(fpath)
             except Exception as e:
                 logerr.log(e)
@@ -104,16 +107,16 @@ class PrjMgr(object):
             sys.exit()
         fout = open(out, "w+")
         for f in files:
-            print(f)
+            loginfo.log(f)
             with open(f, "rt") as f:
                 txt = f.read()
             fout.write(txt)
         fout.close()
-        print(out)
+        loginfo.log(out)
         os.chmod(out, 0o666)
 
     def execute_program(self, x):
-        print(x)
+        loginfo.log(x)
         s = os.system(x)
         if s != 0:
             logerr.log("Error execute:", x)
@@ -122,7 +125,7 @@ class PrjMgr(object):
 
     def execute_programs(self, exs):
         for x in exs:
-            print(x)
+            loginfo.log(x)
             s = os.system(x)
             if s != 0:
                 logerr.log("Error execute:", x)
@@ -194,7 +197,7 @@ def prn_es():
             ]
         }
     }
-    print(pp(js))
+    loginfo.log(pp(js))
 
 
 if __name__ == "__main__":

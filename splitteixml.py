@@ -187,16 +187,17 @@ class XmlSplitEps(object):
         pb_cb = self.get_prev_pb_cb(nd)
         return pb_cb
 
-    def split_eps(self):
+    def write_episode_lst(self):
         root = etree.parse(self.path_xml_in)
         # root.attrib["{http://www.w3.org/XML/1998/namespace}id"] = xml_id
         ls = root.findall('div')
         eps_lst = []
         eps_num_lst = []
+        # div null per contenere la lista episodi
         eps_lst.append('<null>')
-        for nd in ls:
-            ks = self.node_attrs(nd)
-            src = self.node_src(nd)
+        for xml_node in ls:
+            ks = self.node_attrs(xml_node)
+            src = self.node_src(xml_node)
             # print(src)
             # pagina iniziale con lista episoid
             eps_lst.append(src)
@@ -206,21 +207,22 @@ class XmlSplitEps(object):
             # print(eps_num)
             # sottoalberi episodi
             # controllo inizio pagina
-            pbcb = self.begin_pag_dupl(nd)
+            pbcb = self.begin_pag_dupl(xml_node)
             # print(pbcb)
             if pbcb is not None:
                 pb = pbcb[0]
                 cb = pbcb[1]
                 self.prn_node(pb)
                 self.prn_node(cb)
-                ch = self.get_child(nd, 'lg')
+                ch = self.get_child(xml_node, 'lg')
                 self.prn_node(ch)
                 ch.addprevious(pb)
                 ch.addprevious(cb)
             xml_path = self.build_episode_name(eps_num + '.xml')
-            self.write_eps_xml(nd, xml_path)
+            self.write_eps_xml(xml_node, xml_path)
         s = self.get_notes()
         eps_lst.append(s)
+        # chiusura div contenitore
         eps_lst.append('</null>')
 
         # lista eps<n> in file xml
@@ -236,7 +238,7 @@ class XmlSplitEps(object):
 
 def do_main(path_in, dir_out, sigla_man):
     xmlspl = XmlSplitEps(path_in, dir_out, sigla_man)
-    xmlspl.split_eps()
+    xmlspl.write_episode_lst()
 
 
 """
