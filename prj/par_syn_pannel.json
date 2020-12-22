@@ -1,0 +1,19 @@
+{
+  "exe": [
+    "teixml2html.py -i xml/par/par_list.xml -o html/par/syn/par_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
+    "teixml2html.py -i xml/par/par_list.xml -o html/par/syn/par_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+  ],
+  "include": {
+    "host": "html/syn_pannel.html",
+    "dest": "html/par/syn/par.html",
+    "params": ["MAN|par"],
+    "files": [
+      "EPISODE_LIST_DIPL|html/par/syn/par_listd.html",
+      "EPISODE_LIST_INTER|html/par/syn/par_listi.html"
+    ]
+  },
+  "remove_dir": [
+    "html/par/syn|_listd.htmll",
+    "html/par/syn|_listi.html"
+  ]
+}

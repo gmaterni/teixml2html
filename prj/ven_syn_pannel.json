@@ -1,0 +1,20 @@
+{
+    "exe": [
+        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
+        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+    ],
+    "include": {
+        "host": "html/syn_pannel.html",
+        "dest": "html/ven/syn/ven.html",
+        "params": [
+            "MAN|ven"
+        ],
+        "files": [
+            "EPISODE_LIST_DIPL|html/ven/syn/ven_listd.html",
+            "EPISODE_LIST_INTER|html/ven/syn/ven_listi.html"
+        ],
+        "remove_dir": [
+            "html/ven/syn|_listd.htmll",
+            "html/ven/syn|_listi.html"
+          ]    }
+}

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
-import os
 import json
-import sys
+import os
 import pprint
+import sys
+from pdb import set_trace
+
 from ualog import Log
 
 
@@ -16,8 +17,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "20-12-2020"
-__version__ = "0.3.1"
+__date__ = "22-12-2020"
+__version__ = "0.3.2"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -30,32 +31,11 @@ class PrjMgr(object):
         logerr.open("log/teimprj.err.log", 1)
         loginfo.open("log/teimprj.log", 1)
 
-    def include_files(self, js):
-        """nel file host sostitusce ogni parametro
-        con il file ad esso collegato
-
-        Args:
-            js ([type]): [description]
-        """
-        file_host = js.get("host", None)
-        file_dest = js.get("dest", None)
-        par_path_list = js.get("files")
-        with open(file_host, "rt") as f:
-            host = f.read()
-        #
-        for par_path in par_path_list:
-            sp = par_path.split('|')
-            param = sp[0]
-            path = sp[1]
-            loginfo.log(param)
-            loginfo.log(path)
-            with open(path, "rt") as f:
-                txt = f.read()
-            host = host.replace(param, txt)
-        #
-        with open(file_dest, "w+") as f:
-            f.write(host)
-        os.chmod(file_dest, 0o666)
+    def get(self, js, k):
+        s = js.get(k, None)
+        if s is None:
+            raise Exception(f"{k} not found.{os.linesep}")
+        return s
 
     def files_of_dir(self, dr, ext):
         files = []
@@ -70,53 +50,101 @@ class PrjMgr(object):
                         continue
                 files.append(fpath)
         except Exception as e:
+            logerr.log("file_of_dir")
             logerr.log(e)
-            logerr.log(f'dir:{dr}  ext:{ext}')
             sys.exit(1)
         return files
 
-    def execute_files_of_dir(self,js):
-        
+    def include_files(self, include):
+        """nel file host sostitusce ogni parametro
+        con il file ad esso collegato
+
+        Args:
+            js (dict): "include". ramo del project 
+        """
+        loginfo.log("include")
         try:
-            def get(k):
-                s=js.get(k,None)
-                if s is None:
-                    raise Exception(f"{k} not found.{os.linesep}")
-                return s
-            
-            dr=get('dir')
-            ext=get('ext')
-            prog=get('prog')
-            par_name=get('par_name')
-            sub=get('par_sub')
-            sp=sub.split('|')        
+            file_host = include.get("host", None)
+            file_dest = include.get("dest", None)
+            file_lst = include.get("files", [])
+            param_lst = include.get("params", [])
+            #
+            with open(file_host, "rt") as f:
+                host = f.read()
+            #
+            for param_path in file_lst:
+                sp = param_path.split('|')
+                param = sp[0]
+                path = sp[1]
+                loginfo.log(f"{param}: {path}")
+                with open(path, "rt") as f:
+                    txt = f.read()
+                host = host.replace(param, txt)
+            #
+            for key_val in param_lst:
+                sp = key_val.split('|')
+                key = sp[0]
+                val = sp[1]
+                loginfo.log(f"{key}: {val}")
+                host = host.replace(key, val)
+            #
+            with open(file_dest, "w+") as f:
+                f.write(host)
+            os.chmod(file_dest, 0o666)
+        except Exception as e:
+            logerr.log("include")
+            logerr.log(e)
+            sys.exit(1)
+
+
+    def execute_files_of_dir(self, exe_dir):
+        loginfo.log("exe_dir")
+        try:
+            dr = self.get(exe_dir, 'dir')
+            ext = self.get(exe_dir, 'ext')
+            prog = self.get(exe_dir, 'prog')
+            par_name = self.get(exe_dir, 'par_name')
+            sub = self.get(exe_dir, 'par_sub')
+            #
+            sp = sub.split('|')
             files = self.files_of_dir(dr, ext)
             for f in files:
-                file_name=os.path.basename(f)
-                par=file_name.replace(sp[0],sp[1])
-                x=prog.replace(par_name,par)
+                file_name = os.path.basename(f)
+                par = file_name.replace(sp[0], sp[1])
+                x = prog.replace(par_name, par)
                 loginfo.log(x)
-                r=os.system(x)
-                if r!=0:
-                    logerr.log("ERROR execute:", x)
-                    logerr.log(s)
-                    sys.exit()
-
+                r = os.system(x)
+                if r != 0:
+                    raise Exception(f"ERROR execute:{x}")
         except Exception as e:
+            logerr.log("exe_dir")
             logerr.log(e)
-            logerr.log(str(js))
-            logerr.log(pp(js))
+            logerr.log(pp(exe_dir))
+            sys.exit(0)
+
+    def remove_files_of_dir(self, remove_dir):
+        loginfo.log("remove_dir")
+        try:
+            path_ext_lst = remove_dir
+            for pe in path_ext_lst:
+                loginfo.log(pe)
+                sp=pe.split('|')
+                dr = sp[0]
+                ext = sp[1]
+                files = self.files_of_dir(dr, ext)
+                for f in files:
+                    loginfo.log(f)
+                    os.remove(f)
+        except Exception as e:
+            logerr.log("remove_dir")
+            logerr.log(e)
+            logerr.log(pp(remove_dir))
             sys.exit(0)
 
     def merge_files(self, merge):
-        out = merge.get("out", None)
-        if out is None:
-            logerr.log("tag merrge out is null")
-            sys.exit()
-        files = merge.get("files", None)
-        if files is None:
-            logerr.log("tag files is null")
-            sys.exit()
+        loginfo.log("merge")
+        out = self.get(merge, "out")
+        files = self.get(merge, "files")
         fout = open(out, "w+")
         for f in files:
             loginfo.log(f)
@@ -127,21 +155,14 @@ class PrjMgr(object):
         loginfo.log(out)
         os.chmod(out, 0o666)
 
-    def execute_program(self, x):
-        loginfo.log(x)
-        s = os.system(x)
-        if s != 0:
-            logerr.log("ERROR execute:", x)
-            logerr.log(s)
-            sys.exit()
-
-    def execute_programs(self, exs):
-        for x in exs:
+    def execute_programs(self, exe):
+        loginfo.log("exe")
+        for x in exe:
             loginfo.log(x)
-            s = os.system(x)
-            if s != 0:
-                logerr.log("ERROR execute:", x)
-                logerr.log(s)
+            r = os.system(x)
+            if r != 0:
+                logerr.log("exe:", x)
+                logerr.log(r)
                 sys.exit()
 
     def parse_json(self, js):
@@ -154,11 +175,10 @@ class PrjMgr(object):
                 self.include_files(v)
             elif k == "exe_dir":
                 self.execute_files_of_dir(v)
-            elif k in ["files", "out", "host", "dest"]:
-                pass
+            elif k == "remove_dir":
+                self.remove_files_of_dir(v)
             else:
-                if isinstance(v, str):
-                    self.execute_program(v)
+                pass
 
     def parse(self, in_path):
         try:
@@ -197,12 +217,27 @@ def prn_es():
         "include": {
             "host": "html/txt_pannel.html",
             "dest": "html/par/txt/par.html",
+            "params": [
+                "MANO|par"
+            ],
             "files": [
                 "EPISODE_LIST_DIPL|html/par/txt/par_listd.html",
                 "EPISODE_LIST_INTER|html/par/txt/par_listi.html"
             ]
-        }
+        },
+        "exe_dir": {
+            "dir": "xml/par",
+            "ext": ".xml",
+            "par_sub": ".xml|",
+            "par_name": "$F",
+            "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/par.json"
+        },
+        "remove_dir": [
+            "html/par/syn|_listd.xml",
+            "html/par/syn|_listi.xml"
+        ]
     }
+
     loginfo.log(pp(js))
 
 

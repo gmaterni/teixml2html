@@ -1,0 +1,20 @@
+{
+    "exe": [
+        "teixml2html.py -i xml/tor/tor_list.xml -o html/tor/syn/tor_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
+        "teixml2html.py -i xml/tor/tor_list.xml -o html/tor/syn/tor_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+    ],
+    "include": {
+        "host": "html/syn_pannel.html",
+        "dest": "html/tor/syn/tor.html",
+        "params": [
+            "MAN|tor"
+        ],
+        "files": [
+            "EPISODE_LIST_DIPL|html/tor/syn/tor_listd.html",
+            "EPISODE_LIST_INTER|html/tor/syn/tor_listi.html"
+        ],
+        "remove_dir": [
+            "html/tor/syn|_listd.htmll",
+            "html/torr/syn|_listi.html"
+          ]    }
+}

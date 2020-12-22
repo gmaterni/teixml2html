@@ -1,0 +1,21 @@
+{
+    "exe": [
+        "teixml2html.py -i xml/tou/tou_list.xml -o html/tou/syn/tou_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
+        "teixml2html.py -i xml/tou/tou_list.xml -o html/tou/syn/tou_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+    ],
+    "include": {
+        "host": "html/syn_pannel.html",
+        "dest": "html/tou/syn/tou.html",
+        "params": [
+            "MAN|tou"
+        ],
+        "files": [
+            "EPISODE_LIST_DIPL|html/tou/syn/tou_listd.html",
+            "EPISODE_LIST_INTER|html/tou/syn/tou_listi.html"
+        ],
+        "remove_dir": [
+            "html/tou/syn|_listd.htmll",
+            "html/tou/syn|_listi.html"
+          ]
+    }
+}
