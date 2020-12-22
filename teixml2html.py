@@ -33,6 +33,7 @@ loginfo = Log("a")
 logerr = Log("a")
 inp = Inp()
 
+
 class Xml2Html(object):
 
     def __init__(self):
@@ -166,7 +167,7 @@ class Xml2Html(object):
             return text
         except Exception as e:
             logerr.set_out(1)
-            logerr.log(os.linesep, "Error", "text_format()")
+            logerr.log(os.linesep, "ERROR", "text_format()")
             logerr.log(e)
             logerr.log(f"text:{text}")
             logerr.log(f"pars: {pars}")
@@ -384,12 +385,21 @@ class Xml2Html(object):
         #
         html_text = x_text+c_text
         #
-        # errori nella gestione del files csv dei tag html
+        # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_err.find('_x') > -1:
-            logerr.log("Error in csv").prn()
-            logerr.log("xml:",pp(x_data))
-            s = f'csv: {self.csv_tag_err}'
-            logerr.log(s,os.linesep).prn()
+            logerr.log(os.linesep,"ERROR in csv").prn()
+            logerr.log(f"file: {self.xml_path}")
+            logerr.log("xml:", pp(x_data))
+            logerr.log("csv:",self.csv_tag_err).prn()
+            # ultimo tag w prima dell'ERRORe
+            tag_w_last = ''
+            if len(self.hb.get_tag_lst()) > 1:
+                for i in range(1, 10):
+                    tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
+                    if tag_w_last.find('id') > -1:
+                        break
+            logerr.log("last w: ",tag_w_last).prn()
+            #
             inp.inp("!")
         ####################
         html_data = {
@@ -471,7 +481,7 @@ class Xml2Html(object):
             html_path (str): filr name html 
         """
         inp.enable(deb)
-        self.xml_data_lst=[]
+        self.xml_data_lst = []
         self.xml_path = xml_path
         self.html_path = html_path
         # lettura configurazioni
@@ -485,7 +495,7 @@ class Xml2Html(object):
         self.hb = HtmlBuilder()
         self.xml_data_dict = {}
         self.is_container_stack = [False for i in range(1, 20)]
-        # tag per controlo errori
+        # tag per controlo ERRORi
         self.csv_tag_err = ""
         #
         self.hb.init()
@@ -504,9 +514,9 @@ class Xml2Html(object):
 
         Returns:
             [type]: [description]
-        """        
-        html_lst=self.hb.get_tag_lst()
-        html_over=HtmlOvweflow(self.xml_data_lst,html_lst,self.html_conf)
+        """
+        html_lst = self.hb.get_tag_lst()
+        html_over = HtmlOvweflow(self.xml_data_lst, html_lst, self.html_conf)
         html_over.set_overflow()
         ############################
         # html su una riga versione per produzione

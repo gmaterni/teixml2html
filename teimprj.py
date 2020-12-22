@@ -76,12 +76,19 @@ class PrjMgr(object):
         return files
 
     def execute_files_of_dir(self,js):
+        
         try:
-            dr=js.get('dir',None)
-            ext=js.get('ext',None)
-            prog=js.get('prog',None)
-            par_name=js.get('par_name',None)
-            sub=js.get('par_sub',None)
+            def get(k):
+                s=js.get(k,None)
+                if s is None:
+                    raise Exception(f"{k} not found.{os.linesep}")
+                return s
+            
+            dr=get('dir')
+            ext=get('ext')
+            prog=get('prog')
+            par_name=get('par_name')
+            sub=get('par_sub')
             sp=sub.split('|')        
             files = self.files_of_dir(dr, ext)
             for f in files:
@@ -91,7 +98,7 @@ class PrjMgr(object):
                 loginfo.log(x)
                 r=os.system(x)
                 if r!=0:
-                    logerr.log("Error execute:", x)
+                    logerr.log("ERROR execute:", x)
                     logerr.log(s)
                     sys.exit()
 
@@ -124,7 +131,7 @@ class PrjMgr(object):
         loginfo.log(x)
         s = os.system(x)
         if s != 0:
-            logerr.log("Error execute:", x)
+            logerr.log("ERROR execute:", x)
             logerr.log(s)
             sys.exit()
 
@@ -133,7 +140,7 @@ class PrjMgr(object):
             loginfo.log(x)
             s = os.system(x)
             if s != 0:
-                logerr.log("Error execute:", x)
+                logerr.log("ERROR execute:", x)
                 logerr.log(s)
                 sys.exit()
 

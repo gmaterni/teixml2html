@@ -49,7 +49,7 @@ class XmlSplitEps(object):
             with open(name_ou, "w+") as fw:
                 fw.write(src)
             os.chmod(name_ou, 0o666)
-        except etree.Error as e:
+        except etree.ERROR as e:
             s = str(e)
             logerr.log(s)
             # print(s)

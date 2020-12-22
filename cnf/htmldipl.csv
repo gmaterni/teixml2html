@@ -103,3 +103,6 @@ directspeech|tei_directspeech||||start:«,end:»
 monologue|tei_monologue||||start:",end:"
 
 damage|spanx|
+
+supplied+|_X_supplied_error
+addname|_x_addname_eeror

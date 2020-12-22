@@ -79,10 +79,10 @@ class HtmlOvweflow(object):
         try:
             c_data=self.html_conf.get(tp,None)
             if c_data is None:
-                raise Exception(f"type:{tp} Error in find csv")
+                raise Exception(f"type:{tp} ERROR in find csv")
             clazz=c_data.get('tag',None)
             if clazz is None :
-                raise Exception(f"type:{tp} Error tag in csv")
+                raise Exception(f"type:{tp} ERROR tag in csv")
             c_params=c_data.get('params',{})
             txt_start=''
             txt_end=''
@@ -101,7 +101,7 @@ class HtmlOvweflow(object):
                 p0=rh.find(self.cls_pc  )
                 p0=p0+len(self.cls_pc)
             if p0 < 0:
-                raise Exception("Error in html")
+                raise Exception("ERROR in html")
             p1=rh.find('"',p0)
             s=rh[0:p1]+" "+cls+rh[p1:]
             if txt_start !='':
