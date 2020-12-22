@@ -72,29 +72,34 @@ class PrjMgr(object):
         except Exception as e:
             logerr.log(e)
             logerr.log(f'dir:{dr}  ext:{ext}')
-            sys.exit(0)
+            sys.exit(1)
         return files
 
-    def rm(self, de_lst):
-        """cancella tutti i files elencatto i de_lst
-        ogni riga a la forma dir|pattern
-
-        Args:
-            de_lst (list): elenco files da cancellare 
-        """
-        for de in de_lst:
-            sp = de.split('|')
-            dr = sp[0]
-            ext = "" if len(sp) == 1 else sp[1]
+    def execute_files_of_dir(self,js):
+        try:
+            dr=js.get('dir',None)
+            ext=js.get('ext',None)
+            prog=js.get('prog',None)
+            par_name=js.get('par_name',None)
+            sub=js.get('par_sub',None)
+            sp=sub.split('|')        
             files = self.files_of_dir(dr, ext)
-            try:
-                for fpath in files:
-                    loginfo.log(fpath)
-                    os.remove(fpath)
-            except Exception as e:
-                logerr.log(e)
-                logerr.log(f'dir:{dr}  ext:{ext}')
-                sys.exit(0)
+            for f in files:
+                file_name=os.path.basename(f)
+                par=file_name.replace(sp[0],sp[1])
+                x=prog.replace(par_name,par)
+                loginfo.log(x)
+                r=os.system(x)
+                if r!=0:
+                    logerr.log("Error execute:", x)
+                    logerr.log(s)
+                    sys.exit()
+
+        except Exception as e:
+            logerr.log(e)
+            logerr.log(str(js))
+            logerr.log(pp(js))
+            sys.exit(0)
 
     def merge_files(self, merge):
         out = merge.get("out", None)
@@ -140,8 +145,8 @@ class PrjMgr(object):
                 self.merge_files(v)
             elif k == "include":
                 self.include_files(v)
-            elif k == "rm":
-                self.rm(v)
+            elif k == "exe_dir":
+                self.execute_files_of_dir(v)
             elif k in ["files", "out", "host", "dest"]:
                 pass
             else:
@@ -182,12 +187,6 @@ def prn_es():
                 "./eps/fl_par1_ep17.txt",
             ]
         },
-        "rm": [
-            "./xml/par|.xml",
-            "./xml/tor",
-            "./xml/tou",
-            "./xml/ven"
-        ],
         "include": {
             "host": "html/txt_pannel.html",
             "dest": "html/par/txt/par.html",
@@ -201,8 +200,7 @@ def prn_es():
 
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    if len(args) == 0:
+    if len(sys.argv) == 1:
         prn_es()
         sys.exit()
-    do_main(args[0])
+    do_main(sys.argv[1])

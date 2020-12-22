@@ -1,0 +1,9 @@
+{
+  "exe_dir": {
+    "dir": "xml/ven",
+    "ext": ".xml",
+    "ven_sub": ".xml|",
+    "ven_name": "$F",
+    "prog": "teixml2html_di.py -i xml/ven/$F.xml -o html/ven/txt/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/ven.json"
+  }
+}

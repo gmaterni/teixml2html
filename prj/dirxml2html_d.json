@@ -1,8 +1,0 @@
-{
-    "exe": [
-"dirxml2html.py xml/par html/par/txt d"  ,
-"dirxml2html.py xml/tor html/tor/txt d"  ,
-"dirxml2html.py xml/tou html/tou/txt d"  ,
-"dirxml2html.py xml/ven html/ven/txt d"  
-    ]
-}

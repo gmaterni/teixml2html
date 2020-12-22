@@ -1,0 +1,9 @@
+{
+  "exe_dir": {
+    "dir": "xml/tor",
+    "ext": ".xml",
+    "tor_sub": ".xml|",
+    "tor_name": "$F",
+    "prog": "teixml2html_di.py -i xml/tor/$F.xml -o html/tor/txt/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/tor.json"
+  }
+}

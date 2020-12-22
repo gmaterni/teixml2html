@@ -1,4 +1,8 @@
 {
+    "exe": [
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+    ],
     "include": {
         "host": "html/txt_pannel.html",
         "dest": "html/ven/txt/ven.html",
@@ -8,3 +12,4 @@
                  ]
     }
 }
+

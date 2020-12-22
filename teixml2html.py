@@ -4,7 +4,6 @@
 from pdb import set_trace
 import os
 import re
-import sys
 from lxml import etree
 import pprint
 import sys
@@ -83,7 +82,7 @@ class Xml2Html(object):
         if p > 1:
             logerr.log("ERROR in  xml")
             logerr.log(nd.tag)
-            sys.exyt()
+            sys.exyt(1)
         return tag.strip()
 
     def node_id(self, nd):
@@ -171,7 +170,7 @@ class Xml2Html(object):
             logerr.log(e)
             logerr.log(f"text:{text}")
             logerr.log(f"pars: {pars}")
-            sys.exit()
+            sys.exit(1)
 
     def attrs_format(self, text, pars):
         """formatta html_attr_str se il parametro
@@ -258,7 +257,7 @@ class Xml2Html(object):
             logerr.log("x_items:", x_items)
             logerr.log("c_keys: ", c_keys)
             logerr.log("c_attrs:", c_attrs)
-            sys.exit()
+            sys.exit(1)
         return attrs
 
     def attrs2html(self, attrs):
@@ -384,9 +383,10 @@ class Xml2Html(object):
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
+        #
         # errori nella gestione del files csv dei tag html
         if self.csv_tag_err.find('_x') > -1:
-            logerr.log("ERRORO in csv").prn()
+            logerr.log("Error in csv").prn()
             logerr.log("xml:",pp(x_data))
             s = f'csv: {self.csv_tag_err}'
             logerr.log(s,os.linesep).prn()
@@ -493,7 +493,7 @@ class Xml2Html(object):
             xml_root = etree.parse(self.xml_path)
         except Exception as e:
             logerr.log(e)
-            sys.exit()
+            sys.exit(1)
         for nd in xml_root.iter():
             self.html_append(nd)
         self.hb.del_tags('XXX')
@@ -536,7 +536,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("release: %s  %s" % (__version__, __date__))
         parser.print_help()
-        sys.exit()
+        sys.exit(1)
     parser.add_argument('-d',
                         dest="deb",
                         required=False,
@@ -567,5 +567,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.html == args.xml:
         print("Name File output errato")
-        sys.exit(0)
+        sys.exit(1)
     do_mauin(args.xml, args.html, args.tag, args.cnf, args.deb)

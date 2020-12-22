@@ -25,12 +25,12 @@ def do_mauin(xml, html_name, tagsd, tagsi, conf, deb=False):
 
 
     Args:
-        xml ([type]): [description]
-        html ([type]): [description]
-        tagsd ([type]): [description]
-        tagsi ([type]): [description]
-        conf ([type]): [description]
-        deb (bool, optional): [description]. Defaults to False.
+        xml ([str]): [file.xml]
+        html ([str]): [file.html]
+        tagsd ([str]): [file.csv]
+        tagsi ([str]): [file.csv]
+        conf ([str]): [file.json]
+        deb (bool, optional): [attivazione debug]. Defaults to False.
     """
     xt = Xml2Html()
     html_d = html_name.replace(".html", "d.html")

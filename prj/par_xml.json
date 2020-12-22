@@ -1,0 +1,5 @@
+{
+    "exe": [
+"splitteixml.py -i xml/floripar.xml -o xml/par/ -m par"
+    ]
+}

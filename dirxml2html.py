@@ -23,7 +23,6 @@ def do_main(xml_dir,html_dir,dip_int):
         rt = os.system(prg)
         if rt != 0:
             sys.exit()
-        print("-------")
 
 if __name__ == '__main__':
     if len(sys.argv)==1:

@@ -49,7 +49,7 @@ class HtmlOvweflow(object):
                 if x_from is None or x_to is None or x_type is None:
                     logerr.log("fill_span_list ERROR.").prn()
                     logerr.log(pp(x_data).prn())
-                    sys.exit()
+                    sys.exit(1)
                 item = {
                     "id0": x_from,
                     "id1": x_to,
@@ -112,7 +112,7 @@ class HtmlOvweflow(object):
         except Exception as e:
             logerr.log(e)
             logerr.log(rh)
-            sys.exit()
+            sys.exit(1)
 
 
     def find_w_id(self,r,id):

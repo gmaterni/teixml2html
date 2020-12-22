@@ -1,9 +1,0 @@
-{
-    "exe": [
-"splitteixml.py -i xml/floripar.xml -o xml/par/ -m par",
-"splitteixml.py -i xml/floritor.xml -o xml/tor/ -m tor",
-"splitteixml.py -i xml/floritou.xml -o xml/tou/ -m tou",
-"splitteixml.py -i xml/floriven.xml -o xml/ven/ -m ven"
-
-    ]
-}

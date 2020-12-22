@@ -1,0 +1,7 @@
+{
+    "exe": [
+        "teimprj.py prj/tei_xml.json",
+        "teimprj.py prj/tei_txt.json",
+        "teimprj.py prj/tei_syn.json"
+    ]
+}
