@@ -1,7 +1,7 @@
 {
     "exe": [
-        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listd.html -t cnf/htmldipl.csv -c cnf/episode_list.json",
-        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listi.html -t cnf/htmlinter.csv -c cnf/episode_list.json"
+        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listd.html -t cnf/htmldipl.csv -c cnf/cnf_episode_list.json",
+        "teixml2html.py -i xml/ven/ven_list.xml -o html/ven/syn/ven_listi.html -t cnf/htmlinter.csv -c cnf/cnf_episode_list.json"
     ],
     "include": {
         "host": "html/syn_pannel.html",

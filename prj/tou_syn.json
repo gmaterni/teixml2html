@@ -4,7 +4,7 @@
         "ext": ".xml",
         "par_sub":".xml|",
         "par_name":"$F",
-    "prog":"teixml2html_di.py -i xml/tou/$F.xml -o html/tou/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/tou.json"
+    "prog":"teixml2html_di.py -i xml/tou/$F.xml -o html/tou/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/cnf_tou_txt.json"
 
     }
 }

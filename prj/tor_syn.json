@@ -4,6 +4,6 @@
     "ext": ".xml",
     "par_sub": ".xml|",
     "par_name": "$F",
-    "prog": "teixml2html_di.py -i xml/tor/$F.xml -o html/tor/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/tor.json"
+    "prog": "teixml2html_di.py -i xml/tor/$F.xml -o html/tor/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/cnf_tor_txt.json"
   }
 }

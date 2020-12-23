@@ -230,7 +230,7 @@ def prn_es():
             "ext": ".xml",
             "par_sub": ".xml|",
             "par_name": "$F",
-            "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/par.json"
+            "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/cnf_par_txt.json"
         },
         "remove_dir": [
             "html/par/syn|_listd.xml",

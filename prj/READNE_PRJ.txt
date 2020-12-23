@@ -1,0 +1,137 @@
+files per l'esecuzione nella dir
+prj//
+----------------------------------
+esecuzione  le fasi del projetto
+(per semplicità tutti gli scritti fanno riferimento
+al manoscritto par)
+----------------------------------
+prj//splitxml.json
+
+estraee dal file:
+xml/florpar.xml
+
+gli episodii:
+xml/par/ep1.xml
+xml/par/ep2.xml
+...
+produce lista degli episdofi da includre successivamente
+xml/par/par_list.xml
+----------------------------------------
+prj//dirxml2html_di.json
+
+per ogni dir dei manoscritti (par,tor,tou,ven, ..)
+trasforma da xml a html i singoli episodi
+contenebti sia l'interpretativa che la diplonatica
+
+xml/par/ep1.xml => html/par/txt/ep1.html
+xml/par/ep2.xml => html/par/txt/ep2.html
+......
+
+per effettuare controlli 
+(da NON utilizzatre in produzione)
+peoduce per ogni episodio
+html formattato per la
+
+diplomatica
+html/par/txt/ep1d_F.html
+
+interpretativa
+html/par/txt/ep1i_F.html
+---------------------------------------
+prj//pannel_list.json
+
+produce per ogni manoscritto (par,tor,..)
+la lista degli episodi per la
+
+diplomatica
+xml/par/par_list.xml => html/par/txt/par_listd.html
+
+interpretativa
+xml/par/par_list.xml => html/par/txt/par_listi.html
+---------------------------------------
+prj//pannel_par.json
+
+nel file:
+html/txt_pannel.html
+
+sosiusce i parametri con i file
+EPISODE_LIST_DIPL => html/par/txt/par_listd.html
+
+EPISODE_LIST_INTER => html/par/txt/par_listi.html
+
+scrive il  file contenente le intestazioni e l'elenco 
+html/par/txt/par.html
+
+============================
+prj//prohect.json
+
+{
+    "exe": [
+        "teimprj.py prj//splitxml.json",
+        "teimprj.py prj//dirxml2html_di.json",
+        "teimprj.py prj//pannel_list.json",
+        "teimprj.py prj//pannel_par.json",
+        "teimprj.py prj//pannel_tor.json",
+        "teimprj.py prj//pannel_tou.json",
+        "teimprj.py prj//pannel_ven.json"
+
+    ]
+}
+
+-----------------------------------------
+prj//splitxml.json
+
+{
+    "exe": [
+"splitteixml.py -i xml/floripar.xml -o xml/par/ -m par",
+"splitteixml.py -i xml/floritor.xml -o xml/tor/ -m tor",
+"splitteixml.py -i xml/floritou.xml -o xml/tou/ -m tou",
+"splitteixml.py -i xml/floriven.xml -o xml/ven/ -m ven"
+
+    ]
+}
+--------------------------------------------
+prj//dirxml2html_di.json
+
+{
+    "exe": [
+"dirxml2html_di.py xml/par html/par/txt "  ,
+"dirxml2html_di.py xml/tor html/tor/txt "  ,
+"dirxml2html_di.py xml/tou html/tou/txt "  ,
+"dirxml2html_di.py xml/ven html/ven/txt "  
+    ]
+}
+
+--------------------------------------------
+prj//pannel_list.json
+
+{
+    "exe": [
+"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listd.html -t cnf/htmldipl.csv -c cnf/cnf_episode_list.json",
+"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listi.html -t cnf/htmlinter.csv -c cnf/cnf_episode_list.json",
+
+"teixml2html.py -i xml/tor/tor_list.xml -o html/tor/txt/tor_listd.html -t cnf/htmldipl.csv -c cnf/cnf_tor_txt.json ",
+"teixml2html.py -i xml/tor/tor_list.xml -o html/tor/txt/tor_listi.html -t cnf/htmlinter.csv -c cnf/cnf_tor_txt.json ",
+
+"teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listd.html -t cnf/htmldipl.csv -c cnf/cnf_tou_txt.json ",
+"teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listi.html -t cnf/htmlinter.csv -c cnf/cnf_tou_txt.json ",
+
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listd.html -t cnf/htmldipl.csv -c cnf/cnf_vwn_txt.json ",
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listi.html -t cnf/htmlinter.csv -c cnf/cnf_vwn_txt.json "
+
+    ]
+}
+------------------------------------------------
+prj//pannel_par.json
+
+{
+    "include": {
+        "host": "html/txt_pannel.html",
+        "dest": "html/par/txt/par.html",
+        "files": [
+            "EPISODE_LIST_DIPL|html/par/txt/par_listd.html",
+            "EPISODE_LIST_INTER|html/par/txt/par_listi.html"
+                 ]
+    }
+}
+.......

@@ -492,6 +492,7 @@ class Xml2Html(object):
         # lettura configurazioni
         self.man_conf = read_json(json_path)
         logconf.log(">> man_coonf", pp(self.man_conf)).prn(0)
+        #
         self.html_conf = read_html_conf(csv_path)
         logconf.log(">> html_conf", pp(self.html_conf)).prn(0)
         # TODO prefisso di  id per diplomatia e interpretativa
