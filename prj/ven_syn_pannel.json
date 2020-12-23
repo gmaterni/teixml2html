@@ -14,7 +14,7 @@
             "EPISODE_LIST_INTER|html/ven/syn/ven_listi.html"
         ],
         "remove_dir": [
-            "html/ven/syn|_listd.htmll",
+            "html/ven/syn|_listd.html",
             "html/ven/syn|_listi.html"
           ]    }
 }

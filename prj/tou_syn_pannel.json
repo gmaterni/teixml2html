@@ -14,7 +14,7 @@
             "EPISODE_LIST_INTER|html/tou/syn/tou_listi.html"
         ],
         "remove_dir": [
-            "html/tou/syn|_listd.htmll",
+            "html/tou/syn|_listd.html",
             "html/tou/syn|_listi.html"
           ]
     }

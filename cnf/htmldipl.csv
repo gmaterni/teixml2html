@@ -10,7 +10,10 @@ tei|body
 
 div|div|type,ref|class:div_text
 pb|div|id,n|class:pb
-cb|div|id|class:cb|%n%
+
+cb|div>div|id|class:cb cbpb|<div class=""cb_tt>%pb_n%%n%||pb
+
+xcb|div|id|class:cb|%n%
 lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
 l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
 w|div|id|class:w %ana%
@@ -50,7 +53,7 @@ geogfeat|XXX
 rolename|XXX
 
 expan|span||class:abbrev %corresp%
-ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="css/abr/%MAN%/%corresp%.jpg"/></span>%text%</a>||expan
+ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="css/abr/%MAN%/%expan_corresp%.jpg"/></span>%text%</a>||expan
 
 subst|XXX
 

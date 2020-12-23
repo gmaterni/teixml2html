@@ -44,9 +44,13 @@ addname XXX
 .tei_capitalize_afp 
 .tei_capitalize_afp_int 
 
-
-
-
-
-
-
+<pb xml:id="Gpb1" n="28r"/>
+<cb xml:id="Gcb1" n="b"/>
+------------
+<div class="pb" id="Gpb1" n="28r"></div>
+<div class="cb cbpb" id="Gcb1">
+  <div class="cb_tt">28rb</div>
+</div>
+----------
+<div class="pb" id="dGpb1" n="28r"/>
+<div class="cb cbpb" id="dGcb1"><div class=""cb_tt>b</div></div>

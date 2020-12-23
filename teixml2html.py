@@ -222,7 +222,12 @@ class Xml2Html(object):
             x_data_parent = self.xml_data_dict.get(csv_tag_parent, None)
             if x_data_parent is not None:
                 items = x_data_parent.get('items', {})
-                attrs = copy.deepcopy(items)
+                # TODO modifica keys di items parent
+                for k,v in items.items():
+                    kn=f'{csv_tag_parent}_{k}'
+                    attrs[kn]=v
+                # attrs = copy.deepcopy(parent_items)
+                # attrs = copy.deepcopy(items)
         # x_data items
         items = x_data.get('items', {})
         for k, v in items.items():

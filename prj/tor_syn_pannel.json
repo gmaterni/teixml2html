@@ -14,7 +14,7 @@
             "EPISODE_LIST_INTER|html/tor/syn/tor_listi.html"
         ],
         "remove_dir": [
-            "html/tor/syn|_listd.htmll",
+            "html/tor/syn|_listd.html",
             "html/torr/syn|_listi.html"
           ]    }
 }
