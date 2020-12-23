@@ -471,7 +471,8 @@ class Xml2Html(object):
             html = html.replace(k, v)
         return html
 
-    def write_html(self, xml_path, html_path, csv_path, json_path, deb=False):
+
+    def write_html(self, xml_path, html_path, json_path, deb=False):
         """fa il parse del file xml_path scrive i files:
             nel formato comapatto: <html_path>
             formato indentato <html_name>_f.html
@@ -479,7 +480,6 @@ class Xml2Html(object):
         Args:
             xml_path (str]:  file xml
             html_path (str): file html
-            csv_path (str): file dei tags di elaborazione
             json_path (str): file di configurazoine
             deb (bool, optional): flag per gestione debuf
 
@@ -491,14 +491,23 @@ class Xml2Html(object):
         self.xml_path = xml_path
         self.html_path = html_path
         # lettura configurazioni
-        self.info_params = read_json(json_path)
-        logconf.log(">> info_parans", pp(self.info_params)).prn(0)
-        #
-        self.info_html_tags = read_html_conf(csv_path)
-        logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
-        # TODO prefisso di  id per diplomatia e interpretativa
-        rd = self.info_html_tags.get("before_id", {})
-        self.before_id = rd.get('tag', "")
+        try:
+            self.info_params = read_json(json_path)
+            logconf.log(">> info_parans", pp(self.info_params)).prn(0)
+            # TODO prefisso di  id per diplomatia e interpretativa
+            self.before_id = self.info_params.get("before_id",None)
+            if self.before_id is None:
+                raise Exception(f"ERROR before_id is null.")
+            #
+            csv_path=self.info_params.get("html_info",None)
+            if csv_path is None:
+                raise Exception(f"ERROR html_info is null.")
+            self.info_html_tags = read_html_conf(csv_path)
+            logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
+        except Exception as e:
+            logerr.log(os.linesep, "ERROR: read conf)")
+            logerr.log(e)
+            sys.exit(1)
         # lib per costruziona html
         self.hb = HtmlBuilder()
         # dict dei dati xml con tag come key
@@ -547,8 +556,8 @@ class Xml2Html(object):
         return self.html_path
 
 
-def do_mauin(xml, html, tags, conf, deb=False):
-    Xml2Html().write_html(xml, html, tags, conf, deb)
+def do_mauin(xml, html, conf, deb=False):
+    Xml2Html().write_html(xml, html, conf, deb)
 
 
 if __name__ == "__main__":
@@ -563,12 +572,6 @@ if __name__ == "__main__":
                         action="store_true",
                         default=False,
                         help="[-d ](abilita debug)")
-    parser.add_argument('-t',
-                        dest="tag",
-                        required=True,
-                        default="",
-                        metavar="",
-                        help="-t <file_hml_tags.csv>")
     parser.add_argument('-c',
                         dest="cnf",
                         required=True,
@@ -588,4 +591,4 @@ if __name__ == "__main__":
     if args.html == args.xml:
         print("Name File output errato")
         sys.exit(1)
-    do_mauin(args.xml, args.html, args.tag, args.cnf, args.deb)
+    do_mauin(args.xml, args.html, args.cnf, args.deb)

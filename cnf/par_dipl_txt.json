@@ -2,6 +2,6 @@
   "html_params": {
     "%MAN%": "par"
   },
-  "html_info": "cmf/htmldipl.csv",
-  "tags_spec": {}
+  "html_info": "cnf/htmldipl.csv",
+  "before_id":"d"
 }

@@ -2,10 +2,8 @@
 "html_params": {
     "%MAN%": "par"
 },
-"html_info":"cmf/htmlinter.csv",
-"tags_spec":{
-    "cb":"cb_syn"
-}
+"html_info":"cnf/htmlinter.csv",
+"before_id":"i"
 
 }
 

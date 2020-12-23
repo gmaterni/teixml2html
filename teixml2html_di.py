@@ -11,7 +11,7 @@ __version__ = "0.0.2"
 __author__ = "Marta Materni"
 
 
-def do_mauin(xml, html_name, tagsd, tagsi, conf, deb=False):
+def do_mauin(xml_name, html_name,confd, confi, deb=False):
     """invoca teixml2html.py 
     con tagsd per la diplomatica
     produce un file hatml_named.html (aggiunge d) e hatml_named_F.html
@@ -25,32 +25,31 @@ def do_mauin(xml, html_name, tagsd, tagsi, conf, deb=False):
 
 
     Args:
-        xml ([str]): [file.xml]
-        html ([str]): [file.html]
-        tagsd ([str]): [file.csv]
-        tagsi ([str]): [file.csv]
-        conf ([str]): [file.json]
-        deb (bool, optional): [attivazione debug]. Defaults to False.
+        xml_name (str): file.xml
+        html_name (str): file.html
+        confd (str): file.json diplomatica
+        confi (str]): file.json interpretativa
+        deb (bool, optional): attivazione debug. Defaults to False.
     """
     xt = Xml2Html()
-    html_d = html_name.replace(".html", "d.html")
-    path_hd=xt.write_html(xml, html_d, tagsd, conf, deb)
+    html_name_dipl = html_name.replace(".html", "d.html")
+    path_html_dipl=xt.write_html(xml_name, html_name_dipl, confd,  deb)
     #
-    html_i = html_name.replace(".html", "i.html")
-    path_hi=xt.write_html(xml, html_i, tagsi, conf, deb)
+    html_name_inter = html_name.replace(".html", "i.html")
+    path_html_inter=xt.write_html(xml_name, html_name_inter, confi, deb)
     #
     fout = open(html_name, "w+")
-    with open(path_hd, "rt") as f:
+    with open(path_html_dipl, "rt") as f:
         txt = f.read()
         fout.write(txt)
     fout.write(os.linesep)
-    with open(path_hi, "rt") as f:
+    with open(path_html_inter, "rt") as f:
         txt = f.read()
         fout.write(txt)
     fout.close()
     os.chmod(html_name, 0o666)
-    os.remove(path_hd)
-    os.remove(path_hi)
+    os.remove(path_html_dipl)
+    os.remove(path_html_inter)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -64,23 +63,16 @@ if __name__ == "__main__":
                         action="store_true",
                         default=False,
                         help="[-d ](abilita debug)")
-    parser.add_argument('-td',
-                        dest="tagd",
-                        required=True,
-                        default="",
-                        metavar="",
-                        help="-t <file_hml_tags_dipl.csv>")
-    parser.add_argument('-ti',
-                        dest="tagi",
-                        required=True,
-                        default="",
-                        metavar="",
-                        help="-t <file_hml_tags_interr.csv>")
-    parser.add_argument('-c',
-                        dest="cnf",
+    parser.add_argument('-cd',
+                        dest="cnfd",
                         required=True,
                         metavar="",
-                        help="-c <file_conf.json")
+                        help="-c <file_conf.json> (diplomatuca")
+    parser.add_argument('-ci',
+                        dest="cnfi",
+                        required=True,
+                        metavar="",
+                        help="-c <file_conf.json> (interpretativa")
     parser.add_argument('-i',
                         dest="xml",
                         required=True,
@@ -92,7 +84,4 @@ if __name__ == "__main__":
                         metavar="",
                         help="-o <file_out.html>")
     args = parser.parse_args()
-    if args.html == args.xml:
-        print("Name File output errato")
-        sys.exit(0)
-    do_mauin(args.xml, args.html, args.tagd, args.tagi, args.cnf, args.deb)
+    do_mauin(args.xml, args.html, args.cnfd, args.cnfi, args.deb)

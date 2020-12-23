@@ -4,7 +4,8 @@
     "</null>": "",
     "/>": "></div>"
   },
-  "html_info": "cmf/htmldipl.csv",
+  "html_info": "cnf/htmldipl.csv",
+  "before_id":"d",
   "tags_spec": {
   }
 }

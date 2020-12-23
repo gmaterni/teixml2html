@@ -1,7 +1,7 @@
 {
     "exe": [
-"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listd.html -t cnf/htmldipl.csv -c cnf/cnf_episode_list.json",
-"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listi.html -t cnf/htmlinter.csv -c cnf/cnf_episode_list.json"
+"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listd.html -c cnf/list_dipl_txt.json",
+"teixml2html.py -i xml/par/par_list.xml -o html/par/txt/par_listi.html -c cnf/list_inter_txt.json"
     ],
     "include": {
         "host": "html/txt_pannel.html",

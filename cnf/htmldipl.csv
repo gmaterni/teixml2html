@@ -12,7 +12,6 @@ div|div|type,ref|class:div_text
 pb|div|id,n|class:pb
 
 cb|div|id|class:cb|%n%
-
 cb_syn|div>div|id|class:cb cbpb|<div class=""cb_tt>%pb_n%%n%||pb
 
 lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
