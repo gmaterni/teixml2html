@@ -116,8 +116,8 @@ prj//pannel_list.json
 "teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listd.html -t cnf/htmldipl.csv -c cnf/cnf_tou_txt.json ",
 "teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listi.html -t cnf/htmlinter.csv -c cnf/cnf_tou_txt.json ",
 
-"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listd.html -t cnf/htmldipl.csv -c cnf/cnf_vwn_txt.json ",
-"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listi.html -t cnf/htmlinter.csv -c cnf/cnf_vwn_txt.json "
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listd.html -t cnf/htmldipl.csv -c cnf/cnf_ven_txt.json ",
+"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listi.html -t cnf/htmlinter.csv -c cnf/cnf_ven_txt.json "
 
     ]
 }

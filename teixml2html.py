@@ -42,14 +42,14 @@ class Xml2Html(object):
         logerr.open("log/teixml2html.err.log", 1)
         self.xml_path = None
         self.html_path = None
-        self.man_conf = None
-        self.html_conf = None
+        self.info_params = None
+        self.info_html_tags = None
         self.before_id = None
         self.hb = None
         self.xml_data_lst = None
         self.xml_data_dict = None
         self.is_container_stack = None
-        self.csv_tag_err = None
+        self.csv_tag_ctrl = None
 
     def node_liv(self, node):
         d = 0
@@ -293,7 +293,7 @@ class Xml2Html(object):
             ls.append(s)
         return " ".join(ls)
 
-    def get_row_conf_data(self, x_data):
+    def get_row_data_info_html(self, x_data):
         """ ritorna dati della row di <tag>.csvindividuata
             dall tag o tag+attr di x_data del file xml
             memorizza x_data  in xml_data_dict
@@ -306,12 +306,13 @@ class Xml2Html(object):
             [row_data (dict): dati estartti da csv
         """
         xml_tag = x_data['tag']
-        row_data = self.html_conf.get(xml_tag, None)
+        row_data = self.info_html_tags.get(xml_tag, None)
         if row_data is None:
-            row_data = self.html_conf.get('x', {})
+            row_data = self.info_html_tags.get('x', {})
             csv_tag = xml_tag
-            self.csv_tag_err = f'_x_{csv_tag}'
+            self.csv_tag_ctrl = f'_x_{csv_tag}'
         else:
+            # TODO
             tag = row_data.get('tag', f"_x_{xml_tag}")
             p = tag.find('+')
             if p > -1:
@@ -323,15 +324,15 @@ class Xml2Html(object):
                 lsv = [x_items[k] for k in lsk if k in x_items.keys()]
                 attrs_val = '+'.join(lsv)
                 csv_tag = xml_tag+'+'+attrs_val
-                row_data = self.html_conf.get(csv_tag, None)
+                row_data = self.info_html_tags.get(csv_tag, None)
                 if row_data is None:
-                    row_data = self.html_conf.get('x+y', None)
-                    self.csv_tag_err = f'_xy_{csv_tag}'
+                    row_data = self.info_html_tags.get('x+y', None)
+                    self.csv_tag_ctrl = f'_xy_{csv_tag}'
                 else:
-                    self.csv_tag_err = csv_tag
+                    self.csv_tag_ctrl = csv_tag
             else:
                 csv_tag = xml_tag
-                self.csv_tag_err = csv_tag
+                self.csv_tag_ctrl = csv_tag
         self.xml_data_dict[csv_tag] = x_data
         return row_data
 
@@ -352,7 +353,7 @@ class Xml2Html(object):
         x_text = x_data['text']
         x_liv = x_data['liv']
         self.is_container_stack[x_liv] = False
-        c_data = self. get_row_conf_data(x_data)
+        c_data = self. get_row_data_info_html(x_data)
         ################################
         if inp.prn:
             loginfo.log("============").prn()
@@ -391,11 +392,11 @@ class Xml2Html(object):
         html_text = x_text+c_text
         #
         # ERRORi nella gestione del files csv dei tag html
-        if self.csv_tag_err.find('_x') > -1:
+        if self.csv_tag_ctrl.find('_x') > -1:
             logerr.log(os.linesep,"ERROR in csv").prn()
             logerr.log(f"file: {self.xml_path}")
             logerr.log("xml:", pp(x_data))
-            logerr.log("csv:",self.csv_tag_err).prn()
+            logerr.log("csv:",self.csv_tag_ctrl).prn()
             # ultimo tag w prima dell'ERRORe
             tag_w_last = ''
             if len(self.hb.get_tag_lst()) > 1:
@@ -465,8 +466,8 @@ class Xml2Html(object):
 
         Returns:
             html (str): html con settati i parametri         """
-        pars = self.man_conf.get("html_params", {})
-        for k, v in pars.items():
+        params = self.info_params.get("html_params", {})
+        for k, v in params.items():
             html = html.replace(k, v)
         return html
 
@@ -490,19 +491,22 @@ class Xml2Html(object):
         self.xml_path = xml_path
         self.html_path = html_path
         # lettura configurazioni
-        self.man_conf = read_json(json_path)
-        logconf.log(">> man_coonf", pp(self.man_conf)).prn(0)
+        self.info_params = read_json(json_path)
+        logconf.log(">> info_parans", pp(self.info_params)).prn(0)
         #
-        self.html_conf = read_html_conf(csv_path)
-        logconf.log(">> html_conf", pp(self.html_conf)).prn(0)
+        self.info_html_tags = read_html_conf(csv_path)
+        logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
         # TODO prefisso di  id per diplomatia e interpretativa
-        rd = self.html_conf.get("before_id", {})
+        rd = self.info_html_tags.get("before_id", {})
         self.before_id = rd.get('tag', "")
+        # lib per costruziona html
         self.hb = HtmlBuilder()
+        # dict dei dati xml con tag come key
         self.xml_data_dict = {}
+        # stack dei nodi che sono si/no container
         self.is_container_stack = [False for i in range(1, 20)]
         # tag per controlo ERRORi
-        self.csv_tag_err = ""
+        self.csv_tag_ctrl = ""
         #
         self.hb.init()
         try:
@@ -522,7 +526,7 @@ class Xml2Html(object):
             [type]: [description]
         """
         html_lst = self.hb.get_tag_lst()
-        html_over = HtmlOvweflow(self.xml_data_lst, html_lst, self.html_conf)
+        html_over = HtmlOvweflow(self.xml_data_lst, html_lst, self.info_html_tags)
         html_over.set_overflow()
         ############################
         # html su una riga versione per produzione

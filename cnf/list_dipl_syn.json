@@ -1,0 +1,11 @@
+{
+  "html_params": {
+    "<null>": "",
+    "</null>": "",
+    "/>": "></div>"
+  },
+  "html_info": "cmf/htmldipl.csv",
+  "tags_spec": {
+    "cb": "cb_syn"
+  }
+}
