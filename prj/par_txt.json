@@ -1,9 +1,9 @@
 {
   "exe_dir": {
-    "dir": "xml/par",
+    "dir": "xml/tou",
     "ext": ".xml",
     "par_sub": ".xml|",
     "par_name": "$F",
-    "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/txt/$F.html -cd cnf/par_dipl_txt.json -ci cnf/par_inter_txt.json"
+    "prog": "teixml2html_di.py -i xml/tou/$F.xml -o html/tou/txt/$F.html -cd cnf/tou_dipl_txt.json -ci cnf/tou_inter_txt.json"
   }
 }
