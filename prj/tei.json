@@ -1,7 +1,8 @@
 {
-    "exe": [
-        "teimprj.py prj/tei_xml.json",
-        "teimprj.py prj/tei_txt.json",
-        "teimprj.py prj/tei_syn.json"
-    ]
+"exe": [
+"teimprj.py prj/par.json",
+"teimprj.py prj/tor.json",
+"teimprj.py prj/tou.json",
+"teimprj.py prj/ven.json"
+]
 }

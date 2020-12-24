@@ -1,9 +1,0 @@
-{
-    "exe": [
-"teimprj.py prj/par_syn.json",
-"teimprj.py prj/tor_syn.json",
-"teimprj.py prj/tou_syn.json",
-"teimprj.py prj/ven_syn.json"
-
-]
-}

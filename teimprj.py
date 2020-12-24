@@ -6,7 +6,7 @@ import os
 import pprint
 import sys
 from pdb import set_trace
-
+import pathlib as pl
 from ualog import Log
 
 
@@ -37,16 +37,16 @@ class PrjMgr(object):
             raise Exception(f"{k} not found.{os.linesep}")
         return s
 
-    def files_of_dir(self, dr, ext):
+    def xfiles_of_dir(self, dr, ptrn):
         files = []
         try:
             for f in os.listdir(dr):
                 fpath = os.path.join(dr, f)
                 if os.path.isfile(fpath) is False:
                     continue
-                if ext != "":
+                if ptrn != "":
                     name = os.path.basename(fpath)
-                    if name.find(ext) < 0:
+                    if name.find(ptrn) < 0:
                         continue
                 files.append(fpath)
         except Exception as e:
@@ -55,12 +55,19 @@ class PrjMgr(object):
             sys.exit(1)
         return files
 
+    def files_of_dir(self, d, e):
+        p = pl.Path(d)
+        if p.exists() is False:
+            raise Exception(f'{d} not found.')
+        fs = [x for x in p.glob(e)]
+        return fs
+
     def include_files(self, include):
         """nel file host sostitusce ogni parametro
         con il file ad esso collegato
 
         Args:
-            js (dict): "include". ramo del project 
+            js (dict): "include". ramo del project
         """
         loginfo.log("include")
         try:
@@ -96,18 +103,17 @@ class PrjMgr(object):
             logerr.log(e)
             sys.exit(1)
 
-
     def execute_files_of_dir(self, exe_dir):
         loginfo.log("exe_dir")
         try:
             dr = self.get(exe_dir, 'dir')
-            ext = self.get(exe_dir, 'ext')
+            ptrn = self.get(exe_dir, 'ptrn')
             prog = self.get(exe_dir, 'prog')
             par_name = self.get(exe_dir, 'par_name')
             sub = self.get(exe_dir, 'par_sub')
             #
             sp = sub.split('|')
-            files = self.files_of_dir(dr, ext)
+            files = self.files_of_dir(dr, ptrn)
             for f in files:
                 file_name = os.path.basename(f)
                 par = file_name.replace(sp[0], sp[1])
@@ -125,13 +131,11 @@ class PrjMgr(object):
     def remove_files_of_dir(self, remove_dir):
         loginfo.log("remove_dir")
         try:
-            path_ext_lst = remove_dir
-            for pe in path_ext_lst:
-                loginfo.log(pe)
-                sp=pe.split('|')
-                dr = sp[0]
-                ext = sp[1]
-                files = self.files_of_dir(dr, ext)
+            for de in remove_dir:
+                loginfo.log(de)
+                dr = de.get('dir')
+                ptrn = de.get('ptrn')
+                files = self.files_of_dir(dr, ptrn)
                 for f in files:
                     loginfo.log(f)
                     os.remove(f)
@@ -227,15 +231,18 @@ def prn_es():
         },
         "exe_dir": {
             "dir": "xml/par",
-            "ext": ".xml",
+            "ptrn": ".xml",
             "par_sub": ".xml|",
             "par_name": "$F",
             "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/cnf_par_txt.json"
         },
         "remove_dir": [
-            "html/par/syn|_listd.xml",
-            "html/par/syn|_listi.xml"
+            {
+                "dir": "html/par/syn",
+                "ptrn": "pa_list*.html"
+            }
         ]
+
     }
 
     loginfo.log(pp(js))

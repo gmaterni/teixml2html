@@ -1,0 +1,36 @@
+{
+    "remove_dir": [
+        {
+            "dir": "html/par/syn",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/par/txt",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/tor/syn",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/tor/txt",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/tou/syn",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/tou/txt",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/ven/syn",
+            "ptrn": "*_F.html"
+        },
+        {
+            "dir": "html/ven/txt",
+            "ptrn": "*_F.html"
+        }
+    ]
+}
