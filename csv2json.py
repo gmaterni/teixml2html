@@ -11,6 +11,7 @@ def do_main(csv_path, json_path):
     with open(json_path, "w+") as f:
         f.write(js)
 
+
 if __name__ == "__main__":
     csv_path = "cnf/htmldipl.csv"
     json_path = "wrk/htmldipl.json"

@@ -6,7 +6,7 @@ import argparse
 import sys
 import pprint
 from ualog import Log
-from pdb import set_trace
+# from pdb import set_trace
 
 __date__ = "20-12-2020"
 __version__ = "0.0.4"
@@ -28,7 +28,7 @@ produce <man>_list.txt con l'elenco degli episodi e scrice i dir_out
 """
 
 
-class XmlSplitEps(object):
+class XmlSplitEps:
 
     def __init__(self, path_xml_in, dir_out, sigla_man):
         self.path_xml_in = path_xml_in
@@ -49,10 +49,9 @@ class XmlSplitEps(object):
             with open(name_ou, "w+") as fw:
                 fw.write(src)
             os.chmod(name_ou, 0o666)
-        except etree.ERROR as e:
+        except etree.Exception as e:
             s = str(e)
             logerr.log(s)
-            # print(s)
 
     # write xml/par/par.xml
     def writ_eps_xml_lst(self, eps_lst, xml_path):
@@ -95,8 +94,8 @@ class XmlSplitEps(object):
     def build_episode_name(self, eps):
         f = self.dir_out
         dir = os.path.dirname(f)
-        name = eps
-        path = os.path.join(dir, name)
+        # name = eps
+        path = os.path.join(dir, eps)
         return path
 
     def build_list_name(self, ext):
@@ -241,14 +240,13 @@ def do_main(path_in, dir_out, sigla_man):
     xmlspl.write_episode_lst()
 
 
-"""
-es.
-dir input: xml/par/file.xml
-dir out  : xml/par/par/
-sigla_man: par
-"""
-
 if __name__ == "__main__":
+    """
+    es.
+    dir input: xml/par/file.xml
+    dir out  : xml/par/par/
+    sigla_man: par
+    """
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
         print("release: %s  %s" % (__version__, __date__))

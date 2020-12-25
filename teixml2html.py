@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
+# from pdb import set_trace
 import os
 import re
 from lxml import etree
 import pprint
 import sys
-import copy
+# import copy
 import argparse
 from readhtmlconf import read_html_conf
 from readjson import read_json
@@ -34,7 +34,7 @@ logerr = Log("a")
 inp = Inp()
 
 
-class Xml2Html(object):
+class Xml2Html:
 
     def __init__(self):
         logconf.open("log/teixml2html.cnf.log", 0)
@@ -97,7 +97,7 @@ class Xml2Html(object):
 
     def node_id_num(self, id):
         if id == '':
-            return ""
+            return ''
         m = re.search('\d', id)
         if m is None:
             return -1
@@ -126,8 +126,8 @@ class Xml2Html(object):
 
     def node_is_parent(self, nd):
         cs = nd.getchildren()
-        l = len(cs)
-        return l > 0
+        le = len(cs)
+        return le > 0
 
     def get_node_data(self, nd):
         items = self.node_items(nd)
@@ -482,10 +482,10 @@ class Xml2Html(object):
             #
             csv_path = self.info_params.get("html_info", None)
             if csv_path is None:
-                raise Exception(f"ERROR html_info is null.")
+                raise Exception("ERROR html_info is null.")
             html_type = self.info_params.get("html_type", None)
             if html_type is None:
-                raise Exception(f"ERROR html_type is null.")
+                raise Exception("ERROR html_type is null.")
             self.info_html_tags = read_html_conf(csv_path, html_type)
             logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
         except Exception as e:

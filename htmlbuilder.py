@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os
-from pdb import set_trace
+# from pdb import set_trace
 
 BLKS = "                                                         "
 NL = os.linesep
 
 
-class HtmlBuilder(object):
+class HtmlBuilder:
 
     def __init__(self):
         self.indent = 2
@@ -20,12 +20,11 @@ class HtmlBuilder(object):
     def sp(self, liv):
         return BLKS[0: liv * self.indent]
 
-   # <!DOCTYPE html>
+    # <!DOCTYPE html>
     def init(self, decl=""):
         if decl != "":
             self.tag_lst.append(decl)
         return self
-
 
     def opn(self, liv, tag, attrs, text, tail):
         self.clsopn(liv)
@@ -34,7 +33,7 @@ class HtmlBuilder(object):
         self.tail_stack[liv] = tail
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
-        # gestione tag interno aperoo 
+        # gestione tag interno aperoo
         # es. span>a implica di chiudere </a></span>
         if tag.find('>') > -1:
             tag = tag.split('>')[0]
@@ -47,12 +46,12 @@ class HtmlBuilder(object):
             self.livx = liv - 1
         b = '' if attrs == '' else ' '
         sp = self.sp(liv)
-        if tag.find('>') > -1:            
-            ts= tag.split('>')
-            tag=ts[0]
+        if tag.find('>') > -1:
+            ts = tag.split('>')
+            tag = ts[0]
             tag_child = f'</{ts[1]}>'
         else:
-            tag_child=""
+            tag_child = ""
         if text != '':
             t = f'{sp}<{tag}{b}{attrs}>{text}{tag_child}</{tag}>{tail}'
         else:
@@ -90,7 +89,7 @@ class HtmlBuilder(object):
         self.clsopn(0)
         return self
 
-    # ultimo tag 
+    # ultimo tag
     def tag_last(self):
         return self.tag_lst[-1:][0]
 
@@ -99,9 +98,9 @@ class HtmlBuilder(object):
         return self.tag_lst
 
     # modifica ultimo tag costruito
-    def upd_tag_last(self,tag):
-        last=len(self.tag_lst)-1
-        self.tag_lst[last]=tag
+    def upd_tag_last(self, tag):
+        last = len(self.tag_lst)-1
+        self.tag_lst[last] = tag
 
     # html identato
     def html_format(self):

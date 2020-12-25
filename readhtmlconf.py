@@ -4,7 +4,7 @@ import os
 import sys
 from ualog import Log
 import traceback
-from pdb import set_trace
+# from pdb import set_trace
 TAG_COL_NUM = 8
 
 logerr = Log("w")
@@ -42,11 +42,7 @@ def row_ok(e, t):
     return False
 
 
-"""
-xml_tag|tag|keys|attrs|text|params|parent
-"""
-
-
+# xml_tag|tag|keys|attrs|text|params|parent
 def tags_cvs2json(csv, html_type):
     lsb = ['', '', '', '', '', '', '', '']
     js = {}

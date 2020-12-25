@@ -16,7 +16,7 @@ import os
     prn(0)               disattivato localmente
                          ma resta valido il settaggio globale
 """
-class Log(object):
+class Log:
 
     def __init__(self,aappend_write='w'):
         self.used = False

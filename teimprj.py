@@ -5,7 +5,7 @@ import json
 import os
 import pprint
 import sys
-from pdb import set_trace
+# from pdb import set_trace
 import pathlib as pl
 from ualog import Log
 
@@ -25,7 +25,7 @@ logerr = Log("a")
 loginfo = Log("a")
 
 
-class PrjMgr(object):
+class PrjMgr:
 
     def __init__(self):
         logerr.open("log/teimprj.err.log", 1)
@@ -47,7 +47,8 @@ class PrjMgr(object):
         p = pl.Path(d)
         if p.exists() is False:
             raise Exception(f'{d} not found.')
-        fs = [x for x in p.glob(e)]
+        # fs = [x for x in p.glob(e)]
+        fs=list(p.glob(e))
         return fs
 
     def include_files(self, include):
