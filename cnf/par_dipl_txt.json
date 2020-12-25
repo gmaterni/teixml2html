@@ -2,6 +2,7 @@
   "html_params": {
     "%MAN%": "par"
   },
-  "html_info": "cnf/htmldipl.csv",
-  "before_id":"d"
+  "html_info": "cnf/html.csv",
+  "html_type":"d",
+    "before_id":"d"
 }

@@ -4,6 +4,13 @@
     "ptrn": "*.xml",
     "par_sub": ".xml|",
     "par_name": "$F",
-    "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -cd cnf/par_dipl_syn.json -ci cnf/par_inter_syn.json"
+    "prog": [
+      "teixml2html_di_tmpl.py",
+      "-i xml/par/$F.xml",
+      "-o html/par/syn/$F.html",
+      "-t html/syn_episode.html",
+      "-cd cnf/par_dipl_syn.json",
+      "-ci cnf/par_inter_syn.json"
+    ]
   }
 }

@@ -223,9 +223,9 @@ class Xml2Html(object):
             if x_data_parent is not None:
                 items = x_data_parent.get('items', {})
                 # TODO modifica keys di items parent
-                for k,v in items.items():
-                    kn=f'{csv_tag_parent}_{k}'
-                    attrs[kn]=v
+                for k, v in items.items():
+                    kn = f'{csv_tag_parent}_{k}'
+                    attrs[kn] = v
                 # attrs = copy.deepcopy(parent_items)
                 # attrs = copy.deepcopy(items)
         # x_data items
@@ -393,10 +393,10 @@ class Xml2Html(object):
         #
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logerr.log(os.linesep,"ERROR in csv").prn()
+            logerr.log(os.linesep, "ERROR in csv").prn()
             logerr.log(f"file: {self.xml_path}")
             logerr.log("xml:", pp(x_data))
-            logerr.log("csv:",self.csv_tag_ctrl).prn()
+            logerr.log("csv:", self.csv_tag_ctrl).prn()
             # ultimo tag w prima dell'ERRORe
             tag_w_last = ''
             if len(self.hb.get_tag_lst()) > 1:
@@ -404,7 +404,7 @@ class Xml2Html(object):
                     tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
                     if tag_w_last.find('id') > -1:
                         break
-            logerr.log("last w: ",tag_w_last).prn()
+            logerr.log("last w: ", tag_w_last).prn()
             #
             inp.inp("!")
         ####################
@@ -471,6 +471,27 @@ class Xml2Html(object):
             html = html.replace(k, v)
         return html
 
+    def read_conf(self, json_path):
+        try:
+            self.info_params = read_json(json_path)
+            logconf.log(">> info_parans", pp(self.info_params)).prn(0)
+            # TODO prefisso di  id per diplomatia e interpretativa
+            self.before_id = self.info_params.get("before_id", None)
+            if self.before_id is None:
+                raise Exception(f"ERROR before_id is null.")
+            #
+            csv_path = self.info_params.get("html_info", None)
+            if csv_path is None:
+                raise Exception(f"ERROR html_info is null.")
+            html_type = self.info_params.get("html_type", None)
+            if html_type is None:
+                raise Exception(f"ERROR html_type is null.")
+            self.info_html_tags = read_html_conf(csv_path, html_type)
+            logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
+        except Exception as e:
+            logerr.log(os.linesep, "ERROR: read_conf())")
+            logerr.log(e)
+            sys.exit(1)
 
     def write_html(self, xml_path, html_path, json_path, deb=False):
         """fa il parse del file xml_path scrive i files:
@@ -490,24 +511,8 @@ class Xml2Html(object):
         self.xml_data_lst = []
         self.xml_path = xml_path
         self.html_path = html_path
-        # lettura configurazioni
-        try:
-            self.info_params = read_json(json_path)
-            logconf.log(">> info_parans", pp(self.info_params)).prn(0)
-            # TODO prefisso di  id per diplomatia e interpretativa
-            self.before_id = self.info_params.get("before_id",None)
-            if self.before_id is None:
-                raise Exception(f"ERROR before_id is null.")
-            #
-            csv_path=self.info_params.get("html_info",None)
-            if csv_path is None:
-                raise Exception(f"ERROR html_info is null.")
-            self.info_html_tags = read_html_conf(csv_path)
-            logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
-        except Exception as e:
-            logerr.log(os.linesep, "ERROR: read conf)")
-            logerr.log(e)
-            sys.exit(1)
+        # lettur a file configurazione
+        self.read_conf(json_path)
         # lib per costruziona html
         self.hb = HtmlBuilder()
         # dict dei dati xml con tag come key
@@ -535,7 +540,8 @@ class Xml2Html(object):
             [type]: [description]
         """
         html_lst = self.hb.get_tag_lst()
-        html_over = HtmlOvweflow(self.xml_data_lst, html_lst, self.info_html_tags)
+        html_over = HtmlOvweflow(
+            self.xml_data_lst, html_lst, self.info_html_tags)
         html_over.set_overflow()
         ############################
         # html su una riga versione per produzione

@@ -17,8 +17,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "22-12-2020"
-__version__ = "0.3.2"
+__date__ = "25-12-2020"
+__version__ = "0.4.1"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -37,23 +37,11 @@ class PrjMgr(object):
             raise Exception(f"{k} not found.{os.linesep}")
         return s
 
-    def xfiles_of_dir(self, dr, ptrn):
-        files = []
-        try:
-            for f in os.listdir(dr):
-                fpath = os.path.join(dr, f)
-                if os.path.isfile(fpath) is False:
-                    continue
-                if ptrn != "":
-                    name = os.path.basename(fpath)
-                    if name.find(ptrn) < 0:
-                        continue
-                files.append(fpath)
-        except Exception as e:
-            logerr.log("file_of_dir")
-            logerr.log(e)
-            sys.exit(1)
-        return files
+    def list2str(self, x):
+        if isinstance(x, str):
+            return x
+        s = " ".join(x)
+        return s
 
     def files_of_dir(self, d, e):
         p = pl.Path(d)
@@ -69,7 +57,7 @@ class PrjMgr(object):
         Args:
             js (dict): "include". ramo del project
         """
-        loginfo.log("include")
+        loginfo.log(os.linesep,">> include")
         try:
             file_host = include.get("host", None)
             file_dest = include.get("dest", None)
@@ -104,14 +92,15 @@ class PrjMgr(object):
             sys.exit(1)
 
     def execute_files_of_dir(self, exe_dir):
-        loginfo.log("exe_dir")
+        loginfo.log(os.linesep,"*>> exe_dir")
         try:
             dr = self.get(exe_dir, 'dir')
             ptrn = self.get(exe_dir, 'ptrn')
             prog = self.get(exe_dir, 'prog')
+            prog = self.list2str(prog)
             par_name = self.get(exe_dir, 'par_name')
             sub = self.get(exe_dir, 'par_sub')
-            #
+            # replace par in par_name
             sp = sub.split('|')
             files = self.files_of_dir(dr, ptrn)
             for f in files:
@@ -129,7 +118,7 @@ class PrjMgr(object):
             sys.exit(0)
 
     def remove_files_of_dir(self, remove_dir):
-        loginfo.log("remove_dir")
+        loginfo.log(os.linesep,">> remove_dir")
         try:
             for de in remove_dir:
                 loginfo.log(de)
@@ -146,7 +135,7 @@ class PrjMgr(object):
             sys.exit(0)
 
     def merge_files(self, merge):
-        loginfo.log("merge")
+        loginfo.log(os.linesep,">> merge")
         out = self.get(merge, "out")
         files = self.get(merge, "files")
         fout = open(out, "w+")
@@ -160,8 +149,9 @@ class PrjMgr(object):
         os.chmod(out, 0o666)
 
     def execute_programs(self, exe):
-        loginfo.log("exe")
+        loginfo.log(os.linesep,">> exe")
         for x in exe:
+            x = self.list2str(x)
             loginfo.log(x)
             r = os.system(x)
             if r != 0:
@@ -192,7 +182,7 @@ class PrjMgr(object):
         except Exception as e:
             logerr.log("json ERROR")
             logerr.log(e)
-            sys.exit()
+            sys.exit(1)
         self.parse_json(js)
 
 
@@ -203,7 +193,12 @@ def do_main(src_path):
 def prn_es():
     js = {
         "exe": [
-            "teimxml.py -i prova01.txt -t tags01.csv -o prova01_v.txt",
+            [
+                "teimxml.py",
+                "-i prova01.txt",
+                "-t tags01.csv",
+                "-o prova01_v.txt"
+            ],
             "teimlineword.py -i prova01_v.txt -o prova01_vlw.xml",
             "xmllint --format prova01_vlw.xml -o prova01_vlwf.xml",
             "teimdict.py -i prova01.txt -o prova01_d.csv"
@@ -234,7 +229,14 @@ def prn_es():
             "ptrn": ".xml",
             "par_sub": ".xml|",
             "par_name": "$F",
-            "prog": "teixml2html_di.py -i xml/par/$F.xml -o html/par/syn/$F.html -td cnf/htmldipl.csv -ti cnf/htmlinter.csv -c cnf/cnf_par_txt.json"
+            "prog": [
+                "teixml2html_di_templ.py",
+                "-i xml/par/$F.xml",
+                "-o html/par/syn/$F.html",
+                "-t html/syn_episode.html",
+                "-cd cnf/par_dipl_syn.json",
+                "-ci cnf/par_inter_syn.json"
+            ]
         },
         "remove_dir": [
             {
