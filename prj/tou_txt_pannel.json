@@ -1,16 +1,30 @@
 {
-    "exe": [
-"teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listd.html -c cnf/list_dipl_txt.json",
-"teixml2html.py -i xml/tou/tou_list.xml -o html/tou/txt/tou_listi.html -c cnf/list_inter_txt.json"
-
-],
-    "include": {
-        "host": "html/txt_pannel.html",
-        "dest": "html/tou/txt/tou.html",
-        "files": [
-            "EPISODE_LIST_DIPL|html/tou/txt/tou_listd.html",
-            "EPISODE_LIST_INTER|html/tou/txt/tou_listi.html"
-                 ]
+  "exe": [
+    [
+      "teixml2html.py",
+      "-i xml/tou/tou_list.xml",
+      "-o html/tou/txt/tou_listd.html",
+      "-c cnf/list_dipl_txt.json"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tou/tou_list.xml",
+      "-o html/tou/txt/tou_listi.html",
+      "-c cnf/list_inter_txt.json"
+    ]
+  ],
+  "include": {
+    "host": "html/txt_pannel.html",
+    "dest": "html/tou/txt/tou.html",
+    "files": [
+      "EPISODE_LIST_DIPL|html/tou/txt/tou_listd.html",
+      "EPISODE_LIST_INTER|html/tou/txt/tou_listi.html"
+    ]
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tou/txt",
+      "ptrn": "tou_list*.html"
     }
+  ]
 }
-

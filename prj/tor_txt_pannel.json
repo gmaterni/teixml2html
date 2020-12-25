@@ -1,7 +1,17 @@
 {
   "exe": [
-  "teixml2html.py -i xml/tor/tor_list.xml -o html/tor/txt/tor_listd.html -c cnf/list_dipl_txt.json",
-  "teixml2html.py -i xml/tor/tor_list.xml -o html/tor/txt/tor_listi.html -c cnf/list_inter_txt.json"
+    [
+      "teixml2html.py",
+      "-i xml/tor/tor_list.xml",
+      "-o html/tor/txt/tor_listd.html",
+      "-c cnf/list_dipl_txt.json"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tor/tor_list.xml",
+      "-o html/tor/txt/tor_listi.html",
+      "-c cnf/list_inter_txt.json"
+    ]
   ],
   "include": {
     "host": "html/txt_pannel.html",
@@ -10,5 +20,11 @@
       "EPISODE_LIST_DIPL|html/tor/txt/tor_listd.html",
       "EPISODE_LIST_INTER|html/tor/txt/tor_listi.html"
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tor/txt",
+      "ptrn": "tor_list*.html"
+    }
+  ]
 }

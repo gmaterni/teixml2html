@@ -2,6 +2,7 @@
   "html_params": {
     "%MAN%": "tou"
   },
-  "html_info": "cnf/htmlinter.csv",
+  "html_info": "cnf/html.csv",
+  "html_type":"i",
   "before_id":"i"
 }

@@ -49,9 +49,10 @@ class XmlSplitEps:
             with open(name_ou, "w+") as fw:
                 fw.write(src)
             os.chmod(name_ou, 0o666)
-        except etree.Exception as e:
+        except Exception as e:
             s = str(e)
             logerr.log(s)
+            sys.exit(1)
 
     # write xml/par/par.xml
     def writ_eps_xml_lst(self, eps_lst, xml_path):

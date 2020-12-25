@@ -2,6 +2,7 @@
   "html_params": {
     "%MAN%": "tou"
   },
-  "html_info": "cnf/htmldipl.csv",
+  "html_info": "cnf/html.csv",
+  "html_type":"d:syn",
   "before_id":"d"
 }

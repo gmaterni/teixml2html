@@ -1,5 +1,10 @@
 {
     "exe": [
-"splitteixml.py -i xml/floritor.xml -o xml/tor/ -m tor"
+         [
+            "splitteixml.py",
+            "-i xml/floritor.xml",
+            "-o xml/tor/",
+            "-m tor"
+        ]
     ]
 }

@@ -1,11 +1,16 @@
 {
-    "exe_dir": {
-      "dir": "xml/tou",
-      "ext": ".xml",
-      "par_sub": ".xml|",
-      "par_name": "$F",
-      "prog": "teixml2html_di.py -i xml/tou/$F.xml -o html/tou/syn/$F.html -cd cnf/tou_dipl_syn.json -ci cnf/tou_inter_syn.json"
-  
-    }
+  "exe_dir": {
+    "dir": "xml/tou",
+    "ptrn": "*.xml",
+    "par_sub": ".xml|",
+    "par_name": "$F",
+    "prog": [
+      "teixml2html_di_tmpl.py",
+      "-i xml/tou/$F.xml",
+      "-o html/tou/syn/$F.html",
+      "-t html/syn_episode.html",
+      "-cd cnf/tou_dipl_syn.json",
+      "-ci cnf/tou_inter_syn.json"
+    ]
   }
-  
+}

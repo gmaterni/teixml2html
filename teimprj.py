@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+from pdb import set_trace
 import json
 import os
 import pprint
 import sys
-# from pdb import set_trace
 import pathlib as pl
 from ualog import Log
 
@@ -116,7 +115,7 @@ class PrjMgr:
             logerr.log("exe_dir")
             logerr.log(e)
             logerr.log(pp(exe_dir))
-            sys.exit(0)
+            sys.exit(1)
 
     def remove_files_of_dir(self, remove_dir):
         loginfo.log(os.linesep,">> remove_dir")
@@ -133,7 +132,7 @@ class PrjMgr:
             logerr.log("remove_dir")
             logerr.log(e)
             logerr.log(pp(remove_dir))
-            sys.exit(0)
+            sys.exit(1)
 
     def merge_files(self, merge):
         loginfo.log(os.linesep,">> merge")
@@ -151,6 +150,7 @@ class PrjMgr:
 
     def execute_programs(self, exe):
         loginfo.log(os.linesep,">> exe")
+        # set_trace()
         for x in exe:
             x = self.list2str(x)
             loginfo.log(x)
@@ -158,7 +158,7 @@ class PrjMgr:
             if r != 0:
                 logerr.log("exe:", x)
                 logerr.log(r)
-                sys.exit()
+                sys.exit(1)
 
     def parse_json(self, js):
         for k, v in js.items():

@@ -1,0 +1,12 @@
+{
+"exe": [
+"teimprj.py prj/tou_xml.json",
+
+"teimprj.py prj/tou_syn.json",
+"teimprj.py prj/tou_syn_pannel.json",
+
+"teimprj.py prj/tou_txt.json",
+"teimprj.py prj/tou_txt_pannel.json"
+
+]
+}

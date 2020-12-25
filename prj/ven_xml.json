@@ -1,5 +1,10 @@
 {
     "exe": [
-"splitteixml.py -i xml/floriven.xml -o xml/ven/ -m ven"
+         [
+            "splitteixml.py",
+            " -i xml/floriven.xml",
+            "-o xml/ven/",
+            "-m ven"
+        ]
     ]
 }

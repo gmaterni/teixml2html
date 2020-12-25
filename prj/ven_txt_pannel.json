@@ -1,15 +1,30 @@
 {
-    "exe": [
-"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listd.html -t cnf/htmldipl.csv -c cnf/cnf_episode_list.json",
-"teixml2html.py -i xml/ven/ven_list.xml -o html/ven/txt/ven_listi.html -t cnf/htmlinter.csv -c cnf/cnf_episode_list.json"
+  "exe": [
+    [
+      "teixml2html.py",
+      "-i xml/ven/ven_list.xml",
+      "-o html/ven/txt/ven_listd.html",
+      "-c cnf/list_dipl_txt.json"
     ],
-    "include": {
-        "host": "html/txt_pannel.html",
-        "dest": "html/ven/txt/ven.html",
-        "files": [
-            "EPISODE_LIST_DIPL|html/ven/txt/ven_listd.html",
-            "EPISODE_LIST_INTER|html/ven/txt/ven_listi.html"
-                 ]
+    [
+      "teixml2html.py",
+      "-i xml/ven/ven_list.xml",
+      "-o html/ven/txt/ven_listi.html",
+      "-c cnf/list_inter_txt.json"
+    ]
+  ],
+  "include": {
+    "host": "html/txt_pannel.html",
+    "dest": "html/ven/txt/ven.html",
+    "files": [
+      "EPISODE_LIST_DIPL|html/ven/txt/ven_listd.html",
+      "EPISODE_LIST_INTER|html/ven/txt/ven_listi.html"
+    ]
+  },
+  "remove_dir": [
+    {
+      "dir": "html/ven/txt",
+      "ptrn": "ven_list*.html"
     }
+  ]
 }
-

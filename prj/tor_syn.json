@@ -1,10 +1,16 @@
 {
   "exe_dir": {
     "dir": "xml/tor",
-    "ext": ".xml",
+    "ptrn": "*.xml",
     "par_sub": ".xml|",
     "par_name": "$F",
-    "prog": "teixml2html_di.py -i xml/tor/$F.xml -o html/tor/syn/$F.html -cd cnf/tor_dipl_syn.json -ci cnf/tor_inter_syn.json"
-
+    "prog": [
+      "teixml2html_di_tmpl.py",
+      "-i xml/tor/$F.xml",
+      "-o html/tor/syn/$F.html",
+      "-t html/syn_episode.html",
+      "-cd cnf/tor_dipl_syn.json",
+      "-ci cnf/tor_inter_syn.json"
+    ]
   }
 }

@@ -2,7 +2,8 @@
 "html_params": {
     "%MAN%": "ven"
 },
-"html_info":"cnf/htmlinter.csv",
+"html_info":"cnf/html.csv",
+"html_type":"i:syn",
 "before_id":"i"
 
 }
