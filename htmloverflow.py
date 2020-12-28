@@ -17,7 +17,7 @@ def pp(data):
 logerr = Log("a")
 
 
-class HtmlOvweflow(object):
+class HtmlOvweflow:
     """gestisce propriet+ overflov
     utilizzando <span from="<id>" to="<id>"  type0"<tipo>" 
 

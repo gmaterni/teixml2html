@@ -7,11 +7,11 @@ x|null|null
 
 x|tei|body
 
-x|div|div|type,ref|class:div_text
+x|div|div|type,ref|class:div_text|null
 x|pb|div|id,n|class:pb
 
-x|cb|div|id|class:cb|%n%
-x:sys|cb|div>div|id|class:cb cbpb|<div class=""cb_tt>%pb_n%%n%||pb
+x:txt|cb|div|id|class:cb|%n%
+x:syn|cb|div>div|id|class:cb cbpb|<div class=""cb_tt>%pb_n%%n%||pb
 
 x|lg|div|id|class:lg|<span class="lgnum">[%id_num%]</span>
 x|l|div|id,n|class:l|<span class="lnum">.%id_num%</span>
@@ -24,10 +24,11 @@ d|pc+#ed|span|id|class:pc_ed
 d|pc+#1hd|span|id|class:pc_1hd
 d|pc+#1hd-r|span|id|class:pc_1hd_r
 d|pc+#2hd|span|id|class:pc_2hd
-i|pc+#ed|span|id|class:pc_ed_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
-i|pc+#1hd|span|id|class:pc_1hd_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
-i|pc+#1hd-r|span|id|class:pc_1hd_r_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
-i|pc+#2hd|span|id|class:pc_2hd_%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+
+i|pc+#ed|span|id|class:pc_ed%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+i|pc+#1hd|span|id|class:pc_1hd%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+i|pc+#1hd-r|span|id|class:pc_1hd_r%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
+i|pc+#2hd|span|id|class:pc_2hd%%text%%_int|%text%|.:_upc,!:_upc,?:_upc
 
 x|hi|hi+rend
 d|hi+init-flour|span||class:hi_flour
@@ -48,6 +49,7 @@ d|c+#affr|span||class:diacr
 d|c+#diacr-desamb|span||class:diacr
 d|c+#lram-v|span||class:ramis
 d|c+#lram-c|span||class:ramis
+
 i|c+e-ton|span||class:diacr_int|%%text%%|e:é
 i|c+#e-ton|span||class:diacr_int|%%text%%|e:é
 i|c+#hiat|span||class:diacr_int|%%text%%|i:ï,u:ü,e:ë
@@ -85,6 +87,7 @@ x|rolename|XXX
 
 d|expan|span||class:abbrev %corresp%
 d|ex|span||class:ex|<a class="ex_ref" href="#"><span class="ex_tooltip"><img src="css/abr/%MAN%/%expan_corresp%.jpg"/></span>%text%</a>||expan
+
 i|expan|span||class:abrev_int
 i|ex|span||class:ex
 

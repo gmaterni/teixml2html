@@ -5,6 +5,7 @@ xml/
 log/
 bin/
 wrk/
+css/
 *.sh
 .vscode/
 .history/

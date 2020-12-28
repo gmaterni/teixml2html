@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from pdb import set_trace
 import os
 import sys
 from ualog import Log
 import traceback
-# from pdb import set_trace
 TAG_COL_NUM = 8
 
 logerr = Log("w")
@@ -21,24 +21,37 @@ def t_split(s):
         s1 = ''
     return s0, s1
 
-# d:syn
-# SI  x, d, x:syn, d:syn
-# NO  i, i:syn, x:pip, d:pip
-# e    d, i, d:s. i:s
-# t    x, d , i , x:s. d:s, i:s
+    """
+        
+        d   i   xt  xs  dt  ds  it  is
+    x   1   1   1   1   1   1   1   1
+    
+    d   1   0   1   1   1   1   0   0
+    i   0   1   1   1   0   0   1   1
+    
+    xt  0   0   1   0   1   0   1   0
+    xs  0   0   0   1   0   1   0   1
+    
+    dt  0   0   1   0   1   0   0   0
+    ds  0   0   0   1   0   1   0   0
 
-
-def row_ok(e, t):
-    if t == 'x' or t == e:
+    it  0   0   1   0   0   0   1   0
+    is  0   0   0   1   0   0   0   1
+    
+    """
+def row_ok(t, e):
+    if t == 'x'or t == e:
         return True
-    if e.find(':') < 0:
-        return False
     e0, e1 = t_split(e)
-    if t == 'x' or t == e0:
-        return True
-    t0, t1 = t_split(t)
-    if (t0 == 'x' or t0 == e0) and (t1 == e1):
-        return True
+    if t.find(':') < 0:
+        if t == e0 or e0=='x':
+            return True
+    else:
+        t0, t1 = t_split(t)
+        if t0 == 'x' and t1==e1:
+            return True
+        if e0 == 'x'  and t1==e1:
+            return True
     return False
 
 
@@ -58,7 +71,7 @@ def tags_cvs2json(csv, html_type):
                 le = len(flds)
                 flds.extend(lsb[0:TAG_COL_NUM-le])
             x = flds[0]
-            if row_ok(html_type, x) is False:
+            if row_ok(x,html_type) is False:
                 continue
             #
             flds = flds[1:]

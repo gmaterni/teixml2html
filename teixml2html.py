@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# from pdb import set_trace
+from pdb import set_trace
 import os
 import re
 from lxml import etree
@@ -31,15 +31,17 @@ def pp(data):
 logconf = Log("w")
 loginfo = Log("a")
 logerr = Log("a")
+logcsverr = Log('a')
 inp = Inp()
 
 
 class Xml2Html:
 
     def __init__(self):
-        logconf.open("log/teixml2html.cnf.log", 0)
+        logconf.open("log/cnf.json", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.err.log", 1)
+        logcsverr.open("log/csv.err.log", 1)
         self.xml_path = None
         self.html_path = None
         self.info_params = None
@@ -50,6 +52,7 @@ class Xml2Html:
         self.xml_data_dict = None
         self.is_container_stack = None
         self.csv_tag_ctrl = None
+        self.trace = False
 
     def node_liv(self, node):
         d = 0
@@ -148,43 +151,14 @@ class Xml2Html:
         }
 
     def text_format(self, text, pars):
-        """ formatta text utilizzado attrs
-            pqrw={'k0':'val0','k1':'val1', ..}
+        ms = re.findall("[%][\w.]+[.%]", text)
+        ks = [x.replace('%', '') for x in ms]
+        for k in ks:
+            v = pars.get(k, f'%{k}%')
+            text = text.replace(f'%{k}%', v)
+        return text
 
-        Args:
-            text (str): testo
-            pars ( dict): [parametri
-
-        Returns:
-            str : testo formattato
-        """
-        try:
-            ms = re.findall("[%]\w+[%]", text)
-            ks = [x.replace('%', '') for x in ms]
-            for k in ks:
-                v = pars.get(k, f'%{k}%')
-                text = text.replace(f'%{k}%', v)
-            return text
-        except Exception as e:
-            logerr.set_out(1)
-            logerr.log(os.linesep, "ERROR", "text_format()")
-            logerr.log(e)
-            logerr.log(f"text:{text}")
-            logerr.log(f"pars: {pars}")
-            sys.exit(1)
-
-    def attrs_format(self, text, pars):
-        """formatta html_attr_str se il parametro
-            non esiste lo rimuove
-            aggiusta gli argommenti di class
-
-        Args:
-            text (str): testo
-            pars (list): patametri
-
-        Returns:
-            str: testo con i parametri settai
-        """
+    def text_format_null(self, text, pars):
         ms = re.findall("[%]\w+[%]", text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
@@ -213,7 +187,7 @@ class Xml2Html:
             csv_data (dict): data estartto dat fiele html..:csv
 
         Returns:
-            dicct: unione dei due dict
+            dict: unione dei due dict
         """
         attrs = {}
         # TODO parent x_data items
@@ -221,16 +195,16 @@ class Xml2Html:
         if csv_tag_parent is not None:
             x_data_parent = self.xml_data_dict.get(csv_tag_parent, None)
             if x_data_parent is not None:
-                items = x_data_parent.get('items', {})
+                p_items = x_data_parent.get('items', {})
                 # TODO modifica keys di items parent
-                for k, v in items.items():
-                    kn = f'{csv_tag_parent}_{k}'
-                    attrs[kn] = v
+                for k, v in p_items.items():
+                    pk = f'{csv_tag_parent}_{k}'
+                    attrs[pk] = v
                 # attrs = copy.deepcopy(parent_items)
                 # attrs = copy.deepcopy(items)
         # x_data items
-        items = x_data.get('items', {})
-        for k, v in items.items():
+        x_items = x_data.get('items', {})
+        for k, v in x_items.items():
             attrs[k] = v
         # csv_data attrs
         c_attrs = csv_data.get('attrs', {})
@@ -251,19 +225,10 @@ class Xml2Html:
             attrs (dict): dict unione dei parametri e degli items del parent
         """
         attrs = {}
-        try:
-            # set_trace()
-            for k in c_keys:
-                attrs[k] = x_items[k]
-            for k in c_attrs.keys():
-                attrs[k] = c_attrs[k]
-        except Exception as e:
-            logerr.log(os.linesep, "ERROR: attrs_builder()")
-            logerr.log(e)
-            logerr.log("x_items:", x_items)
-            logerr.log("c_keys: ", c_keys)
-            logerr.log("c_attrs:", c_attrs)
-            sys.exit(1)
+        for k in c_keys:
+            attrs[k] = x_items[k]
+        for k in c_attrs.keys():
+            attrs[k] = c_attrs[k]
         return attrs
 
     def attrs2html(self, attrs):
@@ -312,7 +277,6 @@ class Xml2Html:
             csv_tag = xml_tag
             self.csv_tag_ctrl = f'_x_{csv_tag}'
         else:
-            # TODO
             tag = row_data.get('tag', f"_x_{xml_tag}")
             p = tag.find('+')
             if p > -1:
@@ -369,12 +333,22 @@ class Xml2Html:
         c_text = c_data.get('text', "")
         c_params = c_data.get('params', {})
         html_attrs = self.attrs_builder(x_items, c_keys, c_attrs)
-        html_attrs_str = self.attrs2html(html_attrs)
+        h_attrs_str = self.attrs2html(html_attrs)
         ext_items = self.items_extend(x_data, c_data)
-        # formatta attr utilizzando x_items
-        if html_attrs_str.find('%') > -1:
-            html_attrs_str = self.attrs_format(html_attrs_str, x_items)
-            html_attrs_str = self.class_adjust(html_attrs_str)
+        #
+        # formatta attr (x_items [solo c_keys) ] + c_attr)
+        if x_data['tag'] == 'pc':
+            # set_trace()
+            # self.trace=True
+            pass
+        if h_attrs_str.find('%') > -1:
+            if h_attrs_str.find('%text%') > -1:
+                h_attrs_str = h_attrs_str.replace('%text%', x_text)
+            if h_attrs_str.find('%') > -1:
+                h_attrs_str = self.text_format(h_attrs_str, c_params)
+            h_attrs_str = self.text_format_null(h_attrs_str, x_items)
+            h_attrs_str = self.class_adjust(h_attrs_str)
+        #
         # formatta c_text itilizzando ext_items :items + parent.items)
         if c_text.find('%') > -1:
             c_text = self.text_format(c_text, ext_items)
@@ -385,18 +359,25 @@ class Xml2Html:
                     x_text = ''
                 else:
                     self.is_container_stack[x_liv] = True
-            # ormatta c_text utilizzando c_params
+            # formatta c_text utilizzando c_params
             if c_text.find('%') > -1:
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
-        #
+        ####################
+        html_data = {
+            'tag': c_tag,
+            'attrs': h_attrs_str,
+            'text': html_text
+        }
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logerr.log(os.linesep, "ERROR in csv").prn()
-            logerr.log(f"file: {self.xml_path}")
-            logerr.log("xml:", pp(x_data))
-            logerr.log("csv:", self.csv_tag_ctrl).prn()
+            logcsverr.log(os.linesep, "ERROR in csv").prn()
+            logcsverr.log(f"file: {self.xml_path}")
+            logcsverr.log("xml:", pp(x_data))
+            logcsverr.log("csv:", self.csv_tag_ctrl).prn()
+            logcsverr.log("ext_items:", pp(ext_items)).prn()
+            logcsverr.log("html:", pp(html_data)).prn()
             # ultimo tag w prima dell'ERRORe
             tag_w_last = ''
             if len(self.hb.get_tag_lst()) > 1:
@@ -404,15 +385,9 @@ class Xml2Html:
                     tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
                     if tag_w_last.find('id') > -1:
                         break
-            logerr.log("last w: ", tag_w_last).prn()
+            logcsverr.log("last w: ", tag_w_last).prn()
             #
             inp.inp("!")
-        ####################
-        html_data = {
-            'tag': c_tag,
-            'attrs': html_attrs_str,
-            'text': html_text
-        }
         ################################
         if inp.prn:
             loginfo.log(">> htl_data").prn()
@@ -474,7 +449,7 @@ class Xml2Html:
     def read_conf(self, json_path):
         try:
             self.info_params = read_json(json_path)
-            logconf.log(">> info_parans", pp(self.info_params)).prn(0)
+            logconf.log(pp(self.info_params).replace("'", '"')).prn(0)
             # TODO prefisso di  id per diplomatia e interpretativa
             self.before_id = self.info_params.get("before_id", None)
             if self.before_id is None:
@@ -487,13 +462,13 @@ class Xml2Html:
             if html_type is None:
                 raise Exception("ERROR html_type is null.")
             self.info_html_tags = read_html_conf(csv_path, html_type)
-            logconf.log(">> info_html_tags", pp(self.info_html_tags)).prn(0)
+            logconf.log(pp(self.info_html_tags).replace("'", '"')).prn(0)
         except Exception as e:
             logerr.log(os.linesep, "ERROR: read_conf())")
             logerr.log(e)
             sys.exit(1)
 
-    def write_html(self, xml_path, html_path, json_path, deb=False):
+    def write_html(self, xml_path, html_path, json_path, debug_liv=0):
         """fa il parse del file xml_path scrive i files:
             nel formato comapatto: <html_path>
             formato indentato <html_name>_f.html
@@ -507,7 +482,7 @@ class Xml2Html:
         Returns:
             html_path (str): filr name html 
         """
-        inp.enable(deb)
+        inp.set(debug_liv)
         self.xml_data_lst = []
         self.xml_path = xml_path
         self.html_path = html_path
@@ -575,9 +550,9 @@ if __name__ == "__main__":
     parser.add_argument('-d',
                         dest="deb",
                         required=False,
-                        action="store_true",
-                        default=False,
-                        help="[-d ](abilita debug)")
+                        metavar="",
+                        default=0,
+                        help="[-d 0/1/2](setta livello di debug)")
     parser.add_argument('-c',
                         dest="cnf",
                         required=True,

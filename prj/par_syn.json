@@ -10,7 +10,8 @@
       "-o html/par/syn/$F.html",
       "-t html/syn_episode.html",
       "-cd cnf/par_dipl_syn.json",
-      "-ci cnf/par_inter_syn.json"
+      "-ci cnf/par_inter_syn.json",
+      "-d 1"
     ]
   }
 }

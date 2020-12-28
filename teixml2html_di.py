@@ -11,7 +11,7 @@ __version__ = "0.0.2"
 __author__ = "Marta Materni"
 
 
-def do_mauin(xml_name, html_name,confd, confi, deb=False):
+def do_mauin(xml_name, html_name,confd, confi, debug_liv=0):
     """invoca teixml2html.py 
     con tagsd per la diplomatica
     produce un file hatml_named.html (aggiunge d) e hatml_named_F.html
@@ -33,19 +33,24 @@ def do_mauin(xml_name, html_name,confd, confi, deb=False):
     """
     xt = Xml2Html()
     html_name_dipl = html_name.replace(".html", "d.html")
-    path_html_dipl=xt.write_html(xml_name, html_name_dipl, confd,  deb)
+    path_html_dipl=xt.write_html(xml_name, html_name_dipl, confd,  debug_liv)
     #
     html_name_inter = html_name.replace(".html", "i.html")
-    path_html_inter=xt.write_html(xml_name, html_name_inter, confi, deb)
+    path_html_inter=xt.write_html(xml_name, html_name_inter, confi, debug_liv)
     #
     fout = open(html_name, "w+")
     with open(path_html_dipl, "rt") as f:
         txt = f.read()
-        fout.write(txt)
+    # TODO applicazione html params
+    txt=xt.set_html_pramas(txt)
+    fout.write(txt)
     fout.write(os.linesep)
+    #
     with open(path_html_inter, "rt") as f:
         txt = f.read()
-        fout.write(txt)
+    # TODO applicazione html params
+    txt=xt.set_html_pramas(txt)
+    fout.write(txt)
     fout.close()
     os.chmod(html_name, 0o666)
     os.remove(path_html_dipl)
@@ -60,9 +65,9 @@ if __name__ == "__main__":
     parser.add_argument('-d',
                         dest="deb",
                         required=False,
-                        action="store_true",
-                        default=False,
-                        help="[-d ](abilita debug)")
+                        metavar="",
+                        default=0,
+                        help="[-d 0/1/2](setta livello di debug)")
     parser.add_argument('-cd',
                         dest="cnfd",
                         required=True,
