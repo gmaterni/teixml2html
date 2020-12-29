@@ -151,7 +151,21 @@ class Xml2Html:
         }
 
     def text_format(self, text, pars):
-        ms = re.findall("[%][\w.]+[.%]", text)
+        """settta pars su text
+        vengono coniserati tutti gli elemnti di text dell
+        pattern [%][\w.?!+][%] e sono rimpiazzati utilizando il dict pars
+        quelli per i quali non vi sono paramteri corrsipondenti
+        SONO lasciati nella loro forma originale
+
+        Args:
+            text (str): testo con parametri da settare
+            pars (dict): parametri per settare text
+
+        Returns:
+            str: testo formatato
+        """        
+        ptrn=r"%[\w/,;:.?!^-]+%"
+        ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
             v = pars.get(k, f'%{k}%')
@@ -159,7 +173,21 @@ class Xml2Html:
         return text
 
     def text_format_null(self, text, pars):
-        ms = re.findall("[%]\w+[%]", text)
+        """settta pars su text
+        vengono coniserati tutti gli elemnti di text dell
+        pattern [%]\w[%] e sono rimpiazzati utilizando il dict pars
+        quelli per i quali non vi sono paramteri corrsipondenti
+        sono rimossi
+
+        Args:
+            text (str): testo con parametri da settare
+            pars (dict): parametri per settare text
+
+        Returns:
+            str: testo formatato
+        """        
+        ptrn=r"%[\w/,;:.?!^-]+%"
+        ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
             v = pars.get(k, '')
@@ -332,20 +360,23 @@ class Xml2Html:
         c_attrs = c_data.get('attrs', {})
         c_text = c_data.get('text', "")
         c_params = c_data.get('params', {})
+        #dice selezionato da c_keys
         html_attrs = self.attrs_builder(x_items, c_keys, c_attrs)
         h_attrs_str = self.attrs2html(html_attrs)
+        #
         ext_items = self.items_extend(x_data, c_data)
         #
-        # formatta attr (x_items [solo c_keys) ] + c_attr)
         if x_data['tag'] == 'pc':
             # set_trace()
             # self.trace=True
             pass
         if h_attrs_str.find('%') > -1:
+            # rimpiazza se esiste %text% con x_data['text']
             if h_attrs_str.find('%text%') > -1:
                 h_attrs_str = h_attrs_str.replace('%text%', x_text)
-            if h_attrs_str.find('%') > -1:
-                h_attrs_str = self.text_format(h_attrs_str, c_params)
+            # formatta utilizzando x_params, sono lascait qyelli senza corrsipondenti
+            h_attrs_str = self.text_format(h_attrs_str, c_params)
+            # formatta attr (x_items [solo c_keys) ] + c_attr)
             h_attrs_str = self.text_format_null(h_attrs_str, x_items)
             h_attrs_str = self.class_adjust(h_attrs_str)
         #

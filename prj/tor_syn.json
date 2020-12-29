@@ -10,7 +10,8 @@
       "-o html/tor/syn/$F.html",
       "-t html/syn_episode.html",
       "-cd cnf/tor_dipl_syn.json",
-      "-ci cnf/tor_inter_syn.json"
+      "-ci cnf/tor_inter_syn.json",
+      "-d 0"
     ]
   }
 }

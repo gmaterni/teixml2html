@@ -3,6 +3,6 @@
     "%MAN%": "tou"
   },
   "html_info": "cnf/html.csv",
-  "html_type":"i",
+  "html_type":"i:txt",
   "before_id":"i"
 }

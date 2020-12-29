@@ -10,7 +10,7 @@
       "-o html/par/txt/$F.html",
       "-cd cnf/par_dipl_txt.json",
       "-ci cnf/par_inter_txt.json",
-      "-d 1"
+      "-d 0"
     ]
   }
 }

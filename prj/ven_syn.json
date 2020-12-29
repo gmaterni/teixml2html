@@ -1,17 +1,17 @@
 {
-    "exe_dir": {
-      "dir": "xml/ven",
-      "ptrn": "*.xml",
-      "par_sub": ".xml|",
-      "par_name": "$F",
-      "prog": [
-        "teixml2html_di_tmpl.py",
-        "-i xml/ven/$F.xml",
-        "-o html/ven/syn/$F.html",
-        "-t html/syn_episode.html",
-        "-cd cnf/ven_dipl_syn.json",
-        "-ci cnf/ven_inter_syn.json"
-      ]
-    }
+  "exe_dir": {
+    "dir": "xml/ven",
+    "ptrn": "*.xml",
+    "par_sub": ".xml|",
+    "par_name": "$F",
+    "prog": [
+      "teixml2html_di_tmpl.py",
+      "-i xml/ven/$F.xml",
+      "-o html/ven/syn/$F.html",
+      "-t html/syn_episode.html",
+      "-cd cnf/ven_dipl_syn.json",
+      "-ci cnf/ven_inter_syn.json",
+      "-d 0"
+    ]
   }
-  
+}

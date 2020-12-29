@@ -6,9 +6,11 @@
     "par_name": "$F",
     "prog": [
       "teixml2html_di.py",
-      " -i xml/ven/$F.xml",
+      "-i xml/ven/$F.xml",
       "-o html/ven/txt/$F.html",
       "-cd cnf/ven_dipl_txt.json",
-      "-ci cnf/ven_inter_txt.json"]
+      "-ci cnf/ven_inter_txt.json",
+      "-d 0"
+    ]
   }
 }
