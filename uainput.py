@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
 import sys
+from pdb import set_trace
+
 
 class Inp:
     """
@@ -23,7 +24,6 @@ class Inp:
     """
 
     def __init__(self):
-
         self.debug = False
         self.pause = False
         self.x = ''
@@ -55,8 +55,11 @@ class Inp:
         stop = False
         if self.pause and p == '!':
             stop = True
+            self.last = self.x
         if stop is False and self.debug is False:
             return
+        # if self.debug is False:
+        #   return
         enabled = False
         if self.x == '':
             enabled = True
@@ -74,7 +77,8 @@ class Inp:
             enabled = True
             self.x = ''
         if enabled or stop:
-            self.last = self.x
+            if enabled :
+                self.last = self.x
             s = input(p+'>')
             if s == '.':
                 sys.exit()

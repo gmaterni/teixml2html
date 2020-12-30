@@ -133,7 +133,7 @@ i|rs|span||class:rs_int_%type%
 x|span|span|from,to,type
 
 d|note|span>a||class:annotaz|<a href="#">%text%
-i|note|span>a||class:annotaz|<a href="#">
+i|note|span>a||class:annotaz_int
 
 x|ptr|a|id,type|class:ptr note,href:#,target_note:%target%|%n%|
 

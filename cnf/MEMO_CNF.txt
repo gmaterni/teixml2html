@@ -38,3 +38,9 @@ addname XXX
 .tei_capitalize_afp 
 .tei_capitalize_afp_int 
 =====================================
+<pc xml:id="Gl17pc2" resp="#ed">,</pc>
+<note type="peritextuelle">"einsi": j'ignore un tilde de nasalité sur sur le premier i</note>
+wrk
+<pc xml:id="Gl17pc2" resp="#ed">,</pc>
+<note type="peritextuelle">"einsi": j'ignore un tilde de nasalité sur sur le premier i</note>
+old

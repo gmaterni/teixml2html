@@ -7,7 +7,6 @@ import re
 from lxml import etree
 import pprint
 import sys
-# import copy
 import argparse
 from readhtmlconf import read_html_conf
 from readjson import read_json
@@ -16,8 +15,8 @@ from htmloverflow import HtmlOvweflow
 from ualog import Log
 from uainput import Inp
 
-__date__ = "19-12-2020"
-__version__ = "0.0.5"
+__date__ = "29-12-2020"
+__version__ = "0.1.0"
 __author__ = "Marta Materni"
 
 
@@ -46,12 +45,19 @@ class Xml2Html:
         self.html_path = None
         self.info_params = None
         self.info_html_tags = None
+        # prefisso di id per diplomarica / interpretativa
         self.before_id = None
+        # HtmlBuilder
         self.hb = None
+        # lista x_data (dati xml)
         self.xml_data_lst = None
+        # dizionario di x_data (dati xml)
         self.xml_data_dict = None
+        # stack dei valori v/f dei container
         self.is_container_stack = None
+        # tag di controllo per erroi csv
         self.csv_tag_ctrl = None
+        # flag per gestione set_trace()
         self.trace = False
 
     def node_liv(self, node):
@@ -218,18 +224,16 @@ class Xml2Html:
             dict: unione dei due dict
         """
         attrs = {}
-        # TODO parent x_data items
+        # parent x_data items
         csv_tag_parent = csv_data.get('parent', None)
         if csv_tag_parent is not None:
             x_data_parent = self.xml_data_dict.get(csv_tag_parent, None)
             if x_data_parent is not None:
                 p_items = x_data_parent.get('items', {})
-                # TODO modifica keys di items parent
+                # modifica keys di items parent
                 for k, v in p_items.items():
                     pk = f'{csv_tag_parent}_{k}'
                     attrs[pk] = v
-                # attrs = copy.deepcopy(parent_items)
-                # attrs = copy.deepcopy(items)
         # x_data items
         x_items = x_data.get('items', {})
         for k, v in x_items.items():
@@ -365,11 +369,13 @@ class Xml2Html:
         h_attrs_str = self.attrs2html(html_attrs)
         #
         ext_items = self.items_extend(x_data, c_data)
+        
         #
         if x_data['tag'] == 'pc':
             # set_trace()
             # self.trace=True
             pass
+
         if h_attrs_str.find('%') > -1:
             # rimpiazza se esiste %text% con x_data['text']
             if h_attrs_str.find('%text%') > -1:
@@ -403,7 +409,7 @@ class Xml2Html:
         }
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logcsverr.log(os.linesep, "ERROR in csv").prn()
+            logcsverr.log(os.linesep, f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
             logcsverr.log(f"file: {self.xml_path}")
             logcsverr.log("xml:", pp(x_data))
             logcsverr.log("csv:", self.csv_tag_ctrl).prn()
@@ -421,7 +427,7 @@ class Xml2Html:
             inp.inp("!")
         ################################
         if inp.prn:
-            loginfo.log(">> htl_data").prn()
+            loginfo.log(">> html_data").prn()
             loginfo.log(pp(html_data)).prn()
             loginfo.log(">> ext_items").prn()
             loginfo.log(pp(ext_items)).prn()
@@ -429,23 +435,34 @@ class Xml2Html:
         return html_data
 
     def html_append(self, nd):
+        """
+        estrae da nd x_data
+        invoca build_html_tah()
+        setta:h_data
+        utilizza self.hb (HtmlBuildr) per costruire HTML
+        Args:
+            nd (xml.node): nodo xml
+        """        
         x_data = self.get_node_data(nd)
+        # aggiorna xml_data_lst da utilzzare per HtmlOverflow
         self.xml_data_lst.append(x_data)
         x_tag = x_data['tag']
         x_liv = x_data['liv']
         x_is_parent = x_data['is_parent']
         x_tail = x_data['tail']
+        # setta dati per tag html
         h_data = self.build_html_tag(x_data)
         h_tag = h_data['tag']
         h_text = h_data['text']
         h_attrs = h_data['attrs']
-        # TODO se il precedente è un parent contenitor
+        # se il precedente è un parent contenitor
         is_container = self.is_container_stack[x_liv-1]
         if is_container:
             content = self.build_content(h_tag, h_attrs, h_text, x_tail)
             s = self.hb.tag_last()
             content = s.replace('%text%', content)
             self.hb.upd_tag_last(content)
+            # setta con XXX l'elemnto da rimuovere
             h_tag = 'XXX'
         if x_is_parent:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, x_tail)
@@ -466,7 +483,6 @@ class Xml2Html:
             es. il nome del manoscrittp %MAN%
             qualsiasi altro parametro definito nel file cid configurazione
             al tag html_params
-
         Args:
             html (str): html 
 
@@ -481,7 +497,7 @@ class Xml2Html:
         try:
             self.info_params = read_json(json_path)
             logconf.log(pp(self.info_params).replace("'", '"')).prn(0)
-            # TODO prefisso di  id per diplomatia e interpretativa
+            # prefisso di  id per diplomatia e interpretativa
             self.before_id = self.info_params.get("before_id", None)
             if self.before_id is None:
                 raise Exception(f"ERROR before_id is null.")
@@ -537,13 +553,19 @@ class Xml2Html:
         for nd in xml_root.iter():
             self.html_append(nd)
         self.hb.del_tags('XXX')
+
+        # TODO provisorio
+        ############################
+        # self.hb.del_tags('x_err')
+        ############################
+
         self.hb.end()
         #############################
         """gestisce il settaggio degli overflow
         modifica il parametro html_lst
 
         Returns:
-            [type]: [description]
+            str: html modificato
         """
         html_lst = self.hb.get_tag_lst()
         html_over = HtmlOvweflow(
