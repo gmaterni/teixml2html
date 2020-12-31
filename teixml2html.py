@@ -504,11 +504,10 @@ class Xml2Html:
             #
             csv_path = self.info_params.get("html_info", None)
             if csv_path is None:
-                raise Exception("ERROR html_info is null.")
+                raise Exception("ERROR csv_path is null.")
             html_type = self.info_params.get("html_type", None)
             if html_type is None:
                 raise Exception("ERROR html_type is null.")
-            self.info_html_tags = read_html_conf(csv_path, html_type)
             logconf.log(pp(self.info_html_tags).replace("'", '"')).prn(0)
         except Exception as e:
             logerr.log(os.linesep, "ERROR: read_conf())")

@@ -5,7 +5,7 @@ import os
 import sys
 from ualog import Log
 import traceback
-TAG_COL_NUM = 8
+TAG_COL_NUM = 12
 
 logerr = Log("w")
 logerr.open("log/readhtmlconf.err.log", 1)
@@ -55,9 +55,9 @@ def row_ok(t, e):
     return False
 
 
-# xml_tag|tag|keys|attrs|text|params|parent
+# x|xml_tag|tag|keys|attrs|text|params|parent!tags|before|after
 def tags_cvs2json(csv, html_type):
-    lsb = ['', '', '', '', '', '', '', '']
+    lsb = ["", "", "", "", "", "", "", ""]
     js = {}
     # set_trace()
     for row in csv:
@@ -95,7 +95,14 @@ def tags_cvs2json(csv, html_type):
                 attrs = {}
                 for x in ls:
                     kv = x.split(':')
-                    attrs[kv[0]] = kv[1]
+                    if len(kv) !=2 :
+                        logerr.log("readhtmlconf.py")
+                        logerr.log(f'ERROR csv in column attrs; field:{f}{os.linesep}')
+                        logerr.log(row)
+                        sys.exit()
+                    k=kv[0]
+                    v=kv[1]
+                    attrs[k] = v
                 row_data['attrs'] = attrs
             # text=""
             f = flds[4]
@@ -108,25 +115,43 @@ def tags_cvs2json(csv, html_type):
                 params = {}
                 for x in ls:
                     kv = x.split(':')
-                    params[kv[0]] = kv[1]
+                    if len(kv) !=2 :
+                        logerr.log("readhtmlconf.py")
+                        logerr.log(f'ERROR csv in column params; field:{f}{os.linesep}')
+                        logerr.log(row)
+                        sys.exit()
+                    k=kv[0]
+                    v=kv[1]
+                    params[k] = v
                 row_data['params'] = params
             # parent
             f = flds[6]
             if f != '':
                 row_data['parent'] = f
+            #
             js[xml_tag] = row_data
         except Exception as e:
             s = traceback.format_exc()
-            logerr.log("tag_csv2json")
+            logerr.log("readhtmlconf")
             logerr.log(s)
             logerr.log(str(e))
             logerr.log(row)
-            sys.exit()
+            sys.exit(1)
     return js
 
 
+"""
 def read_html_conf(csv_path, html_type):
     with open(csv_path, "r+") as f:
         csv = f.readlines()
+    js = tags_cvs2json(csv, html_type)
+    return js
+"""
+
+def read_html_conf(csv_path, html_type):
+    with open(csv_path, "r+") as f:
+        txt = f.read()
+    txt=txt.replace(f'\{os.linesep}','')
+    csv=txt.split(os.linesep)
     js = tags_cvs2json(csv, html_type)
     return js
