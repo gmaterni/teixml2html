@@ -1,16 +1,27 @@
 {
   "exe_dir": {
     "dir": "xml/tou",
-    "ptrn": "*.xml",
-    "par_sub": ".xml|",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
     "par_name": "$F",
-    "prog": [
-      "teixml2html_di.py",
-      "-i xml/tou/$F.xml",
-      "-o html/tou/txt/$F.html",
-      "-cd cnf/tou_dipl_txt.json",
-      "-ci cnf/tou_inter_txt.json",
-      "-d 1"
+    "exe_file": [
+      [
+        "teixml2html.py",
+        "-i xml/tou/$F.xml",
+        "-o html/tou/txt/$F.html",
+        "-c cnf/tou_dipl_txt.json",
+        "-wa w",
+        "-d 0"
+      ],
+      ["writehtml.py -o html/tou/txt/$F.html -wa a"],
+      [
+        "teixml2html.py",
+        "-i xml/tou/$F.xml",
+        "-o html/tou/txt/$F.html",
+        "-c cnf/tou_inter_txt.json",
+        "-wa a",
+        "-d 0"
+      ]
     ]
   }
 }

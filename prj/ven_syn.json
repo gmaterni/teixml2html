@@ -1,17 +1,39 @@
 {
   "exe_dir": {
     "dir": "xml/ven",
-    "ptrn": "*.xml",
-    "par_sub": ".xml|",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
     "par_name": "$F",
-    "prog": [
-      "teixml2html_di_tmpl.py",
-      "-i xml/ven/$F.xml",
-      "-o html/ven/syn/$F.html",
-      "-t html/syn_episode.html",
-      "-cd cnf/ven_dipl_syn.json",
-      "-ci cnf/ven_inter_syn.json",
-      "-d 1"
+    "exe_file": [
+      [
+        "writehtml.py",
+        "-o html/ven/syn/$F.html -wa w",
+        "-i '</div><div id=\"ven_int_id\" class=\"text_pannel tei_int\">'"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/ven/$F.xml",
+        "-o html/ven/syn/$F.html -wa a",
+        "-c cnf/ven_dipl_syn.json",
+        "-d 0"
+      ],
+      [
+        "writehtml.py",
+        "-o html/ven/syn/$F.html -wa a",
+        "-i '</div><div id=\"ven_int_id\" class=\"text_pannel tei_int\">'"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/ven/$F.xml",
+        "-o html/ven/syn/$F.html -wa a",
+        "-c cnf/ven_inter_syn.json",
+        "-d 0"
+      ],
+      [
+        "writehtml.py",
+        "-o html/ven/syn/$F.html -wa a",
+        "-i '</div>'"
+      ]
     ]
   }
 }

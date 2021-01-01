@@ -1,34 +1,37 @@
 {
-    "exe": [
-      [
-        "teixml2html.py",
-        "-i xml/tou/tou_list.xml",
-        "-o html/tou/syn/tou_listd.html",
-        "-c cnf/list_dipl_syn.json"
-      ],
-      [
-        "teixml2html.py",
-        "-i xml/tou/tou_list.xml",
-        "-o html/tou/syn/tou_listi.html",
-        "-c cnf/list_inter_syn.json"
-      ] 
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/tou/syn/tou.html",
+      "-i '<div id=\"tou_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
     ],
-    "include": {
-      "host": "html/syn_pannel.html",
-      "dest": "html/tou/syn/tou.html",
-      "params": [
-        "MAN|tou"
-      ],
-        "files": [
-        "EPISODE_LIST_DIPL|html/tou/syn/tou_listd.html",
-        "EPISODE_LIST_INTER|html/tou/syn/tou_listi.html"
-      ]
-    },
-    "remove_dir": [
-        {
-          "dir": "html/tou/syn",
-          "ptrn": "tou_list*.html"
-        }
-      ]
-  }
-  
+    [
+      "teixml2html.py",
+      "-i xml/tou/tou_list.xml",
+      "-o html/tou/syn/tou.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tou/syn/tou.html",
+      "-i '</div>",
+      "<div id=\"tou_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tou/tou_list.xml",
+      "-o html/tou/syn/tou.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tou/syn/tou.html",
+      "-i '</div></div>'",
+      "-wa a"
+    ]
+  ]
+}

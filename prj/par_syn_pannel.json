@@ -1,34 +1,37 @@
 {
-    "exe": [
-      [
-        "teixml2html.py",
-        "-i xml/par/par_list.xml",
-        "-o html/par/syn/par_listd.html",
-        "-c cnf/list_dipl_syn.json"
-      ],
-      [
-        "teixml2html.py",
-        "-i xml/par/par_list.xml",
-        "-o html/par/syn/par_listi.html",
-        "-c cnf/list_inter_syn.json"
-      ] 
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/par/syn/par.html",
+      "-i '<div id=\"par_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
     ],
-    "include": {
-      "host": "html/syn_pannel.html",
-      "dest": "html/par/syn/par.html",
-      "params": [
-        "MAN|par"
-      ],
-        "files": [
-        "EPISODE_LIST_DIPL|html/par/syn/par_listd.html",
-        "EPISODE_LIST_INTER|html/par/syn/par_listi.html"
-      ]
-    },
-    "remove_dir": [
-        {
-          "dir": "html/par/syn",
-          "ptrn": "par_list*.html"
-        }
-      ]
-  }
-  
+    [
+      "teixml2html.py",
+      "-i xml/par/par_list.xml",
+      "-o html/par/syn/par.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/syn/par.html",
+      "-i '</div>",
+      "<div id=\"par_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/par/par_list.xml",
+      "-o html/par/syn/par.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/syn/par.html",
+      "-i '</div></div>'",
+      "-wa a"
+    ]
+  ]
+}

@@ -1,34 +1,37 @@
 {
-    "exe": [
-      [
-        "teixml2html.py",
-        "-i xml/ven/ven_list.xml",
-        "-o html/ven/syn/ven_listd.html",
-        "-c cnf/list_dipl_syn.json"
-      ],
-      [
-        "teixml2html.py",
-        "-i xml/ven/ven_list.xml",
-        "-o html/ven/syn/ven_listi.html",
-        "-c cnf/list_inter_syn.json"
-      ] 
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/ven/syn/ven.html",
+      "-i '<div id=\"ven_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
     ],
-    "include": {
-      "host": "html/syn_pannel.html",
-      "dest": "html/ven/syn/ven.html",
-      "params": [
-        "MAN|ven"
-      ],
-        "files": [
-        "EPISODE_LIST_DIPL|html/ven/syn/ven_listd.html",
-        "EPISODE_LIST_INTER|html/ven/syn/ven_listi.html"
-      ]
-    },
-    "remove_dir": [
-        {
-          "dir": "html/ven/syn",
-          "ptrn": "ven_list*.html"
-        }
-      ]
-  }
-  
+    [
+      "teixml2html.py",
+      "-i xml/ven/ven_list.xml",
+      "-o html/ven/syn/ven.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven/syn/ven.html",
+      "-i '</div>",
+      "<div id=\"ven_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/ven/ven_list.xml",
+      "-o html/ven/syn/ven.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven/syn/ven.html",
+      "-i '</div></div>'",
+      "-wa a"
+    ]
+  ]
+}
