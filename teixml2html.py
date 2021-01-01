@@ -516,7 +516,7 @@ class Xml2Html:
             logerr.log(e)
             sys.exit(1)
 
-    def write_html(self, xml_path, html_path, json_path, write_append='w', debug_liv=0):
+    def write_html(self, xml_path, html_path, json_path, write_append='w', debug_liv='0'):
         """fa il parse del file xml_path scrive i files:
             nel formato comapatto: <html_path>
             formato indentato <html_name>_f.html
@@ -577,7 +577,7 @@ class Xml2Html:
         html_over = HtmlOvweflow(
             self.xml_data_lst, html_lst, self.info_html_tags)
         html_over.set_overflow()
-        ############################
+        #
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)
@@ -587,12 +587,14 @@ class Xml2Html:
         #
         # html formattato versione per il debug
         # file_name.html => file_name_X.html
-        html = self.hb.html_format()
-        html = self.set_html_pramas(html)
-        path = self.html_path.replace(".html", "_F.html")
-        with open(path, write_append) as f:
-            f.write(html)
-        os.chmod(self.html_path, 0o666)
+        if int(debug_liv)> 0:
+            set_trace()
+            html = self.hb.html_format()
+            html = self.set_html_pramas(html)
+            path = self.html_path.replace(".html", "_F.html")
+            with open(path, write_append) as f:
+                f.write(html)
+            os.chmod(self.html_path, 0o666)
         return self.html_path
 
 

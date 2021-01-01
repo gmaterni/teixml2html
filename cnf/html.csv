@@ -7,7 +7,7 @@ x|null|null
 
 x|tei|body
 
-x|div|div|type,ref|class:div_text|null
+x|div|div|type,ref|class:div_text|text_null
 x|pb|div|id,n|class:pb
 
 x:txt|cb|div|id|class:cb|%n%

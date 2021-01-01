@@ -10,17 +10,19 @@
         "-i xml/tor/$F.xml",
         "-o html/tor/txt/$F.html",
         "-c cnf/tor_dipl_txt.json",
-        "-wa w",
-        "-d 0"
+        "-wa w"
       ],
-      ["writehtml.py -o html/tor/txt/$F.html -wa a"],
+      [
+        "writehtml.py ",
+        "-o html/tor/txt/$F.html",
+        "-wa a"
+      ],
       [
         "teixml2html.py",
         "-i xml/tor/$F.xml",
         "-o html/tor/txt/$F.html",
         "-c cnf/tor_inter_txt.json",
-        "-wa a",
-        "-d 0"
+        "-wa a"
       ]
     ]
   }

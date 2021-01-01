@@ -21,8 +21,7 @@
       "-i xml/ven/ven_list.xml",
       "-o html/ven/txt/ven.html",
       "-c cnf/list_dipl_txt.json",
-      "-wa a",
-      "-d 0"
+      "-wa a"
     ],
     [
       "writehtml.py",

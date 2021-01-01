@@ -30,7 +30,7 @@
     [
       "writehtml.py",
       "-o html/par/syn/par.html",
-      "-i '</div></div>'",
+      "-i '</div>'",
       "-wa a"
     ]
   ]

@@ -21,8 +21,7 @@
       "-i xml/tor/tor_list.xml",
       "-o html/tor/txt/tor.html",
       "-c cnf/list_dipl_txt.json",
-      "-wa a",
-      "-d 0"
+      "-wa a"
     ],
     [
       "writehtml.py",

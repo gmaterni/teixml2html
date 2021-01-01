@@ -21,8 +21,7 @@
       "-i xml/par/par_list.xml",
       "-o html/par/txt/par.html",
       "-c cnf/list_dipl_txt.json",
-      "-wa a",
-      "-d 0"
+      "-wa a"
     ],
     [
       "writehtml.py",

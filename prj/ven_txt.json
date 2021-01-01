@@ -10,17 +10,19 @@
         "-i xml/ven/$F.xml",
         "-o html/ven/txt/$F.html",
         "-c cnf/ven_dipl_txt.json",
-        "-wa w",
-        "-d 0"
+        "-wa w"
       ],
-      ["writehtml.py -o html/ven/txt/$F.html -wa a"],
+      [
+        "writehtml.py ",
+        "-o html/ven/txt/$F.html",
+        "-wa a"
+      ],
       [
         "teixml2html.py",
         "-i xml/ven/$F.xml",
         "-o html/ven/txt/$F.html",
         "-c cnf/ven_inter_txt.json",
-        "-wa a",
-        "-d 0"
+        "-wa a"
       ]
     ]
   }

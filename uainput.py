@@ -30,7 +30,7 @@ class Inp:
         self.last = ''
         self.ok_prn = True
 
-    def set(self, debug_liv=0):
+    def set(self, debug_liv='0'):
         """livello debig
         0: disattivato
         1:  attivato solo per !

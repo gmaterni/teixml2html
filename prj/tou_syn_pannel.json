@@ -30,7 +30,7 @@
     [
       "writehtml.py",
       "-o html/tou/syn/tou.html",
-      "-i '</div></div>'",
+      "-i '</div>'",
       "-wa a"
     ]
   ]

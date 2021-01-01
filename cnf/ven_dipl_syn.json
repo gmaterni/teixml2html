@@ -1,6 +1,7 @@
 {
   "html_params": {
-    "null":""
+    "%MAN%":"ven",
+    "text_null":""
   },
    "html_info":  "cnf/html.csv",
    "html_type":"d:syn",

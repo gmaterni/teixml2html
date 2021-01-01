@@ -10,17 +10,19 @@
         "-i xml/par/$F.xml",
         "-o html/par/txt/$F.html",
         "-c cnf/par_dipl_txt.json",
-        "-wa w",
-        "-d 0"
+        "-wa w"
       ],
-      ["writehtml.py -o html/par/txt/$F.html -wa a"],
+      [
+        "writehtml.py ",
+        "-o html/par/txt/$F.html",
+        "-wa a"
+      ],
       [
         "teixml2html.py",
         "-i xml/par/$F.xml",
         "-o html/par/txt/$F.html",
         "-c cnf/par_inter_txt.json",
-        "-wa a",
-        "-d 0"
+        "-wa a"
       ]
     ]
   }
