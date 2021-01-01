@@ -1,17 +1,39 @@
 {
   "exe_dir": {
     "dir": "xml/par",
-    "ptrn": "*.xml",
-    "par_sub": ".xml|",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
     "par_name": "$F",
-    "prog": [
-      "teixml2html_di_tmpl.py",
-      "-i xml/par/$F.xml",
-      "-o html/par/syn/$F.html",
-      "-t html/syn_episode.html",
-      "-cd cnf/par_dipl_syn.json",
-      "-ci cnf/par_inter_syn.json",
-      "-d 1"
+    "exe_file": [
+      [
+        "writehtml.py",
+        "-o html/par/syn/$F.html -wa w",
+        "-i '</div><div id=\"par_int_id\" class=\"text_pannel tei_int\">'"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/par/$F.xml",
+        "-o html/par/syn/$F.html -wa a",
+        "-c cnf/par_dipl_syn.json",
+        "-d 0"
+      ],
+      [
+        "writehtml.py",
+        "-o html/par/syn/$F.html -wa a",
+        "-i '</div><div id=\"par_int_id\" class=\"text_pannel tei_int\">'"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/par/$F.xml",
+        "-o html/par/syn/$F.html -wa a",
+        "-c cnf/par_inter_syn.json",
+        "-d 0"
+      ],
+      [
+        "writehtml.py",
+        "-o html/par/syn/$F.html -wa a",
+        "-i '</div>'"
+      ]
     ]
   }
 }

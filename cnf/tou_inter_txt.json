@@ -1,6 +1,7 @@
 {
   "html_params": {
-    "%MAN%": "tou"
+    "%MAN%": "tou",
+    "null":""
   },
   "html_info": "cnf/html.csv",
   "html_type":"i:txt",

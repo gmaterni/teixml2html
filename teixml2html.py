@@ -169,8 +169,8 @@ class Xml2Html:
 
         Returns:
             str: testo formatato
-        """        
-        ptrn=r"%[\w/,;:.?!^-]+%"
+        """
+        ptrn = r"%[\w/,;:.?!^-]+%"
         ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
@@ -191,8 +191,8 @@ class Xml2Html:
 
         Returns:
             str: testo formatato
-        """        
-        ptrn=r"%[\w/,;:.?!^-]+%"
+        """
+        ptrn = r"%[\w/,;:.?!^-]+%"
         ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
@@ -364,12 +364,12 @@ class Xml2Html:
         c_attrs = c_data.get('attrs', {})
         c_text = c_data.get('text', "")
         c_params = c_data.get('params', {})
-        #dice selezionato da c_keys
+        # dice selezionato da c_keys
         html_attrs = self.attrs_builder(x_items, c_keys, c_attrs)
         h_attrs_str = self.attrs2html(html_attrs)
         #
         ext_items = self.items_extend(x_data, c_data)
-        
+
         #
         if x_data['tag'] == 'pc':
             # set_trace()
@@ -409,7 +409,8 @@ class Xml2Html:
         }
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logcsverr.log(os.linesep, f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
+            logcsverr.log(
+                os.linesep, f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
             logcsverr.log(f"file: {self.xml_path}")
             logcsverr.log("xml:", pp(x_data))
             logcsverr.log("csv:", self.csv_tag_ctrl).prn()
@@ -442,7 +443,7 @@ class Xml2Html:
         utilizza self.hb (HtmlBuildr) per costruire HTML
         Args:
             nd (xml.node): nodo xml
-        """        
+        """
         x_data = self.get_node_data(nd)
         # aggiorna xml_data_lst da utilzzare per HtmlOverflow
         self.xml_data_lst.append(x_data)
@@ -508,13 +509,14 @@ class Xml2Html:
             html_type = self.info_params.get("html_type", None)
             if html_type is None:
                 raise Exception("ERROR html_type is null.")
+            self.info_html_tags = read_html_conf(csv_path, html_type)
             logconf.log(pp(self.info_html_tags).replace("'", '"')).prn(0)
         except Exception as e:
             logerr.log(os.linesep, "ERROR: read_conf())")
             logerr.log(e)
             sys.exit(1)
 
-    def write_html(self, xml_path, html_path, json_path, debug_liv=0):
+    def write_html(self, xml_path, html_path, json_path, write_append='w', debug_liv=0):
         """fa il parse del file xml_path scrive i files:
             nel formato comapatto: <html_path>
             formato indentato <html_name>_f.html
@@ -523,6 +525,7 @@ class Xml2Html:
             xml_path (str]:  file xml
             html_path (str): file html
             json_path (str): file di configurazoine
+            write_append(str): modalità output
             deb (bool, optional): flag per gestione debuf
 
         Returns:
@@ -532,6 +535,9 @@ class Xml2Html:
         self.xml_data_lst = []
         self.xml_path = xml_path
         self.html_path = html_path
+        write_append = write_append.lower()
+        if write_append not in ['w', 'a']:
+            raise Exception(f"ERROR in output write/append. {write_append}")
         # lettur a file configurazione
         self.read_conf(json_path)
         # lib per costruziona html
@@ -547,6 +553,7 @@ class Xml2Html:
         try:
             xml_root = etree.parse(self.xml_path)
         except Exception as e:
+            logerr.log("ERROR teixml2html.py write_html()")
             logerr.log(e)
             sys.exit(1)
         for nd in xml_root.iter():
@@ -574,7 +581,7 @@ class Xml2Html:
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)
-        with open(self.html_path, "w+") as f:
+        with open(self.html_path, write_append) as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
         #
@@ -583,14 +590,14 @@ class Xml2Html:
         html = self.hb.html_format()
         html = self.set_html_pramas(html)
         path = self.html_path.replace(".html", "_F.html")
-        with open(path, "w+") as f:
+        with open(path, write_append) as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
         return self.html_path
 
 
-def do_mauin(xml, html, conf, deb=False):
-    Xml2Html().write_html(xml, html, conf, deb)
+def do_mauin(xml, html, conf, wa='w', deb=False):
+    Xml2Html().write_html(xml, html, conf, wa, deb)
 
 
 if __name__ == "__main__":
@@ -605,6 +612,12 @@ if __name__ == "__main__":
                         metavar="",
                         default=0,
                         help="[-d 0/1/2](setta livello di debug)")
+    parser.add_argument('-wa',
+                        dest="wa",
+                        required=False,
+                        metavar="",
+                        default="w",
+                        help="[-wa w/a (w)rite a)ppend) default w")
     parser.add_argument('-c',
                         dest="cnf",
                         required=True,
@@ -624,4 +637,4 @@ if __name__ == "__main__":
     if args.html == args.xml:
         print("Name File output errato")
         sys.exit(1)
-    do_mauin(args.xml, args.html, args.cnf, args.deb)
+    do_mauin(args.xml, args.html, args.cnf, args.wa, args.deb)

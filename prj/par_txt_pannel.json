@@ -1,31 +1,49 @@
 {
   "exe": [
     [
-      "teixml2html.py",
-      "-i xml/par/par_list.xml",
-      "-o html/par/txt/par_listd.html",
-      "-c cnf/list_dipl_txt.json",
-      "-d 0"
+      "writehtml.py",
+      "-o html/par/txt/par.html",
+      "-i '<div id=\"eps_id\"></div>",
+      "<div id=\"teimed_id\">",
+      "<div id=\"bar_text_id\"></div>",
+      "<div id=\"bar_img_id\"></div>",
+      "<div id=\"barv_text_id\"></div>",
+      "<div id=\"teimed_help_id\"></div>",
+      "<div id=\"teimed_bar_id\"></div>",
+      "<div id=\"teimed_abr_id\"></div>",
+      "<div id=\"pannel_img_id\" class=\"img\"></div>",
+      "<div id=\"pannel_dip_id\" class=\"text_pannel\">",
+      "<div id=\"notes_dip_id\" class=\"notes\"></div>'",
+      "-wa w"
     ],
     [
       "teixml2html.py",
       "-i xml/par/par_list.xml",
-      "-o html/par/txt/par_listi.html",
-      "-c cnf/list_inter_txt.json"
+      "-o html/par/txt/par.html",
+      "-c cnf/list_dipl_txt.json",
+      "-wa a",
+      "-d 0"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/txt/par.html",
+      "-i '</div>",
+      "<div id=\"pannel_int_id\" class=\"text_pannel\">",
+      "<div id=\"notes_int_id\" class=\"notes\"></div>'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/par/par_list.xml",
+      "-o html/par/txt/par.html",
+      "-c cnf/list_inter_txt.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/txt/par.html",
+      "-i '</div></div>'",
+      "-wa a"
     ]
-  ],
-  "include": {
-    "host": "html/txt_pannel.html",
-    "dest": "html/par/txt/par.html",
-    "files": [
-      "EPISODE_LIST_DIPL|html/par/txt/par_listd.html",
-      "EPISODE_LIST_INTER|html/par/txt/par_listi.html"
-    ]
-  },
-  "remove_dir": [
-    {
-      "dir": "html/par/txt",
-      "ptrn": "par_list*.html"
-    }
   ]
 }

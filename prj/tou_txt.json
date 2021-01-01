@@ -10,7 +10,7 @@
       "-o html/tou/txt/$F.html",
       "-cd cnf/tou_dipl_txt.json",
       "-ci cnf/tou_inter_txt.json",
-      "-d 0"
+      "-d 1"
     ]
   }
 }

@@ -10,7 +10,7 @@
       "-o html/ven/txt/$F.html",
       "-cd cnf/ven_dipl_txt.json",
       "-ci cnf/ven_inter_txt.json",
-      "-d 0"
+      "-d 1"
     ]
   }
 }

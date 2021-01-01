@@ -11,7 +11,7 @@
       "-t html/syn_episode.html",
       "-cd cnf/tor_dipl_syn.json",
       "-ci cnf/tor_inter_syn.json",
-      "-d 0"
+      "-d 1"
     ]
   }
 }

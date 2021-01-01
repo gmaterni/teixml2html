@@ -1,6 +1,7 @@
 {
   "html_params": {
-    "%MAN%": "tor"
+    "%MAN%": "tor",
+    "null":""
   },
   "html_info": "cnf/html.csv",
   "html_type":"i:txt",

@@ -10,7 +10,7 @@
       "-o html/tor/txt/$F.html",
       "-cd cnf/tor_dipl_txt.json",
       "-ci cnf/tor_inter_txt.json",
-      "-d 0"
+      "-d 1"
     ]
   }
 }

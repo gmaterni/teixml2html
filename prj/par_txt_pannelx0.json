@@ -1,0 +1,34 @@
+{
+  "exe": [
+    [
+      "writehtmlfile.py",
+      "-o html/par/txt/par.html -wa w",
+      "-i ./html/txt_pannel0.html"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/par/par_list.xml",
+      "-o html/par/txt/par.html -wa a",
+      "-c cnf/list_dipl_txt.json",
+      "-d 0"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/txt/par.html -wa a",
+      "-i '</div>",
+      "<div id=\"pannel_int_id\" class=\"text_pannel\">",
+      "<div id=\"notes_int_id\" class=\"notes\"></div>'"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/par/par_list.xml",
+      "-o html/par/txt/par.html -wa a",
+      "-c cnf/list_inter_txt.json"
+    ],
+    [
+      "writehtml.py",
+      "-o html/par/txt/par.html -wa a",
+      "-i '</div></div>'"
+    ]
+  ]
+}

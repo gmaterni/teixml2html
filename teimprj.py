@@ -30,16 +30,24 @@ class PrjMgr:
         logerr.open("log/teimprj.err.log", 1)
         loginfo.open("log/teimprj.log", 1)
 
+    def kv_split(self, s, sep):
+        sp = s.split(sep)
+        s0 = sp[0].strip()
+        s1 = ''
+        if len(sp) > 1:
+            s1 = sp[1].strip()
+        return s0, s1
+
+    def list2str(self, data):
+        if isinstance(data, str):
+            return data.strip()
+        s = " ".join(data)
+        return s.strip()
+
     def get(self, js, k):
         s = js.get(k, None)
         if s is None:
             raise Exception(f"{k} not found.{os.linesep}")
-        return s
-
-    def list2str(self, x):
-        if isinstance(x, str):
-            return x
-        s = " ".join(x)
         return s
 
     def files_of_dir(self, d, e):
@@ -47,7 +55,7 @@ class PrjMgr:
         if p.exists() is False:
             raise Exception(f'{d} not found.')
         # fs = [x for x in p.glob(e)]
-        fs=list(p.glob(e))
+        fs = list(p.glob(e))
         return fs
 
     def include_files(self, include):
@@ -57,7 +65,7 @@ class PrjMgr:
         Args:
             js (dict): "include". ramo del project
         """
-        loginfo.log(os.linesep,">> include")
+        loginfo.log(os.linesep, ">> include")
         try:
             file_host = include.get("host", None)
             file_dest = include.get("dest", None)
@@ -68,18 +76,14 @@ class PrjMgr:
                 host = f.read()
             #
             for param_path in file_lst:
-                sp = param_path.split('|')
-                param = sp[0]
-                path = sp[1]
+                param, path = self.kv_split(param_path, '|')
                 loginfo.log(f"{param}: {path}")
                 with open(path, "rt") as f:
                     txt = f.read()
                 host = host.replace(param, txt)
             #
             for key_val in param_lst:
-                sp = key_val.split('|')
-                key = sp[0]
-                val = sp[1]
+                key, val = self.kv_split(key_val, '|')
                 loginfo.log(f"{key}: {val}")
                 host = host.replace(key, val)
             #
@@ -92,25 +96,26 @@ class PrjMgr:
             sys.exit(1)
 
     def execute_files_of_dir(self, exe_dir):
-        loginfo.log(os.linesep,"*>> exe_dir")
+        loginfo.log(os.linesep, ">> exe_dir")
         try:
             dr = self.get(exe_dir, 'dir')
-            ptrn = self.get(exe_dir, 'ptrn')
-            prog = self.get(exe_dir, 'prog')
-            prog = self.list2str(prog)
+            ptrn = self.get(exe_dir, 'pattern')
+            exe_lst = self.get(exe_dir, 'exe_file')
             par_name = self.get(exe_dir, 'par_name')
-            sub = self.get(exe_dir, 'par_sub')
+            par_subst = self.get(exe_dir, 'par_subst')
             # replace par in par_name
-            sp = sub.split('|')
+            k, v = self.kv_split(par_subst, '|')
             files = self.files_of_dir(dr, ptrn)
             for f in files:
                 file_name = os.path.basename(f)
-                par = file_name.replace(sp[0], sp[1])
-                x = prog.replace(par_name, par)
-                loginfo.log(x)
-                r = os.system(x)
-                if r != 0:
-                    raise Exception(f"ERROR execute:{x}")
+                par = file_name.replace(k, v)
+                for exe in exe_lst:
+                    exe = self.list2str(exe)
+                    x = exe.replace(par_name, par)
+                    loginfo.log(x)
+                    r = os.system(x)
+                    if r != 0:
+                        raise Exception(f"ERROR execute:{x}")
         except Exception as e:
             logerr.log("exe_dir")
             logerr.log(e)
@@ -118,7 +123,7 @@ class PrjMgr:
             sys.exit(1)
 
     def remove_files_of_dir(self, remove_dir):
-        loginfo.log(os.linesep,">> remove_dir")
+        loginfo.log(os.linesep, ">> remove_dir")
         try:
             for de in remove_dir:
                 loginfo.log(de)
@@ -135,7 +140,7 @@ class PrjMgr:
             sys.exit(1)
 
     def merge_files(self, merge):
-        loginfo.log(os.linesep,">> merge")
+        loginfo.log(os.linesep, ">> merge")
         out = self.get(merge, "out")
         files = self.get(merge, "files")
         fout = open(out, "w+")
@@ -149,7 +154,7 @@ class PrjMgr:
         os.chmod(out, 0o666)
 
     def execute_programs(self, exe):
-        loginfo.log(os.linesep,">> exe")
+        loginfo.log(os.linesep, ">> exe")
         # set_trace()
         for x in exe:
             x = self.list2str(x)
