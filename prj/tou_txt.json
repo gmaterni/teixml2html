@@ -25,5 +25,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tou/txt",
+      "pattern": "tou_list.html"
+    }
+  ]
 }

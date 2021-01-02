@@ -25,5 +25,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/ven/txt",
+      "pattern": "ven_list.html"
+    }
+  ]
 }

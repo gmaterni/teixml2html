@@ -587,7 +587,7 @@ class Xml2Html:
         #
         # html formattato versione per il debug
         # file_name.html => file_name_X.html
-        if int(debug_liv)> 1:
+        if int(debug_liv)> 0:
             html = self.hb.html_format()
             html = self.set_html_pramas(html)
             path = self.html_path.replace(".html", "_F.html")

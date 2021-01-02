@@ -38,5 +38,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tor/syn",
+      "pattern": "tor_list.html"
+    }
+  ]
 }

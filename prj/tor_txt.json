@@ -25,5 +25,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tor/txt",
+      "pattern": "tor_list.html"
+    }
+  ]
 }

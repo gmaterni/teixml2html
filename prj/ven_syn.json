@@ -38,5 +38,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/ven/syn",
+      "pattern": "ven_list.html"
+    }
+  ]
 }

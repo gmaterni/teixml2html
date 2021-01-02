@@ -38,5 +38,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tou/syn",
+      "pattern": "tou_list.html"
+    }
+  ]
 }
