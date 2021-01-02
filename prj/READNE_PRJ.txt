@@ -67,13 +67,13 @@ prj//prohect.json
 
 {
     "exe": [
-        "teimprj.py prj//splitxml.json",
-        "teimprj.py prj//dirxml2html_di.json",
-        "teimprj.py prj//pannel_list.json",
-        "teimprj.py prj//pannel_par.json",
-        "teimprj.py prj//pannel_tor.json",
-        "teimprj.py prj//pannel_tou.json",
-        "teimprj.py prj//pannel_ven.json"
+        "uaprj.py prj//splitxml.json",
+        "uaprj.py prj//dirxml2html_di.json",
+        "uaprj.py prj//pannel_list.json",
+        "uaprj.py prj//pannel_par.json",
+        "uaprj.py prj//pannel_tor.json",
+        "uaprj.py prj//pannel_tou.json",
+        "uaprj.py prj//pannel_ven.json"
 
     ]
 }

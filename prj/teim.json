@@ -1,8 +1,0 @@
-{
-"exe": [
-"teimprj.py prj/par.json",
-"teimprj.py prj/tor.json",
-"teimprj.py prj/tou.json",
-"teimprj.py prj/ven.json"
-]
-}

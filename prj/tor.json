@@ -1,12 +1,12 @@
 {
 "exe": [
-"teimprj.py prj/tor_xml.json",
+"uaprj.py prj/tor_xml.json",
 
-"teimprj.py prj/tor_syn.json",
-"teimprj.py prj/tor_syn_pannel.json",
+"uaprj.py prj/tor_syn.json",
+"uaprj.py prj/tor_syn_pannel.json",
 
-"teimprj.py prj/tor_txt.json",
-"teimprj.py prj/tor_txt_pannel.json"
+"uaprj.py prj/tor_txt.json",
+"uaprj.py prj/tor_txt_pannel.json"
 
 ]
 }

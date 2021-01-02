@@ -1,0 +1,8 @@
+{
+"exe": [
+"uaprj.py prj/par.json",
+"uaprj.py prj/tor.json",
+"uaprj.py prj/tou.json",
+"uaprj.py prj/ven.json"
+]
+}
