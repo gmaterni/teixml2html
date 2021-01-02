@@ -1,0 +1,17 @@
+{
+  "exe_dir": {
+    "dir": "html/tou/txt",
+    "pattern": "*.html",
+    "par_subst": ".html|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "htmlformat.py",
+        "-e htmlf/tou/txt/$F_F_err.html",
+        "-o htmlf/tou/txt/$F_F.html",
+        "-i html/tou/txt/$F.html"
+      ]
+
+   ]
+  }
+}

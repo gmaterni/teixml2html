@@ -16,8 +16,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "25-12-2020"
-__version__ = "0.4.1"
+__date__ = "02-01-2021"
+__version__ = "0.4.2"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -54,7 +54,6 @@ class PrjMgr:
         p = pl.Path(d)
         if p.exists() is False:
             raise Exception(f'{d} not found.')
-        # fs = [x for x in p.glob(e)]
         fs = list(p.glob(e))
         return fs
 
@@ -108,10 +107,10 @@ class PrjMgr:
             files = self.files_of_dir(dr, ptrn)
             for f in files:
                 file_name = os.path.basename(f)
-                par = file_name.replace(k, v)
+                file_par = file_name.replace(k, v)
                 for exe in exe_lst:
                     exe = self.list2str(exe)
-                    x = exe.replace(par_name, par)
+                    x = exe.replace(par_name, file_par)
                     loginfo.log(x)
                     r = os.system(x)
                     if r != 0:
@@ -128,7 +127,7 @@ class PrjMgr:
             for de in remove_dir:
                 loginfo.log(de)
                 dr = de.get('dir')
-                ptrn = de.get('ptrn')
+                ptrn = de.get('pattern')
                 files = self.files_of_dir(dr, ptrn)
                 for f in files:
                     loginfo.log(f)
@@ -232,8 +231,8 @@ def prn_es():
         },
         "exe_dir": {
             "dir": "xml/par",
-            "ptrn": ".xml",
-            "par_sub": ".xml|",
+            "pattern": ".xml",
+            "par_subst": ".xml|",
             "par_name": "$F",
             "prog": [
                 "teixml2html_di_templ.py",
@@ -247,7 +246,7 @@ def prn_es():
         "remove_dir": [
             {
                 "dir": "html/par/syn",
-                "ptrn": "pa_list*.html"
+                "pattern": "pa_list*.html"
             }
         ]
 

@@ -227,13 +227,15 @@ class XmlSplitEps:
 
         # lista eps<n> in file xml
         # xml/par/<mano>.xml
+        # TODO
         xml_path = self.build_list_name(".xml")
         self.writ_eps_xml_lst(eps_lst, xml_path)
 
         # lista eps<n> in file txt
-        # xml/par/<mano>.TXT
-        txt_path = self.build_list_name(".txt")
-        self.writ_eps_num_lst(eps_num_lst, txt_path)
+        # xml/par/<mano>.txt
+        # TODO
+        # txt_path = self.build_list_name(".txt")
+        # self.writ_eps_num_lst(eps_num_lst, txt_path)
 
 
 def do_main(path_in, dir_out, sigla_man):

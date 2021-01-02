@@ -38,5 +38,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/par/syn",
+      "pattern": "par_list.html"
+    }
+  ]
 }

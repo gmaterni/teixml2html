@@ -25,5 +25,11 @@
         "-wa a"
       ]
     ]
-  }
+  },
+  "remove_dir": [
+    {
+      "dir": "html/par/txt",
+      "pattern": "par_list.html"
+    }
+  ]
 }

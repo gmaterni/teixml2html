@@ -13,8 +13,10 @@ par_p=[
 "par.json",
 "par_syn.json",
 "par_syn_pannel.json",
+"par_syn_format.json",
 "par_txt.json",
 "par_txt_pannel.json",
+"par_txt_format.json",
 "par_xml.json"
 ]
 

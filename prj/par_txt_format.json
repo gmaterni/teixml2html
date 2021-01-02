@@ -1,0 +1,17 @@
+{
+  "exe_dir": {
+    "dir": "html/par/txt",
+    "pattern": "*.html",
+    "par_subst": ".html|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "htmlformat.py",
+        "-e htmlf/par/txt/$F_F_err.html",
+        "-o htmlf/par/txt/$F_F.html",
+        "-i html/par/txt/$F.html"
+      ]
+
+   ]
+  }
+}
