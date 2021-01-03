@@ -1,0 +1,19 @@
+{
+  "exe_dir": {
+    "dir": "xml/par",
+    "pattern": "*ep12.xml",
+    "par_subst": ".xml|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "teixml2html.py",
+        "-i xml/par/$F.xml",
+        "-o html/par/txt/$F_d.html",
+        "-c cnf/par_inter_txt.json",
+        "-wa w",
+        "-d 1"
+      ]
+]
+  }
+  
+}
