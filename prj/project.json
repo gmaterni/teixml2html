@@ -1,8 +1,8 @@
 {
-"exe": [
-"uaprj.py prj/par.json",
-"uaprj.py prj/tor.json",
-"uaprj.py prj/tou.json",
-"uaprj.py prj/ven.json"
-]
+    "exe": [
+        "prjmgr.py prj/par.json",
+        "prjmgr.py prj/tor.json",
+        "prjmgr.py prj/tou.json",
+        "prjmgr.py prj/ven.json"
+    ]
 }

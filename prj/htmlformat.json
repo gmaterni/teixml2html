@@ -1,16 +1,15 @@
 {
     "exe": [
-    "uaprj.py prj/par_syn_format.json",
-    "uaprj.py prj/par_txt_format.json",
-    
-    "uaprj.py prj/tor_syn_format.json",
-    "uaprj.py prj/tor_txt_format.json",
-    
-    "uaprj.py prj/tou_syn_format.json",
-    "uaprj.py prj/tou_txt_format.json",
-    
-    "uaprj.py prj/ven_syn_format.json",
-    "uaprj.py prj/ven_txt_format.json"
+    "prjmgr.py prj/par_syn_format.json",
+    "prjmgr.py prj/par_txt_format.json",
+
+    "prjmgr.py prj/tor_syn_format.json",
+    "prjmgr.py prj/tor_txt_format.json",
+
+    "prjmgr.py prj/tou_syn_format.json",
+    "prjmgr.py prj/tou_txt_format.json",
+
+    "prjmgr.py prj/ven_syn_format.json",
+    "prjmgr.py prj/ven_txt_format.json"
     ]
     }
-    

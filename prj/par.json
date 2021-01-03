@@ -1,12 +1,9 @@
 {
-"exe": [
-"uaprj.py prj/par_xml.json",
-
-"uaprj.py prj/par_syn.json",
-"uaprj.py prj/par_syn_pannel.json",
-
-"uaprj.py prj/par_txt.json",
-"uaprj.py prj/par_txt_pannel.json"
-
-]
+    "exe": [
+        "prjmgr.py prj/par_xml.json",
+        "prjmgr.py prj/par_syn.json",
+        "prjmgr.py prj/par_syn_pannel.json",
+        "prjmgr.py prj/par_txt.json",
+        "prjmgr.py prj/par_txt_pannel.json"
+    ]
 }

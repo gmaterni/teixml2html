@@ -234,7 +234,7 @@ def prn_es():
             "pattern": ".xml",
             "par_subst": ".xml|",
             "par_name": "$F",
-            "prog": [
+            "exe_file": [
                 "teixml2html_di_templ.py",
                 "-i xml/par/$F.xml",
                 "-o html/par/syn/$F.html",

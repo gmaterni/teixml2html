@@ -370,11 +370,11 @@ class Xml2Html:
         #
         ext_items = self.items_extend(x_data, c_data)
 
-        #
+        """
         if x_data['tag'] == 'pc':
             # set_trace()
-            # self.trace=True
-            pass
+            self.trace=True
+        """
 
         if h_attrs_str.find('%') > -1:
             # rimpiazza se esiste %text% con x_data['text']

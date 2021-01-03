@@ -1,10 +1,10 @@
 {
-"exe": [
-[
-"splitteixml.py",
-"-i xml/floripar.xml",
-"-o xml/par/",
-"-m par"
-]
-]
+    "exe": [
+        [
+            "splitteixml.py",
+            "-i xml/floripar.xml",
+            "-o xml/par/",
+            "-m par"
+        ]
+    ]
 }
