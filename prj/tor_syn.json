@@ -8,7 +8,7 @@
       [
         "writehtml.py",
         "-o html/tor/syn/$F.html",
-        "-i '<div id=\"tor_int_id\" class=\"text_pannel tei_int\">'",
+        "-i '<div id=\"tor_dipl_id\" class=\"text_pannel tei_dipl\">'",
         "-wa w"
       ],
       [

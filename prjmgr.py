@@ -251,8 +251,8 @@ def prn_es():
         ]
 
     }
-
-    loginfo.log(pp(js))
+    s=pp(js)
+    print(s)
 
 
 if __name__ == "__main__":

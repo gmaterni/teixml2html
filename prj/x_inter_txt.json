@@ -11,7 +11,7 @@
         "-o html/par/txt/$F_d.html",
         "-c cnf/par_inter_txt.json",
         "-wa w",
-        "-d 1"
+        "-d 2"
       ]
 ]
   }

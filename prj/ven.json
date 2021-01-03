@@ -1,12 +1,9 @@
 {
-"exe": [
-"prjmgr.py prj/ven_xml.json",
-
-"prjmgr.py prj/ven_syn.json",
-"prjmgr.py prj/ven_syn_pannel.json",
-
-"prjmgr.py prj/ven_txt.json",
-"prjmgr.py prj/ven_txt_pannel.json"
-
-]
+    "exe": [
+        "prjmgr.py prj/ven_xml.json",
+        "prjmgr.py prj/ven_syn.json",
+        "prjmgr.py prj/ven_syn_pannel.json",
+        "prjmgr.py prj/ven_txt.json",
+        "prjmgr.py prj/ven_txt_pannel.json"
+    ]
 }
