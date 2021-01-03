@@ -1,0 +1,48 @@
+{
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/ven1/txt/ven1.html",
+      "-i '<div id=\"eps_id\"></div>",
+      "<div id=\"teimed_id\">",
+      "<div id=\"bar_text_id\"></div>",
+      "<div id=\"bar_img_id\"></div>",
+      "<div id=\"barv_text_id\"></div>",
+      "<div id=\"teimed_help_id\"></div>",
+      "<div id=\"teimed_bar_id\"></div>",
+      "<div id=\"teimed_abr_id\"></div>",
+      "<div id=\"pannel_img_id\" class=\"img\"></div>",
+      "<div id=\"pannel_dip_id\" class=\"text_pannel\">",
+      "<div id=\"notes_dip_id\" class=\"notes\"></div>'",
+      "-wa w"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/ven1/ven1_list.xml",
+      "-o html/ven1/txt/ven1.html",
+      "-c cnf/list_dipl_txt.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven1/txt/ven1.html",
+      "-i '</div>",
+      "<div id=\"pannel_int_id\" class=\"text_pannel\">",
+      "<div id=\"notes_int_id\" class=\"notes\"></div>'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/ven1/ven1_list.xml",
+      "-o html/ven1/txt/ven1.html",
+      "-c cnf/list_inter_txt.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven1/txt/ven1.html",
+      "-i '</div></div>'",
+      "-wa a"
+    ]
+  ]
+}

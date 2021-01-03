@@ -6,8 +6,8 @@ import argparse
 import os
 from ualog import Log
 
-__date__ = "31-12-2020"
-__version__ = "0.0.1"
+__date__ = "'4-01-2021"
+__version__ = "0.1.0"
 __author__ = "Marta Materni"
 
 logerr = Log("a")

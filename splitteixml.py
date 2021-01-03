@@ -8,8 +8,8 @@ import pprint
 from ualog import Log
 # from pdb import set_trace
 
-__date__ = "20-12-2020"
-__version__ = "0.0.4"
+__date__ = "04-01-2021"
+__version__ = "0.1.0"
 __author__ = "Marta Materni"
 
 
@@ -24,7 +24,7 @@ def pp_data(data):
 """
 splitta path_xml_in negli episodi ci scribe in dir_out
 produce <man>_list.xml con l'elenco degli episodi e scrive in dir_out
-produce <man>_list.txt con l'elenco degli episodi e scrice i dir_out 
+produce <man>_list.txt con l'elenco degli episodi e scrice i dir_out
 """
 
 

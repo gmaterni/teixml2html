@@ -1,9 +1,0 @@
-{
-    "exe": [
-        "prjmgr.py prj/tor_xml.json",
-        "prjmgr.py prj/tor_syn.json",
-        "prjmgr.py prj/tor_syn_pannel.json",
-        "prjmgr.py prj/tor_txt.json",
-        "prjmgr.py prj/tor_txt_pannel.json"
-    ]
-}

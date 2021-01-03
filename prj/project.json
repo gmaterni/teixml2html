@@ -1,8 +1,8 @@
 {
     "exe": [
-        "prjmgr.py prj/par.json",
-        "prjmgr.py prj/tor.json",
-        "prjmgr.py prj/tou.json",
-        "prjmgr.py prj/ven.json"
+        "prjmgr.py prj/par1.json",
+        "prjmgr.py prj/tor1.json",
+        "prjmgr.py prj/tou1.json",
+        "prjmgr.py prj/ven1.json"
     ]
 }

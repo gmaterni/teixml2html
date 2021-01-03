@@ -1,0 +1,37 @@
+{
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/tou1/syn/tou1.html",
+      "-i '<div id=\"tou1_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tou1/tou1_list.xml",
+      "-o html/tou1/syn/tou1.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tou1/syn/tou1.html",
+      "-i '</div>",
+      "<div id=\"tou1_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tou1/tou1_list.xml",
+      "-o html/tou1/syn/tou1.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tou1/syn/tou1.html",
+      "-i '</div>'",
+      "-wa a"
+    ]
+  ]
+}

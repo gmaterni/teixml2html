@@ -30,14 +30,16 @@ if __name__ == "__main__":
                             metavar="",
                             help="[-i <file html input>")
         args = parser.parse_args()
-        os.system(
-            f"tidy -config cnf/tidy.cnf -file {args.err} -output {args.hou} {args.hin}")
+        err=args.err
+        hou=args.hou
+        hin=args.hin   
+        s=f"tidy -config cnf/tidy.cnf -file {err} -output {hou} {hin}"
+        os.system(s)
         #
-        with open(args.err) as f:
+        with open(err) as f:
             txt = f.read()
         if txt.strip() == '':
-            os.remove(args.err)
-
+            os.remove(err)
     except Exception as e:
         print(e)
         sys.exit(1)

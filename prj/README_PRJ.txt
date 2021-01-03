@@ -5,68 +5,68 @@ esecuzione  le fasi del projetto
 (per semplicità tutti gli scritti fanno riferimento
 al manoscritto pcon sigla ar)
 ----------------------------------
-par_xml.json
+par1_xml.json
 
 {
     "exe": [
         [
             "splitteixml.py",
-            "-i xml/floripar.xml",
-            "-o xml/par/",
-            "-m par"
+            "-i xml/floripar1.xml",
+            "-o xml/par1/",
+            "-m par1"
         ]
     ]
 }
 
 
 ---------------------------------
-par_txt.json
+par1_txt.json
 
 {
   "exe_dir": {
-    "dir": "xml/par",
+    "dir": "xml/par1",
     "pattern": "*.xml",
-    "par_subst": ".xml|",
-    "par_name": "$F",
+    "par1_subst": ".xml|",
+    "par1_name": "$F",
     "exe_file": [
       [
         "teixml2html.py",
-        "-i xml/par/$F.xml",
-        "-o html/par/txt/$F.html",
-        "-c cnf/par_dipl_txt.json",
+        "-i xml/par1/$F.xml",
+        "-o html/par1/txt/$F.html",
+        "-c cnf/par1_dipl_txt.json",
         "-wa w"
       ],
       [
         "writehtml.py ",
-        "-o html/par/txt/$F.html",
+        "-o html/par1/txt/$F.html",
         "-wa a"
       ],
       [
         "teixml2html.py",
-        "-i xml/par/$F.xml",
-        "-o html/par/txt/$F.html",
-        "-c cnf/par_inter_txt.json",
+        "-i xml/par1/$F.xml",
+        "-o html/par1/txt/$F.html",
+        "-c cnf/par1_inter_txt.json",
         "-wa a"
       ]
     ]
   },
   "remove_dir": [
     {
-      "dir": "html/par/txt",
-      "pattern": "par_list.html"
+      "dir": "html/par1/txt",
+      "pattern": "par1_list.html"
     }
   ]
 }
 
 
 -----------------------------------------
-par_txt_pannel.json_path
+par1_txt_pannel.json_path
 
 {
   "exe": [
     [
       "writehtml.py",
-      "-o html/par/txt/par.html",
+      "-o html/par1/txt/par1.html",
       "-i '<div id=\"eps_id\"></div>",
       "<div id=\"teimed_id\">",
       "<div id=\"bar_text_id\"></div>",
@@ -82,14 +82,14 @@ par_txt_pannel.json_path
     ],
     [
       "teixml2html.py",
-      "-i xml/par/par_list.xml",
-      "-o html/par/txt/par.html",
+      "-i xml/par1/par1_list.xml",
+      "-o html/par1/txt/par1.html",
       "-c cnf/list_dipl_txt.json",
       "-wa a"
     ],
     [
       "writehtml.py",
-      "-o html/par/txt/par.html",
+      "-o html/par1/txt/par1.html",
       "-i '</div>",
       "<div id=\"pannel_int_id\" class=\"text_pannel\">",
       "<div id=\"notes_int_id\" class=\"notes\"></div>'",
@@ -97,14 +97,14 @@ par_txt_pannel.json_path
     ],
     [
       "teixml2html.py",
-      "-i xml/par/par_list.xml",
-      "-o html/par/txt/par.html",
+      "-i xml/par1/par1_list.xml",
+      "-o html/par1/txt/par1.html",
       "-c cnf/list_inter_txt.json",
       "-wa a"
     ],
     [
       "writehtml.py",
-      "-o html/par/txt/par.html",
+      "-o html/par1/txt/par1.html",
       "-i '</div></div>'",
       "-wa a"
     ]
@@ -113,15 +113,15 @@ par_txt_pannel.json_path
 
 
 --------------------------------
-par.json
+par1.json
 
 {
     "exe": [
-        "prjmgr.py prj/par_xml.json",
-        "prjmgr.py prj/par_syn.json",
-        "prjmgr.py prj/par_syn_pannel.json",
-        "prjmgr.py prj/par_txt.json",
-        "prjmgr.py prj/par_txt_pannel.json"
+        "prjmgr.py prj/par1_xml.json",
+        "prjmgr.py prj/par1_syn.json",
+        "prjmgr.py prj/par1_syn_pannel.json",
+        "prjmgr.py prj/par1_txt.json",
+        "prjmgr.py prj/par1_txt_pannel.json"
     ]
 }
 
@@ -130,7 +130,7 @@ project.json
 
 {
     "exe": [
-        "prjmgr.py prj/par.json",
+        "prjmgr.py prj/par1.json",
         "prjmgr.py prj/tor.json",
         "prjmgr.py prj/tou.json",
         "prjmgr.py prj/ven.json"

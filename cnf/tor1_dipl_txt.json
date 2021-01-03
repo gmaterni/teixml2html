@@ -1,0 +1,9 @@
+{
+  "html_tor1ams": {
+    "%MAN%":"tor1",
+    "text_null":""
+  },
+  "html_info": "cnf/html.csv",
+  "html_type":"d:txt",
+  "before_id":"d"
+}

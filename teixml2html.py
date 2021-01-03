@@ -15,8 +15,8 @@ from htmloverflow import HtmlOvweflow
 from ualog import Log
 from uainput import Inp
 
-__date__ = "29-12-2020"
-__version__ = "0.1.0"
+__date__ = "04-01-2021"
+__version__ = "0.2.0"
 __author__ = "Marta Materni"
 
 

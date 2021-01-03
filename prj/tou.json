@@ -1,9 +1,0 @@
-{
-    "exe": [
-        "prjmgr.py prj/tou_xml.json",
-        "prjmgr.py prj/tou_syn.json",
-        "prjmgr.py prj/tou_syn_pannel.json",
-        "prjmgr.py prj/tou_txt.json",
-        "prjmgr.py prj/tou_txt_pannel.json"
-    ]
-}

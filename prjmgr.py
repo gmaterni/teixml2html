@@ -16,8 +16,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "02-01-2021"
-__version__ = "0.4.2"
+__date__ = "04-01-2021"
+__version__ = "0.5.0"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -209,13 +209,13 @@ def prn_es():
             "teimdict.py -i prova01.txt -o prova01_d.csv"
         ],
         "merge": {
-            "out": "floripar1.txt",
+            "out": "floripar.txt",
             "files": [
-                "./eps/fl_par1_ep12.txt",
-                "./eps/fl_par1_ep13.txt",
-                "./eps/fl_par1_ep14.txt",
-                "./eps/fl_par1_ep16.txt",
-                "./eps/fl_par1_ep17.txt",
+                "./eps/fl_par_ep12.txt",
+                "./eps/fl_par_ep13.txt",
+                "./eps/fl_par_ep14.txt",
+                "./eps/fl_par_ep16.txt",
+                "./eps/fl_par_ep17.txt",
             ]
         },
         "include": {

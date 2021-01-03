@@ -1,0 +1,37 @@
+{
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/tor1/syn/tor1.html",
+      "-i '<div id=\"tor1_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tor1/tor1_list.xml",
+      "-o html/tor1/syn/tor1.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tor1/syn/tor1.html",
+      "-i '</div>",
+      "<div id=\"tor1_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/tor1/tor1_list.xml",
+      "-o html/tor1/syn/tor1.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/tor1/syn/tor1.html",
+      "-i '</div>'",
+      "-wa a"
+    ]
+  ]
+}

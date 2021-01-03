@@ -20,7 +20,7 @@ drop-empty-paras: no
 drop-proprietary-attributes: no
 enclose-block-text: yes
 enclose-text: yes
-error-file: 
+error-file:
 escape-cdata: no
 escape-scripts: yes
 fix-backslash: no

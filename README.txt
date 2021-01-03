@@ -1,20 +1,20 @@
 file Nche NON sono sotto il controllo git
-tutti le indiczioni sono riferite al manoscritto par
+tutti le indiczioni sono riferite al manoscritto par1
 ma sono da cosiderarsi equivalenti per
-tor,tou,ven sostituendo ila sigla adel manoscritto a par
+tor,tou,ven sostituendo ila sigla adel manoscritto a par1
 
 bin
 dir dei comandi di lavoro
 
 html
-html/par/txt
-html/par/syn
+html/par1/txt
+html/par1/syn
 ......
 output dei file html
 
 htmlf
-htmlf/par/txt
-htmlf/par/syn
+htmlf/par1/txt
+htmlf/par1/syn
 ......
 output dei file html formattati per il debug
 
@@ -25,11 +25,11 @@ dir dei log
 Files soot controllo git
 
 xml
-xml/floripar.xml
+xml/floripar1.xml
 ......
 files xml dei vari manoscritti
 
-xml/par
+xml/par1
 ......
 dir contenete i files degli episodi
 
@@ -43,7 +43,7 @@ dir dei files di prohetto
 file di configurzione:
 
 html.csv
- entity per la produzione di htmlf/par/
+ entity per la produzione di htmlf/par1/
 
 list_dipl_syn.json
 list_dipl_txt.json
@@ -51,10 +51,10 @@ list_inter_syn.json
 list_inter_txt.json
     file per la produzione dei pannelli di gestione
 
-par_dipl_syn.json
-par_dipl_txt.json
-par_inter_syn.json
-par_inter_txt.json
+par1_dipl_syn.json
+par1_dipl_txt.json
+par1_inter_syn.json
+par1_inter_txt.json
     produzione dei files html delle sezioni
 
 tidy.cnf
@@ -63,46 +63,46 @@ tidy.cnf
 ================================
 file per esecuzione deile varie fasi
 
-par_xml.json
+par1_xml.json
     produce i files xml degli episodi
-    xml/floripar.xml => xml/par/epi<num<.xml
+    xml/floripar1.xml => xml/par1/epi<num<.xml
     utilizza:
-        prj/par_xml.json
+        prj/par1_xml.json
 
-par_txt.json
+par1_txt.json
     files xml per txt
-    xml/par/*.xml => html/par/txt/eps<num>.html
+    xml/par1/*.xml => html/par1/txt/eps<num>.html
     utilizza:
-        par_dipl_txt.json
-        par_inter_txt.json
+        par1_dipl_txt.json
+        par1_inter_txt.json
 
-par_txt_pannel.json
+par1_txt_pannel.json
     file per il pannello txt
-    xml/par/par_list.xml => html/par/txt/par.html
+    xml/par1/par1_list.xml => html/par1/txt/par1.html
     utilizza:
         list_dipl_txt.json
         list_inter_txt.json
 
-par_txt_format.json
+par1_txt_format.json
     formatta i files html e rova eventuali errir
-    html/par/txt/eps<num>.html => htmlf/par/txt/eps<num>_F.html
+    html/par1/txt/eps<num>.html => htmlf/par1/txt/eps<num>_F.html
 
-par_syn.json
-par_syn_pannel.json
-par_syn_format.json
-    sstesse operazioni per par_syn_format
+par1_syn.json
+par1_syn_pannel.json
+par1_syn_format.json
+    sstesse operazioni per par1_syn_format
 
-par.json
+par1.json
     esegute tutti i progetti json tranne format
-        par_xml.json
-        par_tx.json
-        par_txt_pannel.json
-        par_syn.json
-        par_syn_pannel.json
+        par1_xml.json
+        par1_tx.json
+        par1_txt_pannel.json
+        par1_syn.json
+        par1_syn_pannel.json
 
 project.json
     esegue
-    par.json
+    par1.json
     tor.json
     tou.json
     ven.json
@@ -116,11 +116,11 @@ prjmgr.py
 
 splitteixml.py
     estraee dla file xml del manoscritto i files xmlm
-    xml/floripar.xml => xml/par/eps<num>.xml
+    xml/floripar1.xml => xml/par1/eps<num>.xml
 
 teixml2html.py
     trasforma xml in html
-    xml/par/eps<num>.xml => html/par/txt/eps<num>.html
+    xml/par1/eps<num>.xml => html/par1/txt/eps<num>.html
 
 writehtmlfile.py
     lege un file html e lo scrive  all'intyerno dei progetti
@@ -130,10 +130,10 @@ writehtml.py
 
 htmlformat.py
     formatta i file html  e gli eventuali errori
-    html/par/txt/eps<num>.html => htmlf/par/txt/eps<num>_F.html
+    html/par1/txt/eps<num>.html => htmlf/par1/txt/eps<num>_F.html
 
-copy_par2all.py
-    copya file di configurazione e di progetto di par
+copy_par12all.py
+    copya file di configurazione e di progetto di par1
     in tor, tou e ven
 
 libreire
@@ -143,7 +143,7 @@ csv2json.py
     trasforma un csv in json
 
 htmlbuilder.py
-    costruisce la struttura htmlf/par/
+    costruisce la struttura htmlf/par1/
 
 htmloverflow.py
     gestisce overflow (discorso diretto, ..)
