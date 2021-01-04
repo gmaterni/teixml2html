@@ -88,7 +88,7 @@ x|rolename|XXX
 d|expan|span||class:abbrev %corresp%
 d|ex|span||class:ex|<a class="ex_ref" href="#">\
 <span class="ex_tooltip">\
-<img src="css/abr/%MAN%/%expan_corresp%.jpg"/>\
+<img src="css/abr/_MAN_/%expan_corresp%.jpg"/>\
 </span>%text%</a>||expan
 
 i|expan|span||class:abrev_int

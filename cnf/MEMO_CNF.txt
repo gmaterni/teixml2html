@@ -1,3 +1,79 @@
+expan / ex
+
+>>> csv
+d|expan|span||class:abbrev %corresp%
+d|ex|span||class:ex|<a class="ex_ref" href="#">\
+                    <span class="ex_tooltip">\
+                    <img src="css/abr/_MAN_/%expan_corresp%.jpg"/>\
+                     </span>%text%</a>||expan
+---------------------------------------------
+>>> XML
+<w xml:id="Gl610w2" ana="#elis">
+    <expan corresp="#ab-lm-qbarr-d">q
+        <ex>u</ex>
+    </expan>
+</w>
+
+>>> HTML
+<div class="w elis tei_directspeech" id="dGl610w2">
+    <span class="abbrev ab-lm-qbarr-d">q
+        <span class="ex">
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-lm-qbarr-d.jpg" />
+                </span>u
+            </a>
+        </span>
+    </span>
+</div>
+-----------------------------------------
+>>> XML
+<w xml:id="Gl8305w2">
+  <expan corresp="#ab-ctr-chr">ch
+    <ex>e
+      <c ana="#lram-c">u</c>alie
+    </ex>r
+  </expan>
+</w>
+
+ex contiene un altro tag e non solo testo
+quando si incontra <c></c> si verifica che <ex></ex> è
+un container.
+%text% è quindi settato in <ex></ex> che è il container di c
+
+HTML temporaneo con tag XXX da rimuovere
+
+<div class="w" id="dGl8305w2">
+    <span class="abbrev ab-ctr-chr">ch
+        <span class="ex">e
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-ctr-chr.jpg" />
+                </span>
+                <span class="ramis">u</span>alie
+            </a>
+            <XXX class="ramis">u</XXX>alie
+        </span>r
+    </span>
+</div>
+
+
+
+>>> HTML 
+<div class="w" id="dGl8305w2">
+    <span class="abbrev ab-ctr-chr">ch
+        <span class="ex">e
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-ctr-chr.jpg" />
+                </span>
+                <span class="ramis">u</span>alie
+            </a>
+        </span>r
+    </span>
+</div>
+
+
 ==============================
 damage
 <damage degree="low">

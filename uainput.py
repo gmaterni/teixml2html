@@ -16,10 +16,11 @@ class Inp:
             setta x==''
     ''  continua fino alla successiva
         continua fino al successivo tag eguale
-        ?  visualiza html realizzato
+    
+    ?  visualiza html realizzato
 
         se debug_liv ==1:
-        !  attiva input e disattiva tag settato
+    !  attiva input e disattiva tag settato
 
     """
 

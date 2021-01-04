@@ -1,7 +1,7 @@
 
 
 {
-  "html_par1ams": {
+  "html_params": {
     "text_null": "",
     "<null>": "",
     "</null>": ""
@@ -11,7 +11,7 @@
   "before_id":"d"
 }
 
-html_par1ams
+html_params
     utilizza i par1ametri nei files html dopo la
     trasformazione da xml.
     il termine di sinnstra e la key quello di
@@ -101,7 +101,9 @@ text
 
 ext_items
   par1ametri che uniscono
-    xml pranet items (attributi del par1ente xml se definito in csv)
+    xml pranet items (attributi del par1ente xml se definito in csv
+                      le coppye k,v hanno la forma tag_k,v dove tag è
+                      quella del parent)
     xml items (attributi del nodo xml)
     csv attrs (attributi definiti in csv)
     %text% testo definito in xml

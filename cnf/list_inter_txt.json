@@ -1,8 +1,8 @@
 {
-  "html_par1ams": {
+  "html_params": {
+    "text_null": "",
     "<null>": "",
-    "</null>": "",
-    "text_null": ""
+    "</null>": ""
   },
   "html_info": "cnf/html.csv",
   "html_type":"i",

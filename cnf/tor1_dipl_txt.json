@@ -1,6 +1,6 @@
 {
   "html_tor1ams": {
-    "%MAN%":"tor1",
+    "_MAN_":"tor1",
     "text_null":""
   },
   "html_info": "cnf/html.csv",
