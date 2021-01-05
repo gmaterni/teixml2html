@@ -407,8 +407,8 @@ class Xml2Html:
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1 :
             logcsverr.log(os.linesep, f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
-            logcsverr.log(f"file: {self.xml_path}")
-            logcsverr.log("xml:", pp(x_data))
+            logcsverr.log(f"file: {self.xml_path}").prn()
+            logcsverr.log("xml:", pp(x_data)).prn()
             logcsverr.log("csv:", self.csv_tag_ctrl).prn()
             logcsverr.log("ext_items:", pp(ext_items)).prn()
             logcsverr.log("html:", pp(html_data)).prn()
@@ -484,7 +484,6 @@ class Xml2Html:
             al tag html_params
         Args:
             html (str): html 
-
         Returns:
             html (str): html con settati i parametri         """
         params = self.info_params.get("html_params", {})
@@ -492,6 +491,23 @@ class Xml2Html:
             html = html.replace(k, v)
         return html
 
+    def check_tml(self):
+        """ controlla tutte le righe htnl di HtmlBuilder
+        per verificare che vi sda qualche parametro
+        del tipo %param% non settato
+        """        
+        ptrn = r"%[\w/,;:.?!^-]+%"
+        rows =self.hb.get_tag_lst()
+        for row in rows:
+            ms = re.search(ptrn, row)
+            if ms is not None:
+                logcsverr.log(os.linesep, f"ERROR nel parametro: {ms.group()}").prn()
+                logcsverr.log(f"file: {self.xml_path}")
+                logerr.log(row.strip()).prn()
+                logerr.log(os.linesep).prn()
+                inp.inp('!')
+
+    
     def read_conf(self, json_path):
         try:
             self.info_params = read_json(json_path)
@@ -566,10 +582,9 @@ class Xml2Html:
         html_over = HtmlOvweflow(
             self.xml_data_lst, html_lst, self.info_html_tags)
         html_over.set_overflow()
-
-        # TODO check delle righe
-
-
+        # controllo dei parametri %par% non settati
+        if int(debug_liv)> 0:
+            self.check_tml()
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)

@@ -22,7 +22,7 @@
         "-i xml/par1/$F.xml",
         "-o html/par1/txt/$F.html",
         "-c cnf/par1_inter_txt.json",
-        "-wa a"
+        "-wa a -d 0"
       ]
     ]
   },
