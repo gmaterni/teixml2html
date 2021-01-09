@@ -1,4 +1,3 @@
-static/
 html/
 htmlf/
 xsl/
@@ -6,9 +5,8 @@ xml/
 log/
 bin/
 wrk/
-css/
 *.sh
 .vscode/
 .history/
 __pycache__/
-workspace.code-workspace
+*.code-workspace

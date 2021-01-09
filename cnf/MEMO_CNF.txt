@@ -15,7 +15,7 @@ d|ex|span||class:ex|<a class="ex_ref" href="#">\
 </w>
 
 >>> HTML
-<div class="w elis tei_directspeech" id="dGl610w2">
+<div class="w elis directspeech" id="dGl610w2">
     <span class="abbrev ab-lm-qbarr-d">q
         <span class="ex">
             <a class="ex_ref" href="#">
@@ -107,12 +107,12 @@ gap [..
 supplied
 addname XXX
 ======================================
-.tei_directspeech 
-.tei_direct_beg_int 
-.tei_monologue 
-.tei_episode_beg_int 
-.tei_capitalize_afp 
-.tei_capitalize_afp_int 
+.directspeech 
+.directspeech_start_int 
+.monologue 
+.episode_start_int 
+.capitaiize_afp 
+.capitaiize_afp_int 
 =====================================
 <pc xml:id="Gl17pc2" resp="#ed">,</pc>
 <note type="peritextuelle">"einsi": j'ignore un tilde de nasalité sur sur le premier i</note>

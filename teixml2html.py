@@ -31,6 +31,7 @@ logconf = Log("w")
 loginfo = Log("a")
 logerr = Log("a")
 logcsverr = Log('a')
+loghtmlerr = Log('a')
 inp = Inp()
 
 
@@ -39,8 +40,9 @@ class Xml2Html:
     def __init__(self):
         logconf.open("log/cnf.json", 0)
         loginfo.open("log/teixml2html.log", 0)
-        logerr.open("log/teixml2html.err.log", 1)
-        logcsverr.open("log/csv.err.log", 1)
+        logerr.open("log/teixml2html.ERR.log", 1)
+        logcsverr.open("log/csv.ERR.log", 1)
+        loghtmlerr.open("log/html.ERR.log", 1)
         self.xml_path = None
         self.html_path = None
         self.info_params = None
@@ -337,6 +339,18 @@ class Xml2Html:
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
+    def  get_tag_w_last(self):
+        tag_w_last = ''
+        le=len(self.hb.get_tag_lst())
+        if le==0:
+            return ""
+        x= 5 if le > 5 else le
+        for i in range(1, x):
+            tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
+            if tag_w_last.find('id') > -1:
+                break
+        return tag_w_last
+
     def build_html_tag(self, x_data):
         """raccogli i dati per costruire un elemnt html
         Args:
@@ -406,21 +420,16 @@ class Xml2Html:
         }
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1 :
-            logcsverr.log(os.linesep, f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
+            logcsverr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
             logcsverr.log(f"file: {self.xml_path}").prn()
             logcsverr.log("xml:", pp(x_data)).prn()
             logcsverr.log("csv:", self.csv_tag_ctrl).prn()
             logcsverr.log("ext_items:", pp(ext_items)).prn()
             logcsverr.log("html:", pp(html_data)).prn()
             # ultimo tag w prima dell'ERRORe
-            tag_w_last = ''
-            if len(self.hb.get_tag_lst()) > 1:
-                for i in range(1, 10):
-                    tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
-                    if tag_w_last.find('id') > -1:
-                        break
+            tag_w_last = self.get_tag_w_last()
             logcsverr.log("last w: ", tag_w_last).prn()
-            #
+            logcsverr.log(os.linesep).prn()
             inp.inp("!")
         ################################
         if inp.prn:
@@ -501,10 +510,13 @@ class Xml2Html:
         for row in rows:
             ms = re.search(ptrn, row)
             if ms is not None:
-                logcsverr.log(os.linesep, f"ERROR nel parametro: {ms.group()}").prn()
-                logcsverr.log(f"file: {self.xml_path}")
-                logerr.log(row.strip()).prn()
-                logerr.log(os.linesep).prn()
+                loghtmlerr.log( f"ERROR nel parametro: {ms.group()}").prn()
+                loghtmlerr.log(f"file: {self.xml_path}")
+                loghtmlerr.log(row.strip()).prn()
+                # ultimo tag w prima dell'ERRORe
+                tag_w_last = self.get_tag_w_last()
+                loghtmlerr.log("last w: ", tag_w_last).prn()
+                loghtmlerr.log(os.linesep).prn()
                 inp.inp('!')
 
     
@@ -583,8 +595,7 @@ class Xml2Html:
             self.xml_data_lst, html_lst, self.info_html_tags)
         html_over.set_overflow()
         # controllo dei parametri %par% non settati
-        if int(debug_liv)> 0:
-            self.check_tml()
+        self.check_tml()
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)

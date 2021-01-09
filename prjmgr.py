@@ -16,8 +16,8 @@ def pp(data):
     return s+os.linesep
 
 
-__date__ = "04-01-2021"
-__version__ = "0.5.0"
+__date__ = "10-01-2021"
+__version__ = "0.1.0"
 __author__ = "Marta Materni"
 
 logerr = Log("a")
@@ -27,8 +27,8 @@ loginfo = Log("a")
 class PrjMgr:
 
     def __init__(self):
-        logerr.open("log/teimprj.err.log", 1)
-        loginfo.open("log/teimprj.log", 1)
+        logerr.open("log/prjmgr.ERR.log", 1)
+        loginfo.open("log/prjmgr.log", 1)
 
     def kv_split(self, s, sep):
         sp = s.split(sep)
@@ -54,7 +54,7 @@ class PrjMgr:
         p = pl.Path(d)
         if p.exists() is False:
             raise Exception(f'{d} not found.')
-        fs = list(p.glob(e))
+        fs = sorted(list(p.glob(e)))
         return fs
 
     def include_files(self, include):
@@ -138,7 +138,7 @@ class PrjMgr:
             logerr.log(pp(remove_dir))
             sys.exit(1)
 
-    def merge_files(self, merge):
+    def merge_files_of_list(self, merge):
         loginfo.log(os.linesep, ">> merge")
         out = self.get(merge, "out")
         files = self.get(merge, "files")
@@ -148,9 +148,33 @@ class PrjMgr:
             with open(f, "rt") as f:
                 txt = f.read()
             fout.write(txt)
+            fout.write(os.linesep)
         fout.close()
         loginfo.log(out)
         os.chmod(out, 0o666)
+
+    def merge_files_of_dir(self, merge_dir):
+        loginfo.log(os.linesep, ">> merge_dir")
+        try:
+            dr = self.get(merge_dir, 'dir')
+            ptrn = self.get(merge_dir, 'pattern')
+            out_path= self.get(merge_dir, 'out_path')
+            files = self.files_of_dir(dr, ptrn)
+            file_out = open(out_path,"w")
+            for fpath in files:
+                loginfo.log(fpath)
+                with open(fpath, "rt") as f:
+                    txt = f.read()
+                file_out.write(txt)
+                file_out.write(os.linesep)
+            file_out.close()
+            os.chmod(out_path, 0o666)
+            loginfo.log(out_path)
+        except Exception as e:
+            logerr.log("merge_dir")
+            logerr.log(e)
+            logerr.log(pp(merge_dir))
+            sys.exit(1)
 
     def execute_programs(self, exe):
         loginfo.log(os.linesep, ">> exe")
@@ -169,7 +193,9 @@ class PrjMgr:
             if k == "exe":
                 self.execute_programs(v)
             elif k == "merge":
-                self.merge_files(v)
+                self.merge_files_of_list(v)
+            elif k == "merge_dir":
+                self.merge_files_of_dir(v)
             elif k == "include":
                 self.include_files(v)
             elif k == "exe_dir":
@@ -217,6 +243,11 @@ def prn_es():
                 "./eps/fl_par_ep16.txt",
                 "./eps/fl_par_ep17.txt",
             ]
+        },
+        "merge_dir": {
+            "dir": "xml/par",
+            "pattern": ".xml",
+            "out": "floripar.txt"
         },
         "include": {
             "host": "html/txt_pannel.html",

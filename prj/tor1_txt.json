@@ -10,7 +10,7 @@
         "-i xml/tor1/$F.xml",
         "-o html/tor1/txt/$F.html",
         "-c cnf/tor1_dipl_txt.json",
-        "-wa w"
+        "-wa w "
       ],
       [
         "writehtml.py ",
@@ -22,7 +22,7 @@
         "-i xml/tor1/$F.xml",
         "-o html/tor1/txt/$F.html",
         "-c cnf/tor1_inter_txt.json",
-        "-wa a"
+        "-wa a "
       ]
     ]
   },

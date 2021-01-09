@@ -10,7 +10,7 @@
         "-i xml/par1/$F.xml",
         "-o html/par1/txt/$F.html",
         "-c cnf/par1_dipl_txt.json",
-        "-wa w -d 0"
+        "-wa w "
       ],
       [
         "writehtml.py ",
@@ -22,7 +22,7 @@
         "-i xml/par1/$F.xml",
         "-o html/par1/txt/$F.html",
         "-c cnf/par1_inter_txt.json",
-        "-wa a -d 0"
+        "-wa a "
       ]
     ]
   },

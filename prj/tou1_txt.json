@@ -10,7 +10,7 @@
         "-i xml/tou1/$F.xml",
         "-o html/tou1/txt/$F.html",
         "-c cnf/tou1_dipl_txt.json",
-        "-wa w"
+        "-wa w "
       ],
       [
         "writehtml.py ",
@@ -22,7 +22,7 @@
         "-i xml/tou1/$F.xml",
         "-o html/tou1/txt/$F.html",
         "-c cnf/tou1_inter_txt.json",
-        "-wa a"
+        "-wa a "
       ]
     ]
   },

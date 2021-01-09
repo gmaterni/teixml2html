@@ -6,6 +6,8 @@ from ualog import Log
 import pprint
 import os
 import sys
+import re
+
 
 def pp(data):
     if data is None:
@@ -22,21 +24,21 @@ class HtmlOvweflow:
     utilizzando <span from="<id>" to="<id>"  type0"<tipo>" 
 
     """
+
     def __init__(self, xml_lst, html_lst, html_conf):
         """gestione overflow
-
         Args:
             xml_lst (list): lista dei dati xml
             html_lst (lis): lista delle righe html
             html_conf (dict): dict del fie di configurazione csv
-        """        
-        logerr.open("log/htmloverflow.err.log", 1)
+        """
+        logerr.open("log/overflow.ERR.log", 1)
         self.xml_lst = xml_lst
         self.html_lst = html_lst
-        self.html_conf=html_conf
+        self.html_conf = html_conf
         self.span_lst = []
-        self.cls_w='class="w'
-        self.cls_pc='class="pc'
+        self.class_w = 'class="w'
+        self.class_pc = 'class="pc'
 
     def fill_span_list(self):
         for x_data in self.xml_lst:
@@ -57,105 +59,150 @@ class HtmlOvweflow:
                 }
                 self.span_lst.append(item)
 
-    def add_html_class(self, flg, rh, tp):
+    def text_format(self, text, keys, pars):
+        """settta pars su text
+        vengono coniserati tutti gli elemnti di text dell
+        pattern [%]\w[%] e sono rimpiazzati utilizando il 
+        gli item di dict pars selezionati da keys
+        i parametri non trovati sono settati a ""
+        Args:
+            text (str): testo con parametri da settare
+            keys (lsit): key di pars da utilizzare
+            pars (dict): parametri per settare text
+        Returns:
+            str: testo formatato
+        """
+        params = {}
+        for k in keys:
+            v = pars.get(k, '')
+            params[k] = v
+        #
+        ptrn = r"%[\w/,;:.?!^-]+%"
+        ms = re.findall(ptrn, text)
+        ks = [x.replace('%', '') for x in ms]
+        for k in ks:
+            v = params.get(k, '')
+            text = text.replace(f'%{k}%', v)
+        return text
+
+    
+    def add_html_class(self, flag, html_row, span_type):
         """ aggiunge una classe alle righe html in funzione del flag
         e del type
+
         <span from="Gl23w1" to="Gl98w6" type="directspeech"/>
-        modifica da from a to secondo typt
-        
-        <div class="w aggl-s" id="dGl2w1">Si</div>s
-        
-        <span class="pc_ed" id="dGl44pc1">,</span>
+
+        modifica da from a to secondo type
+
+        <div class="w aggl" id="dGl2w1">Si</div>s
+
+        <span class="pc_e gggl d" id="dGl44pc1">,</span>
 
         Args:
-            flg (int):  flga per inizio e fine intervallo
-            rh (str): riga html
-            tp (str): tipo span from to
-
+            flag (int):  flga per inizio e fine intervallo (0,1,2)
+            html_row (str): riga html
+            span_type (str): tipo span from to
         Returns:
-            str: riga html odificata
-
+            str: riga html modificata
         """
         try:
-            c_data=self.html_conf.get(tp,None)
+            c_data = self.html_conf.get(span_type, None)
             if c_data is None:
-                raise Exception(f"type:{tp} ERROR in find csv")
-            clazz=c_data.get('tag',None)
-            if clazz is None :
-                raise Exception(f"type:{tp} ERROR tag in csv")
-            c_params=c_data.get('params',{})
-            txt_start=''
-            txt_end=''
-            if flg == 0:
-                txt_start=c_params.get('start','')
-                cls = f"start_{clazz}"
-            elif flg == 2:
-                txt_end=c_params.get('end','')
-                cls = f"end_{clazz}"
-            else:
-                cls = clazz
-            p0=rh.find(self.cls_w)
+                raise Exception(
+                    f"attr_type:{span_type} ERROR csv row not found ")
+            c_attrs = c_data.get('attrs', {})
+            css_class = c_attrs.get('class', "css_err")
+            c_text = c_data.get('text', "")
+            c_params = c_data.get('params', {})
+            if c_text.find('%') > -1:
+                if flag == 0:
+                    c_text = self.text_format(c_text, ['txt_start'], c_params)
+                elif flag == 2:
+                    c_text = self.text_format(c_text, ['txt_end'], c_params)
+                else:
+                    c_text = self.text_format(c_text, [], {})
+            if css_class.find('%') > -1:
+                if flag == 0:
+                    css_class = self.text_format(
+                        css_class, ['css_start'], c_params)
+                elif flag == 2:
+                    css_class = self.text_format(
+                        css_class, ['css_end'], c_params)
+                else:
+                    css_class = self.text_format(css_class, [], {})
+            #
+            p0 = html_row.find(self.class_w)
             if p0 > -1:
-                p0=p0+len(self.cls_w)
+                p0 = p0+len(self.class_w)
             else:
-                p0=rh.find(self.cls_pc  )
-                p0=p0+len(self.cls_pc)
+                p0 = html_row.find(self.class_pc)
+                if p0 > -1:
+                    p0 = p0+len(self.class_pc)
             if p0 < 0:
-                raise Exception("ERROR in html")
-            p1=rh.find('"',p0)
-            s=rh[0:p1]+" "+cls+rh[p1:]
-            if txt_start !='':
-                s=s.replace('>',f'>{txt_start}',1)
-            if txt_end !='':
-                s=s.replace('</',f'{txt_end}</',1)
+                raise Exception("ERROR in html not found w or pc")
+            p1 = html_row.find('"', p0)
+            s = html_row[0:p1]+" "+css_class+html_row[p1:]
+            # aggiunge eventuale testo a inizio e fine
+            if c_text != '':
+                if flag == 0:
+                    s = s.replace('>', f'>{c_text}', 1)
+                elif flag == 2:
+                    s = s.replace('</', f'{c_text}</', 1)
             return s
         except Exception as e:
             logerr.log(e)
-            logerr.log(rh)
+            logerr.log(html_row)
             sys.exit(1)
 
-
-    def find_w_id(self,r,id):
-        ptr_id=f'{id}"'
-        p=r.find(ptr_id)
+    def find_w_id(self, r, id):
+        ptr_id = f'{id}"'
+        p = r.find(ptr_id)
         return p > -1
-    
-    def find_w_pc(self,rh):
-        p= rh.find(self.cls_w)
+
+    def find_w_pc(self, rh):
+        """verifica se il tag è w o pc
+        """
+        p = rh.find(self.class_w)
         if p < 0:
-            p= rh.find(self.cls_pc)
+            p = rh.find(self.class_pc)
         return p > -1
 
-    def set_html(self,from_to):
+    def set_html(self, from_to):
         """setta le righe html comprese nellìintervallo from to
-
         Args:
             from_to (str): intervallo degli id delle classi w e pc
         """
-        id0=from_to['id0']
-        id1=from_to['id1']
-        tp=from_to['type']
+        id_from = from_to['id0']
+        id_to = from_to['id1']
+        span_type = from_to['type']
         flag = 0
-        for i,rh in enumerate(self.html_lst):
-            if flag==0:
-                if self.find_w_pc(rh):
-                    if self.find_w_id(rh,id0) :
-                        row=self.add_html_class(0,rh,tp)
-                        self.html_lst[i]=row
-                        flag=1
+        for i, html_row in enumerate(self.html_lst):
+            if flag == 0:
+                # verifica se è  word o pc
+                if self.find_w_pc(html_row):
+                    # cera nella riga id_form
+                    if self.find_w_id(html_row, id_from):
+                        # setta come inizio (flga=0)
+                        row = self.add_html_class(0, html_row, span_type)
+                        self.html_lst[i] = row
+                        flag = 1
                         continue
-            if flag==1:
-                if self.find_w_pc(rh):
-                    if self.find_w_id(rh,id1):
-                        row=self.add_html_class(2,rh,tp)
-                        self.html_lst[i]=row
-                        flag=3
+            if flag == 1:
+                # verifica se è  word o pc
+                if self.find_w_pc(html_row):
+                    # cerca nella riga id_to
+                    if self.find_w_id(html_row, id_to):
+                        # setta word o pc com fine (flag=2)
+                        row = self.add_html_class(2, html_row, span_type)
+                        self.html_lst[i] = row
+                        flag = 3
                         break
-                    row=self.add_html_class(1,rh,tp)
-                    self.html_lst[i]=row
-        if flag==0:
-            logerr.log(f"{id0} {id1}  {tp}   Not Found")
-                
+                    # setta word o pc nell'intervallo (flag==1)
+                    row = self.add_html_class(1, html_row, span_type)
+                    self.html_lst[i] = row
+        if flag == 0:
+            # erroe nlla gestione inizio gine
+            logerr.log(f"{id_from} {id_to}  {span_type}   Not Found")
 
     def set_overflow(self):
         self.fill_span_list()

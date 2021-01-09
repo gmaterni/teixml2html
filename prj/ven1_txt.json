@@ -10,7 +10,7 @@
         "-i xml/ven1/$F.xml",
         "-o html/ven1/txt/$F.html",
         "-c cnf/ven1_dipl_txt.json",
-        "-wa w"
+        "-wa w "
       ],
       [
         "writehtml.py ",
@@ -22,7 +22,7 @@
         "-i xml/ven1/$F.xml",
         "-o html/ven1/txt/$F.html",
         "-c cnf/ven1_inter_txt.json",
-        "-wa a"
+        "-wa a "
       ]
     ]
   },
