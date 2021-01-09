@@ -1,6 +1,8 @@
 {
   "html_params": {
-    "text_null":""
+    "text_null":"",
+    "_QA":"\"",
+    "_QC":"\""
   },
   "html_info": "cnf/html.csv",
   "html_type":"i:txt",

@@ -42,4 +42,4 @@ if __name__ == "__main__":
             os.remove(err)
     except Exception as e:
         print(e)
-        sys.exit(1)
+        # sys.exit()

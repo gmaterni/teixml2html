@@ -1,7 +1,9 @@
 {
   "html_params": {
     "_MAN_":"par1",
-    "text_null":""
+    "text_null":"",
+    "_QA_":"\"",
+    "_QC_":"\""
   },
   "html_info": "cnf/html.csv",
   "html_type":"d:txt",

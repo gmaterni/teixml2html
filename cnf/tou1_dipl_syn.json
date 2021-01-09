@@ -1,7 +1,9 @@
 {
   "html_params": {
     "_MAN_":"tou1",
-    "text_null":""
+    "text_null":"",
+    "_QA":"\"",
+    "_QC":"\""
   },
    "html_info":  "cnf/html.csv",
    "html_type":"d:syn",

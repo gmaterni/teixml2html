@@ -159,18 +159,11 @@ i|supplied+evident-omission|span||class:supplied_eo_int
 i|supplied+damage+yes|span||class:supplied_dy_int
 i!supplied+damage+no|span||class:supplied_dn_int
 
-d|xdirectspeech|||class:directspeech|%txt_start%%txt_end$|txt_start:«,txt_end:»
-i|xdirectspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start«:,txt_end:»,css_end:last
+d|directspeech|||class:directspeech|%txt_start%%txt_end$|txt_start:«,txt_end:»
+i|directspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start:«,txt_end:»,css_end:last
 
-d|xmonologue|||class:monologue|%txt_start%%txt_end%|txt_start:",txt_end:"
-i|xmonologue|||class:tei_monologue_int|%txt_start%%txt_end%|txt_start:",txt_end:"
-
-d|directspeech|||class:directspeech|%txt_start%%txt_end$|txt_start:_DD_0,txt_end:_DD_1
-i|directspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start_DD_3:,txt_end:_DD_3_,css_end:_DD_4
-
-d|monologue|||class:monologue|%txt_start%%txt_end%|txt_start:",txt_end:"
-i|monologue|||class:tei_monologue_int|%txt_start%%txt_end%|txt_start:",txt_end:"
-
+d|monologue|||class:monologue|%txt_start%%txt_end%|txt_start:_QA_,txt_end:_QC_
+i|monologue|||class:tei_monologue_int|%txt_start%%txt_end%|txt_start:_QA_,txt_end:_QC_
 
 x|xml_tag|tag|keys|attrs|text|par1ams|par1ent
 

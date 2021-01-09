@@ -7,7 +7,7 @@
     "exe_file": [
       [
         "htmlformat.py",
-        "-e htmlf/tor1/txt/$F_err.html",
+        "-e htmlf/tor1/txt/$F_ERR.html",
         "-o htmlf/tor1/txt/$F_F.html",
         "-i html/tor1/txt/$F.html"
       ]
