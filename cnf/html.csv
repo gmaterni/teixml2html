@@ -159,7 +159,7 @@ i|supplied+evident-omission|span||class:supplied_eo_int
 i|supplied+damage+yes|span||class:supplied_dy_int
 i!supplied+damage+no|span||class:supplied_dn_int
 
-d|directspeech|||class:directspeech|%txt_start%%txt_end$|txt_start:«,txt_end:»
+d|directspeech|||class:directspeech|%txt_start%%txt_end%|txt_start:«,txt_end:»
 i|directspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start:«,txt_end:»,css_end:_last
 
 d|monologue|||class:monologue|%txt_start%%txt_end%|txt_start:_QA_,txt_end:_QC_
@@ -170,7 +170,7 @@ i|agglutination|||class:aggl_int
 d|agglutination_uncert|||class:aggl-uncert
 i|agglutination_uncert|||class:aggl-uncert_int
 
-x|damage|||class:damage%css_end%||css__end:_last
+x|damage|||class:damage%css_end%||css_end:_last
 
 d|supplied+|_x_supplied_error
 d|addname|_x_addname_eeror

@@ -3,7 +3,7 @@
 import os
 import sys
 import pathlib as pl
-
+from pdb import set_trace
 
 par1_c=[
 "par1_dipl_syn.json",
@@ -17,36 +17,29 @@ def files_of_dir(d, e):
     fs = sorted(list(p.glob(e)))
     return fs
 
-def one2all(dr,man):
-    ptrn=f'{man}*.*'
-    one_lst=files_of_dir(dr,ptrn)
-    for x in one_lst:
-        print(x)
-    #
-     
-    """
-    for p in par1_c:
-        fpar=f'cnf/{p}'
-        ftor=fpar.replace('par1','tor1')
-        ftou=fpar.replace('par1','tou1')
-        fven=fpar.replace('par1','ven1')
-        with open(fpar,'r') as f:
-            txt=f.read()
+def copy_man(orig_path,man_path,orig,man):
+    with open(orig_path,"r") as f:
+        txt=f.read()
+    txt=txt.replace(orig,man)
+    print(f"{orig_path} ==> {man_path}")
+    with open(man_path,"w") as f:
+        f.write(txt)
+    os.chmod(man_path,0o666)
 
-        s=txt.replace('par1','tor1')
-        with open(ftor,"w+") as f:
-            f.write(s)
+def one2all(dr,orig,*args):
+    man_lst=args[0]
+    ptrn=f'{orig}*.*'
+    orig_lst=files_of_dir(dr,ptrn)
+    for orig_path in orig_lst:
+        orig_path=str(orig_path)
+        for man in man_lst:
+            path_man=orig_path.replace(orig,man)
+            copy_man(orig_path,path_man,orig,man)
 
-        s=txt.replace('par1','tou1')
-        with open(ftou,"w+") as f:
-            f.write(s)
-
-        s=txt.replace('par1','ven1')
-        with open(fven,"w+") as f:
-            f.write(s)
-        """
 
 if __name__ == "__main__":
     dr=sys.argv[1]
     man=sys.argv[2]
-    one2all(dr,man)
+    mans=sys.argv[3:]
+    man_ls=[x for x in mans]
+    one2all(dr,man,man_ls)
