@@ -160,20 +160,17 @@ i|supplied+damage+yes|span||class:supplied_dy_int
 i!supplied+damage+no|span||class:supplied_dn_int
 
 d|directspeech|||class:directspeech|%txt_start%%txt_end$|txt_start:«,txt_end:»
-i|directspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start:«,txt_end:»,css_end:last
+i|directspeech|||class:directspeech%css_end%_int|%txt_start%%txt_end%|txt_start:«,txt_end:»,css_end:_last
 
 d|monologue|||class:monologue|%txt_start%%txt_end%|txt_start:_QA_,txt_end:_QC_
 i|monologue|||class:tei_monologue_int|%txt_start%%txt_end%|txt_start:_QA_,txt_end:_QC_
-
-x|xml_tag|tag|keys|attrs|text|par1ams|par1ent
 
 d|agglutination|||class:aggl
 i|agglutination|||class:aggl_int
 d|agglutination_uncert|||class:aggl-uncert
 i|agglutination_uncert|||class:aggl-uncert_int
 
-
-x|damage|spanx|
+x|damage|||class:damage%css_end%||css__end:_last
 
 d|supplied+|_x_supplied_error
 d|addname|_x_addname_eeror

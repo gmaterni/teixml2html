@@ -18,6 +18,22 @@ def pp(data):
 
 logerr = Log("a")
 
+"""
+text_start, txt_end 
+parametri per il settaggio di text a inizio e fine intervallo
+
+d|xxx|||class:xxx|%txt_start%%txt_end$|txt_start:«,txt_end:»
+
+css_start,css_end 
+parametri per il settaggio di atttrs a inizio e fine intervallo
+
+x|damage|||class:damage%css_end%||css_end:_last
+
+"""
+TEXT_START= 'txt_start' 
+TEXT_END='txt_end'
+CSS_START='css_start'
+CSS_END='css_end'
 
 class HtmlOvweflow:
     """gestisce propriet+ overflov
@@ -39,6 +55,7 @@ class HtmlOvweflow:
         self.span_lst = []
         self.class_w = 'class="w'
         self.class_pc = 'class="pc'
+        self.trace=False
 
     def fill_span_list(self):
         for x_data in self.xml_lst:
@@ -85,7 +102,7 @@ class HtmlOvweflow:
             text = text.replace(f'%{k}%', v)
         return text
 
-    
+
     def add_html_class(self, flag, html_row, span_type):
         """ aggiunge una classe alle righe html in funzione del flag
         e del type
@@ -116,18 +133,16 @@ class HtmlOvweflow:
             c_params = c_data.get('params', {})
             if c_text.find('%') > -1:
                 if flag == 0:
-                    c_text = self.text_format(c_text, ['txt_start'], c_params)
+                    c_text = self.text_format(c_text, [TEXT_START], c_params)
                 elif flag == 2:
-                    c_text = self.text_format(c_text, ['txt_end'], c_params)
+                    c_text = self.text_format(c_text, [TEXT_END], c_params)
                 else:
                     c_text = self.text_format(c_text, [], {})
             if css_class.find('%') > -1:
                 if flag == 0:
-                    css_class = self.text_format(
-                        css_class, ['css_start'], c_params)
+                    css_class = self.text_format( css_class, [CSS_START], c_params)
                 elif flag == 2:
-                    css_class = self.text_format(
-                        css_class, ['css_end'], c_params)
+                    css_class = self.text_format(css_class, [CSS_END], c_params)
                 else:
                     css_class = self.text_format(css_class, [], {})
             #
@@ -139,7 +154,7 @@ class HtmlOvweflow:
                 if p0 > -1:
                     p0 = p0+len(self.class_pc)
             if p0 < 0:
-                raise Exception("ERROR in html not found w or pc")
+                raise Exception("ERROR in html not found tag w or pc")
             p1 = html_row.find('"', p0)
             s = html_row[0:p1]+" "+css_class+html_row[p1:]
             # aggiunge eventuale testo a inizio e fine
@@ -147,7 +162,10 @@ class HtmlOvweflow:
                 if flag == 0:
                     s = s.replace('>', f'>{c_text}', 1)
                 elif flag == 2:
-                    s = s.replace('</', f'{c_text}</', 1)
+                    if s.find('</')> -1:
+                        s = s.replace('</', f'{c_text}</', 1)
+                    else:
+                        s=f'{s}{c_text}'
             return s
         except Exception as e:
             logerr.log(e)
@@ -166,7 +184,8 @@ class HtmlOvweflow:
         if p < 0:
             p = rh.find(self.class_pc)
         return p > -1
-
+    
+    
     def set_html(self, from_to):
         """setta le righe html comprese nellìintervallo from to
         Args:
@@ -201,7 +220,7 @@ class HtmlOvweflow:
                     row = self.add_html_class(1, html_row, span_type)
                     self.html_lst[i] = row
         if flag == 0:
-            # erroe nlla gestione inizio gine
+            # errroe nlla gestione inizio gine
             logerr.log(f"{id_from} {id_to}  {span_type}   Not Found")
 
     def set_overflow(self):
