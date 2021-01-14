@@ -5,8 +5,9 @@ xml/
 log/
 bin/
 wrk/
+back/
 *.sh
-trimed2html.egg-info7
+teimed2html.egg-info7
 build/
 .vscode/
 .history/
