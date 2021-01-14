@@ -6,6 +6,8 @@ log/
 bin/
 wrk/
 *.sh
+trimed2html.egg-info7
+build/
 .vscode/
 .history/
 __pycache__/

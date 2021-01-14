@@ -9,7 +9,8 @@ NL = os.linesep
 
 
 class HtmlBuilder:
-
+    """costruisce nodo per nodo un file HTML
+    """
     def __init__(self):
         self.indent = 2
         self.livx = -1
