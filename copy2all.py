@@ -5,12 +5,6 @@ import sys
 import pathlib as pl
 from pdb import set_trace
 
-par1_c=[
-"par1_dipl_syn.json",
-"par1_dipl_txt.json",
-"par1_inter_syn.json",
-"par1_inter_txt.json"
-]
 
 def files_of_dir(d, e):
     p = pl.Path(d)

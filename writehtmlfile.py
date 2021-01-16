@@ -12,11 +12,12 @@ logerr = Log("a")
 
 
 if __name__ == "__main__":
+    logerr.open("log/writehtmlfile.ERR.log", 1)
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
         print("release: %s  %s" % (__version__, __date__))
         parser.print_help()
-        sys.exit()
+        sys.exit(1)
     try:
         parser.add_argument('-i',
                             dest="inh",

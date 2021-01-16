@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from pdb import set_trace
 from lxml import etree
 import os
 import argparse
 import sys
 import pprint
 from ualog import Log
-# from pdb import set_trace
+from xml_const import *
+import re
 
-__date__ = "04-01-2021"
-__version__ = "0.1.0"
+__date__ = "15-01-2021"
+__version__ = "0.2.0"
 __author__ = "Marta Materni"
 
 
-logerr = Log("a")
+logerr = Log("w")
+loginfo = Log("w")
 
 
 def pp_data(data):
@@ -34,8 +37,39 @@ class XmlSplitEps:
         self.path_xml_in = path_xml_in
         self.dir_out = dir_out
         self.sigla_man = sigla_man
-        path_err = dir_out + "_eps_err_.log"
+        # path_err = dir_out + "_eps_ERR_.log"
+        path_err = os.path.join(dir_out, "split_ERR.log")
         logerr.open(path_err, out=1)
+        path_info = os.path.join(dir_out, "spli.log")
+        loginfo.open(path_info, out=0)
+        self.body = None
+        self.back = None
+
+    def set_body_back(self):
+        root = etree.parse(self.path_xml_in)
+        xml = etree.tostring(root,
+                             method='xml',
+                             xml_declaration=None,
+                             encoding='unicode',
+                             with_tail=True,
+                             pretty_print=False,
+                             strip_text=False
+                             )
+        m = re.search(BODY_TOP_PATTERN, xml)
+        p0 = m.start()
+        m = re.search(BODY_BOTTOM_PATTERN, xml)
+        p1 = m.end()
+        xml_body = xml[p0:p1]
+        loginfo.log(xml_body)
+        self.body = etree.fromstring(xml_body)
+        #
+        m = re.search(BACK_TOP, xml)
+        p0 = m.start()
+        m = re.search(BACK_BOTTOM, xml)
+        p1 = m.end()
+        xml_back = xml[p0:p1]
+        loginfo.log(xml_back)
+        self.back = etree.fromstring(xml_back)
 
     # write xml/par/eps<n>
     def write_eps_xml(self, nd, name_ou):
@@ -50,6 +84,7 @@ class XmlSplitEps:
                 fw.write(src)
             os.chmod(name_ou, 0o666)
         except Exception as e:
+            logerr.log("splitxml.py write_eps_xml()")
             s = str(e)
             logerr.log(s)
             sys.exit(1)
@@ -60,15 +95,6 @@ class XmlSplitEps:
         with open(xml_path, "w+") as fw:
             fw.write(xml_src)
         os.chmod(xml_path, 0o666)
-        # print("xml_path",xml_path)
-
-    # write xml/par/par.txt
-    def writ_eps_num_lst(self, eps_lst, txt_path):
-        txt = os.linesep.join(eps_lst)
-        with open(txt_path, "w+") as fw:
-            fw.write(txt)
-        os.chmod(txt_path, 0o666)
-        # print("eps_lst",txt_path)
 
     # <div type="episode" ref="#ep1">
     def node_src(self, nd):
@@ -105,17 +131,20 @@ class XmlSplitEps:
         return path
 
     def get_notes(self):
-        root = etree.parse(self.path_xml_in)
-        nds = root.findall('teimed_note')
+        # TODO get_root
+        # root=self.get_root()
+        root_back = self.back
+        note=root_back.find('div')
+        nds = note.findall('teimed_note')
         ls = []
         for nd in nds:
-            src = etree.tostring(nd,
-                                 method='xml',
-                                 xml_declaration=None,
-                                 encoding='unicode',
-                                 with_tail=True,
-                                 pretty_print=True)
-            ls.append(src.strip())
+            xml_node = etree.tostring(nd,
+                                      method='xml',
+                                      xml_declaration=None,
+                                      encoding='unicode',
+                                      with_tail=True,
+                                      pretty_print=True)
+            ls.append(xml_node.strip())
         s = "".join(ls)
         return s
 
@@ -127,10 +156,12 @@ class XmlSplitEps:
         return tag.strip()
 
     def prn_node(self, nd):
+        # TODO stampa nodo nel log
+        return
         tag = self.node_tag(nd)
         ks = self.node_attrs(nd)
         s = pp_data(ks)
-        # print(tag + "  " + s)
+        loginfo.log(tag + "  " + s)
 
     def get_child(self, nd, tag=None):
         child = None
@@ -139,11 +170,14 @@ class XmlSplitEps:
             break
         return child
 
-    # trova episodio corrente
-    # controlla che inizi con pb
-    # trova episodio precedente
-    # trova ultima pagina episodio precedente
-    # inserisce la pagina trova all'inzio dell'eoisodio corrente
+    """
+    trova episodio corrente
+    controlla che inizi con pb
+    trova episodio precedente
+    trova ultima pagina episodio precedente
+    inserisce la pagina trova all'inzio dell'eoisodio corrente
+    """
+
     def get_prev_pb_cb(self, nd):
 
         def build_node(nd):
@@ -152,23 +186,29 @@ class XmlSplitEps:
             id = attrs.get('id', '')
             n = attrs.get('n', '')
             id = id + 'b'
-            # n = n + 'b'
-            s = '<%s xml:id="%s" n="%s" />' % (tag, id, n)
+            s = f'<{tag} xml:id="{id}" n="{n}" />'
             nd = etree.XML(s)
             return nd
+
         try:
             ep_prev = nd.getprevious()
+            pb = None
             for d in ep_prev.iterdescendants(tag="pb"):
                 pb = d
+            if pb is None:
+                raise Exception("get_prev_pb_cb() pb Not Found")
             pb = build_node(pb)
-
+            cb = None
             for d in ep_prev.iterdescendants(tag="cb"):
                 cb = d
+            if cb is None:
+                raise Exception("get_prev_pb_cb() cb Not Found")
             cb = build_node(cb)
-        except Exception:
-            logerr.log("get_prev_pb_cb.")
+        except Exception as e:
+            logerr.log("splixml.py get_prev_pb_cb.")
             logerr.log("pb not found.")
-            sys.exit()
+            logerr.log(str(e))
+            sys.exit(1)
         return [pb, cb]
 
     def begin_pag_dupl(self, nd):
@@ -181,35 +221,35 @@ class XmlSplitEps:
                     rt = False
                 break
             return rt
+
         pb = find_begin_pag(nd)
+        # se è la prima pagina ritona None
         if (pb):
             return None
         pb_cb = self.get_prev_pb_cb(nd)
         return pb_cb
 
     def write_episode_lst(self):
-        root = etree.parse(self.path_xml_in)
-        # root.attrib["{http://www.w3.org/XML/1998/namespace}id"] = xml_id
-        ls = root.findall('div')
+        self.set_body_back()
+        root_body = self.body
+        ls = root_body.findall('div')
         eps_lst = []
         eps_num_lst = []
         # div null per contenere la lista episodi
-        eps_lst.append('<null>')
+        eps_lst.append(NULL_TAG_START)
         for xml_node in ls:
             ks = self.node_attrs(xml_node)
             src = self.node_src(xml_node)
-            # print(src)
             # pagina iniziale con lista episoid
             eps_lst.append(src)
             # file testo con lista episodi
             eps_num = ks['ref'].replace('#', '')
             eps_num_lst.append(eps_num)
-            # print(eps_num)
             # sottoalberi episodi
             # controllo inizio pagina
             pbcb = self.begin_pag_dupl(xml_node)
-            # print(pbcb)
             if pbcb is not None:
+                # non è la prima pagina
                 pb = pbcb[0]
                 cb = pbcb[1]
                 self.prn_node(pb)
@@ -218,22 +258,16 @@ class XmlSplitEps:
                 self.prn_node(ch)
                 ch.addprevious(pb)
                 ch.addprevious(cb)
-            xml_path = self.build_episode_name(eps_num + '.xml')
-            self.write_eps_xml(xml_node, xml_path)
+            xml_eps_path = self.build_episode_name(eps_num + '.xml')
+            self.write_eps_xml(xml_node, xml_eps_path)
         s = self.get_notes()
+        loginfo.log(s)
         eps_lst.append(s)
-        # chiusura div contenitore
-        eps_lst.append('</null>')
-
+        # chiusura div null contenitore
+        eps_lst.append(NULL_TAG_END)
         # lista eps<n> in file xml
-        # xml/par/<mano>.xml
-        xml_path = self.build_list_name(".xml")
-        self.writ_eps_xml_lst(eps_lst, xml_path)
-
-        # lista eps<n> in file txt
-        # xml/par/<mano>.txt
-        # txt_path = self.build_list_name(".txt")
-        # self.writ_eps_num_lst(eps_num_lst, txt_path)
+        xml_list_path = self.build_list_name(".xml")
+        self.writ_eps_xml_lst(eps_lst, xml_list_path)
 
 
 def do_main(path_in, dir_out, sigla_man):
