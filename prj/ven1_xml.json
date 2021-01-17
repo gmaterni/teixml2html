@@ -1,0 +1,10 @@
+{
+    "exe": [
+        [
+            "splitteixml.py",
+            "-i xml/floriven1.xml",
+            "-o xml/ven1/",
+            "-m ven1"
+        ]
+    ]
+}

@@ -1,0 +1,48 @@
+{
+  "exe_dir": {
+    "dir": "xml/tor1",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "writehtml.py",
+        "-o html/tor1/syn/$F.html",
+        "-i '<div id=\"tor1_dipl_id\" class=\"text_pannel tei_dipl\">'",
+        "-wa w"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/tor1/$F.xml",
+        "-o html/tor1/syn/$F.html",
+        "-c cnf/tor1_dipl_syn.json",
+        "-wa a"
+      ],
+      [
+        "writehtml.py",
+        "-o html/tor1/syn/$F.html",
+        "-i '</div><div id=\"tor1_int_id\" class=\"text_pannel tei_int\">'",
+        "-wa a"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/tor1/$F.xml",
+        "-o html/tor1/syn/$F.html",
+        "-c cnf/tor1_inter_syn.json",
+        "-wa a"
+      ],
+      [
+        "writehtml.py",
+        "-o html/tor1/syn/$F.html",
+        "-i '</div>'",
+        "-wa a"
+      ]
+    ]
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tor1/syn",
+      "pattern": "tor1_list.html"
+    }
+  ]
+}

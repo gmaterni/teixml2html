@@ -1,0 +1,10 @@
+{
+  "html_params": {
+    "text_null": "",
+    "<null>": "",
+    "</null>": ""
+  },
+  "html_info": "cnf/html.csv",
+  "html_type":"i",
+  "before_id":"i"
+}

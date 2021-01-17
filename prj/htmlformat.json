@@ -1,0 +1,15 @@
+{
+    "exe": [
+    "prjmgr.py prj/par1_syn_format.json",
+    "prjmgr.py prj/par1_txt_format.json",
+
+    "prjmgr.py prj/tor1_syn_format.json",
+    "prjmgr.py prj/tor1_txt_format.json",
+
+    "prjmgr.py prj/tou1_syn_format.json",
+    "prjmgr.py prj/tou1_txt_format.json",
+
+    "prjmgr.py prj/ven1_syn_format.json",
+    "prjmgr.py prj/ven1_txt_format.json"
+    ]
+    }

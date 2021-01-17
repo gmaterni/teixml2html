@@ -1,0 +1,8 @@
+{
+  "remove_dir": [
+    {
+      "dir": "html/par1/txt",
+      "pattern": "par1_list.html"
+    }
+  ]
+}

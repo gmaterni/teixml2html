@@ -46,30 +46,37 @@ class XmlSplitEps:
         self.back = None
 
     def set_body_back(self):
-        root = etree.parse(self.path_xml_in)
-        xml = etree.tostring(root,
-                             method='xml',
-                             xml_declaration=None,
-                             encoding='unicode',
-                             with_tail=True,
-                             pretty_print=False,
-                             strip_text=False
-                             )
-        m = re.search(BODY_TOP_PATTERN, xml)
-        p0 = m.start()
-        m = re.search(BODY_BOTTOM_PATTERN, xml)
-        p1 = m.end()
-        xml_body = xml[p0:p1]
-        loginfo.log(xml_body)
-        self.body = etree.fromstring(xml_body)
-        #
-        m = re.search(BACK_TOP, xml)
-        p0 = m.start()
-        m = re.search(BACK_BOTTOM, xml)
-        p1 = m.end()
-        xml_back = xml[p0:p1]
-        loginfo.log(xml_back)
-        self.back = etree.fromstring(xml_back)
+        try:
+            root = etree.parse(self.path_xml_in)
+            xml = etree.tostring(root,
+                                method='xml',
+                                xml_declaration=None,
+                                encoding='unicode',
+                                with_tail=True,
+                                pretty_print=False,
+                                strip_text=False
+                                )
+            m = re.search(BODY_TOP_PATTERN, xml)
+            p0 = m.start()
+            m = re.search(BODY_BOTTOM_PATTERN, xml)
+            p1 = m.end()
+            xml_body = xml[p0:p1]
+            loginfo.log(xml_body)
+            self.body = etree.fromstring(xml_body)
+            #
+            m = re.search(BACK_TOP, xml)
+            if m is None:
+                return
+            p0 = m.start()
+            m = re.search(BACK_BOTTOM, xml)
+            p1 = m.end()
+            xml_back = xml[p0:p1]
+            loginfo.log(xml_back)
+            self.back = etree.fromstring(xml_back)
+        except Exception as e:
+            logerr.log("splitteixml.py set_body_back()")
+            logerr.log(str(e))
+            sys.exit(1)
 
     # write xml/par/eps<n>
     def write_eps_xml(self, nd, name_ou):
@@ -84,7 +91,7 @@ class XmlSplitEps:
                 fw.write(src)
             os.chmod(name_ou, 0o666)
         except Exception as e:
-            logerr.log("splitxml.py write_eps_xml()")
+            logerr.log("splitteixml.py write_eps_xml()")
             s = str(e)
             logerr.log(s)
             sys.exit(1)
@@ -132,7 +139,8 @@ class XmlSplitEps:
 
     def get_notes(self):
         # TODO get_root
-        # root=self.get_root()
+        if self.back is None:
+            return ""
         root_back = self.back
         note=root_back.find('div')
         nds = note.findall('teimed_note')

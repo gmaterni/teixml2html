@@ -1,0 +1,16 @@
+{
+  "exe_dir": {
+    "dir": "html/tor1/syn",
+    "pattern": "*.html",
+    "par_subst": ".html|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "htmlformat.py",
+        "-e htmlf/tor1/syn/$F_ERR.html",
+        "-o htmlf/tor1/syn/$F_F.html",
+        "-i html/tor1/syn/$F.html"
+      ]
+    ]
+  }
+}

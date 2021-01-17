@@ -1,0 +1,35 @@
+{
+  "exe_dir": {
+    "dir": "xml/tou1",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "teixml2html.py",
+        "-i xml/tou1/$F.xml",
+        "-o html/tou1/txt/$F.html",
+        "-c cnf/tou1_dipl_txt.json",
+        "-wa w "
+      ],
+      [
+        "writehtml.py ",
+        "-o html/tou1/txt/$F.html",
+        "-wa a"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/tou1/$F.xml",
+        "-o html/tou1/txt/$F.html",
+        "-c cnf/tou1_inter_txt.json",
+        "-wa a "
+      ]
+    ]
+  },
+  "remove_dir": [
+    {
+      "dir": "html/tou1/txt",
+      "pattern": "tou1_list.html"
+    }
+  ]
+}

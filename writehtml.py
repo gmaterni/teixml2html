@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 from pdb import set_trace
 import sys
 import argparse
@@ -15,13 +14,12 @@ logerr = Log("a")
 
 
 if __name__ == "__main__":
-    set_trace()
     logerr.open("log/writehtml.ERR.log", 1)
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
         print("release: %s  %s" % (__version__, __date__))
         parser.print_help()
-        sys.exit(1)
+        sys.exit()
     try:
         parser.add_argument('-i',
                             dest="html",

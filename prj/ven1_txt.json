@@ -1,0 +1,35 @@
+{
+  "exe_dir": {
+    "dir": "xml/ven1",
+    "pattern": "*.xml",
+    "par_subst": ".xml|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "teixml2html.py",
+        "-i xml/ven1/$F.xml",
+        "-o html/ven1/txt/$F.html",
+        "-c cnf/ven1_dipl_txt.json",
+        "-wa w "
+      ],
+      [
+        "writehtml.py ",
+        "-o html/ven1/txt/$F.html",
+        "-wa a"
+      ],
+      [
+        "teixml2html.py",
+        "-i xml/ven1/$F.xml",
+        "-o html/ven1/txt/$F.html",
+        "-c cnf/ven1_inter_txt.json",
+        "-wa a "
+      ]
+    ]
+  },
+  "remove_dir": [
+    {
+      "dir": "html/ven1/txt",
+      "pattern": "ven1_list.html"
+    }
+  ]
+}

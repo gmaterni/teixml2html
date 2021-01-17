@@ -1,0 +1,16 @@
+{
+  "exe_dir": {
+    "dir": "html/tou1/syn",
+    "pattern": "*.html",
+    "par_subst": ".html|",
+    "par_name": "$F",
+    "exe_file": [
+      [
+        "htmlformat.py",
+        "-e htmlf/tou1/syn/$F_ERR.html",
+        "-o htmlf/tou1/syn/$F_F.html",
+        "-i html/tou1/syn/$F.html"
+      ]
+    ]
+  }
+}

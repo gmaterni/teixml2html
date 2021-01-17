@@ -1,0 +1,122 @@
+expan / ex
+
+>>> csv
+d|expan|span||class:abbrev %corresp%
+d|ex|span||class:ex|<a class="ex_ref" href="#">\
+                    <span class="ex_tooltip">\
+                    <img src="css/abr/_MAN_/%expan_corresp%.jpg"/>\
+                     </span>%text%</a>||expan
+---------------------------------------------
+>>> XML
+<w xml:id="Gl610w2" ana="#elis">
+    <expan corresp="#ab-lm-qbarr-d">q
+        <ex>u</ex>
+    </expan>
+</w>
+
+>>> HTML
+<div class="w elis directspeech" id="dGl610w2">
+    <span class="abbrev ab-lm-qbarr-d">q
+        <span class="ex">
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-lm-qbarr-d.jpg" />
+                </span>u
+            </a>
+        </span>
+    </span>
+</div>
+-----------------------------------------
+>>> XML
+<w xml:id="Gl8305w2">
+  <expan corresp="#ab-ctr-chr">ch
+    <ex>e
+      <c ana="#lram-c">u</c>alie
+    </ex>r
+  </expan>
+</w>
+
+ex contiene un altro tag e non solo testo
+quando si incontra <c></c> si verifica che <ex></ex> è
+un container.
+%text% è quindi settato in <ex></ex> che è il container di c
+
+HTML temporaneo con tag XXX da rimuovere
+
+<div class="w" id="dGl8305w2">
+    <span class="abbrev ab-ctr-chr">ch
+        <span class="ex">e
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-ctr-chr.jpg" />
+                </span>
+                <span class="ramis">u</span>alie
+            </a>
+            <XXX class="ramis">u</XXX>alie
+        </span>r
+    </span>
+</div>
+
+
+
+>>> HTML 
+<div class="w" id="dGl8305w2">
+    <span class="abbrev ab-ctr-chr">ch
+        <span class="ex">e
+            <a class="ex_ref" href="#">
+                <span class="ex_tooltip">
+                    <img src="css/abr/par1/#ab-ctr-chr.jpg" />
+                </span>
+                <span class="ramis">u</span>alie
+            </a>
+        </span>r
+    </span>
+</div>
+
+
+==============================
+damage
+<damage degree="low">
+          <w xml:id="Gl833w1">Honor</w>
+          <w xml:id="Gl833w2" ana="#aggl-s">
+            <expan corresp="#ab-tir-7">
+              <ex>et</ex>
+            </expan>
+          </w>
+          <w xml:id="Gl833w3">pris</w>
+          <w xml:id="Gl833w4"><c ana="#lram-c">u</c>os</w>
+          <w xml:id="Gl833w5">seroit</w>
+          <w xml:id="Gl833w6">granz</w>
+</damage>
++
+++
++++
+all'inizio del testo in funzioni di degree
++ alla fine trattare con lo span
+=======================
+<supplied reason="evident-omission">$</supplied>
+supplied_eo
+
+<supplied reason="damage" cert="yes">$</supplied>
+supplie_ds
+
+<supplied reason="damage" cert="no">$</supplied>
+supplie_d_dno
+==========================================
+gap [..
+supplied
+addname XXX
+======================================
+.directspeech 
+.directspeech_start_int 
+.monologue 
+.episode_start_int 
+.capitaiize_afp 
+.capitaiize_afp_int 
+=====================================
+<pc xml:id="Gl17pc2" resp="#ed">,</pc>
+<note type="peritextuelle">"einsi": j'ignore un tilde de nasalité sur sur le premier i</note>
+wrk
+<pc xml:id="Gl17pc2" resp="#ed">,</pc>
+<note type="peritextuelle">"einsi": j'ignore un tilde de nasalité sur sur le premier i</note>
+old

@@ -1,0 +1,37 @@
+{
+  "exe": [
+    [
+      "writehtml.py",
+      "-o html/ven1/syn/ven1.html",
+      "-i '<div id=\"ven1_dip_id\" class=\"text_pannel tei_dip\">'",
+      "-wa w"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/ven1/ven1_list.xml",
+      "-o html/ven1/syn/ven1.html",
+      "-c cnf/list_dipl_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven1/syn/ven1.html",
+      "-i '</div>",
+      "<div id=\"ven1_int_id\" class=\"text_pannel tei_int\">'",
+      "-wa a"
+    ],
+    [
+      "teixml2html.py",
+      "-i xml/ven1/ven1_list.xml",
+      "-o html/ven1/syn/ven1.html",
+      "-c cnf/list_inter_syn.json",
+      "-wa a"
+    ],
+    [
+      "writehtml.py",
+      "-o html/ven1/syn/ven1.html",
+      "-i '</div>'",
+      "-wa a"
+    ]
+  ]
+}
