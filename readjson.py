@@ -46,4 +46,4 @@ def read_json(json_path):
     return js
     
 
-#read_json("cnf/test0.json")
+#read_json("cgf/test0.json")

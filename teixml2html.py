@@ -38,7 +38,7 @@ inp = Inp()
 class Xml2Html:
 
     def __init__(self):
-        logconf.open("log/cnf.json", 0)
+        logconf.open("log/cgf.json", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.ERR.log", 1)
         logcsverr.open("log/csv.ERR.log", 1)
@@ -640,7 +640,7 @@ if __name__ == "__main__":
                         default="w",
                         help="[-wa w/a (w)rite a)ppend) default w")
     parser.add_argument('-c',
-                        dest="cnf",
+                        dest="cgf",
                         required=True,
                         metavar="",
                         help="-c <file_conf.json")
@@ -658,4 +658,4 @@ if __name__ == "__main__":
     if args.html == args.xml:
         print("Name File output errato")
         sys.exit(1)
-    do_mauin(args.xml, args.html, args.cnf, args.wa, args.deb)
+    do_mauin(args.xml, args.html, args.cgf, args.wa, args.deb)

@@ -76,8 +76,8 @@ def prn_es():
                 "-i xml/par/$F.xml",
                 "-o html/par/syn/$F.html",
                 "-t html/syn_episode.html",
-                "-cd cnf/par_dipl_syn.json",
-                "-ci cnf/par_inter_syn.json"
+                "-cd cgf/par_dipl_syn.json",
+                "-ci cgf/par_inter_syn.json"
             ]
         },
         "remove_dir": [
