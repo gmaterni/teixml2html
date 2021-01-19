@@ -177,6 +177,7 @@ class PrjMgr:
             logerr.log(e)
             sys.exit(1)
 
+
     def execute_files_of_dir(self, exe_dir):
         loginfo.log(os.linesep, ">> exe_dir")
         try:

@@ -139,7 +139,6 @@ def tags_cvs2json(csv, html_type):
             sys.exit(1)
     return js
 
-
 """
 def read_html_conf(csv_path, html_type):
     with open(csv_path, "r+") as f:

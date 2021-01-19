@@ -10,6 +10,7 @@ from ualog import Log
 from xml_const import *
 import re
 
+
 __date__ = "15-01-2021"
 __version__ = "0.2.0"
 __author__ = "Marta Materni"

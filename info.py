@@ -2,7 +2,6 @@
 # coding: utf-8
 
 s = """
-
 teixml2html.py
     trasforma file xm in file html utilizzando un fil di
     csv dve sono definiti le entity per l trasformazione

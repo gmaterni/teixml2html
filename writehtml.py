@@ -12,7 +12,7 @@ __author__ = "Marta Materni"
 
 logerr = Log("a")
 
-
+ 
 if __name__ == "__main__":
     logerr.open("log/writehtml.ERR.log", 1)
     parser = argparse.ArgumentParser()

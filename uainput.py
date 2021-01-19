@@ -4,7 +4,6 @@
 import sys
 from pdb import set_trace
 
-
 class Inp:
     """
     .   fine

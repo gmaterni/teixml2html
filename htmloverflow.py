@@ -30,6 +30,7 @@ parametri per il settaggio di atttrs a inizio e fine intervallo
 x|damage|||class:damage%css_end%||css_end:_last
 
 """
+
 TEXT_START= 'txt_start' 
 TEXT_END='txt_end'
 CSS_START='css_start'

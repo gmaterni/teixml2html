@@ -24,7 +24,7 @@ NOTE_BOTTOM = "</div>"
 
 NULL_TAG_START="<null>"
 NULL_TAG_END="</null>"
-
+ 
 """
 tostring(element_or_tree, 
 encoding=None, 

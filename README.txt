@@ -1,4 +1,4 @@
-file Nche NON sono sotto il controllo git
+file che NON sono sotto il controllo git
 tutti le indiczioni sono riferite al manoscritto par1
 ma sono da cosiderarsi equivalenti per
 tor,tou,ven sostituendo ila sigla adel manoscritto a par1

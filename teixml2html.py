@@ -19,7 +19,6 @@ __date__ = "15-01-2021"
 __version__ = "0.3.0"
 __author__ = "Marta Materni"
 
-
 def pp(data):
     if data is None:
         return ""

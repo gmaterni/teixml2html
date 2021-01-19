@@ -7,7 +7,7 @@ import os
 BLKS = "                                                         "
 NL = os.linesep
 
-
+ 
 class HtmlBuilder:
     """costruisce nodo per nodo un file HTML
     """

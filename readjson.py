@@ -45,5 +45,4 @@ def read_json(json_path):
     js= parse_json(js)
     return js
     
-
 #read_json("cgf/test0.json")
