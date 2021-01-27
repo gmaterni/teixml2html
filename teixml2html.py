@@ -531,7 +531,7 @@ class Xml2Html:
             if self.before_id is None:
                 raise Exception(f"ERROR before_id is null.")
             #
-            csv_path = self.info_params.get("html_info", None)
+            csv_path = self.info_params.get("html_tag_file", None)
             if csv_path is None:
                 raise Exception("ERROR csv_path is null.")
             # type : d:txt d:syn i:txt i:syn
