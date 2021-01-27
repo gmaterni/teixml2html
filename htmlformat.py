@@ -32,7 +32,7 @@ if __name__ == "__main__":
         err=args.err
         hou=args.hou
         hin=args.hin   
-        s=f"tidy -config cgf/tidy.cgf -file {err} -output {hou} {hin}"
+        s=f"tidy -config cfg/tidy.cfg -file {err} -output {hou} {hin}"
         os.system(s)
         #
         with open(err) as f:

@@ -12,7 +12,7 @@ TEI_TOP="<TEI>"
 TEI_BOTTOM = "</TEI>"
 
 BODY_TOP="<body>"
-BODY_TOP_PATTERN=f"<\s*body\s*>"
+BODY_TOP_PATTERN=r"<\s*body\s*>"
 BODY_BOTTOM_PATTERN = r"</\s*body\s*>"
 BODY_BOTTOM = "</body>"
 

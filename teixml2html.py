@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
-import os
-import re
-from lxml import etree
-import pprint
-import sys
 import argparse
-from readhtmlconf import read_html_conf
-from readjson import read_json
+import os
+import pprint
+import re
+import sys
+from pdb import set_trace
+
+from lxml import etree
+
 from htmlbuilder import HtmlBuilder
 from htmloverflow import HtmlOvweflow
-from ualog import Log
+from readhtmlconf import read_html_conf
+from readjson import read_json
 from uainput import Inp
+from ualog import Log
 
 __date__ = "15-01-2021"
 __version__ = "0.3.0"
@@ -37,7 +39,7 @@ inp = Inp()
 class Xml2Html:
 
     def __init__(self):
-        logconf.open("log/cgf.json", 0)
+        logconf.open("log/cfg.json", 0)
         loginfo.open("log/teixml2html.log", 0)
         logerr.open("log/teixml2html.ERR.log", 1)
         logcsverr.open("log/csv.ERR.log", 1)
@@ -523,6 +525,7 @@ class Xml2Html:
         try:
             self.info_params = read_json(json_path)
             logconf.log(pp(self.info_params).replace("'", '"')).prn(0)
+            #
             # prefisso di  id per diplomatia e interpretativa
             self.before_id = self.info_params.get("before_id", None)
             if self.before_id is None:
@@ -531,10 +534,11 @@ class Xml2Html:
             csv_path = self.info_params.get("html_info", None)
             if csv_path is None:
                 raise Exception("ERROR csv_path is null.")
-            html_type = self.info_params.get("html_type", None)
-            if html_type is None:
-                raise Exception("ERROR html_type is null.")
-            self.info_html_tags = read_html_conf(csv_path, html_type)
+            # type : d:txt d:syn i:txt i:syn
+            html_tag_type = self.info_params.get("html_tag_type", None)
+            if html_tag_type is None:
+                raise Exception("ERROR html_tag_type is null.")
+            self.info_html_tags = read_html_conf(csv_path, html_tag_type)
             logconf.log(pp(self.info_html_tags).replace("'", '"')).prn(0)
         except Exception as e:
             logerr.log(os.linesep, "ERROR: read_conf())")
@@ -598,21 +602,13 @@ class Xml2Html:
         # html su una riga versione per produzione
         html = self.hb.html_onerow()
         html = self.set_html_pramas(html)
+        # TODO  minscolo interpretativa
+        if self.before_id=='i':
+            html=html.lower()
+        
         with open(self.html_path, write_append) as f:
             f.write(html)
         os.chmod(self.html_path, 0o666)
-        #
-        # html formattato versione per il debug
-        # file_name.html => file_name_X.html
-        """
-        if int(debug_liv)> 0:
-            html = self.hb.html_format()
-            html = self.set_html_pramas(html)
-            path = self.html_path.replace(".html", "_F.html")
-            with open(path, write_append) as f:
-                f.write(html)
-            os.chmod(self.html_path, 0o666)
-        """
         return self.html_path
 
 
@@ -639,7 +635,7 @@ if __name__ == "__main__":
                         default="w",
                         help="[-wa w/a (w)rite a)ppend) default w")
     parser.add_argument('-c',
-                        dest="cgf",
+                        dest="cfg",
                         required=True,
                         metavar="",
                         help="-c <file_conf.json")
@@ -657,4 +653,4 @@ if __name__ == "__main__":
     if args.html == args.xml:
         print("Name File output errato")
         sys.exit(1)
-    do_mauin(args.xml, args.html, args.cgf, args.wa, args.deb)
+    do_mauin(args.xml, args.html, args.cfg, args.wa, args.deb)

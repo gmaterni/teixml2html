@@ -22,7 +22,6 @@ def t_split(s):
     return s0, s1
 
     """
-        
         d   i   xt  xs  dt  ds  it  is
     x   1   1   1   1   1   1   1   1
     
@@ -56,7 +55,7 @@ def row_ok(t, e):
 
 
 # x|xml_tag|tag|keys|attrs|text|params|parent!tags|before|after
-def tags_cvs2json(csv, html_type):
+def tags_cvs2json(csv, html_tag_type):
     lsb = ["", "", "", "", "", "", "", ""]
     js = {}
     # set_trace()
@@ -71,7 +70,7 @@ def tags_cvs2json(csv, html_type):
                 le = len(flds)
                 flds.extend(lsb[0:TAG_COL_NUM-le])
             x = flds[0]
-            if row_ok(x,html_type) is False:
+            if row_ok(x,html_tag_type) is False:
                 continue
             #
             flds = flds[1:]
@@ -140,17 +139,17 @@ def tags_cvs2json(csv, html_type):
     return js
 
 """
-def read_html_conf(csv_path, html_type):
+def read_html_conf(csv_path, html_tag_type):
     with open(csv_path, "r+") as f:
         csv = f.readlines()
-    js = tags_cvs2json(csv, html_type)
+    js = tags_cvs2json(csv, html_tag_type)
     return js
 """
 
-def read_html_conf(csv_path, html_type):
+def read_html_conf(csv_path, html_tag_type):
     with open(csv_path, "r+") as f:
         txt = f.read()
     txt=txt.replace(f'\{os.linesep}','')
     csv=txt.split(os.linesep)
-    js = tags_cvs2json(csv, html_type)
+    js = tags_cvs2json(csv, html_tag_type)
     return js
