@@ -17,9 +17,10 @@ from readjson import read_json
 from uainput import Inp
 from ualog import Log
 
-__date__ = "15-01-2021"
-__version__ = "0.3.0"
+__date__ = "27-01-2021"
+__version__ = "0.3.1"
 __author__ = "Marta Materni"
+
 
 def pp(data):
     if data is None:
@@ -46,8 +47,10 @@ class Xml2Html:
         loghtmlerr.open("log/html.ERR.log", 1)
         self.xml_path = None
         self.html_path = None
-        self.info_params = None
-        self.info_html_tags = None
+        self.html_cfg = None
+        self.html_tag_cfg = None
+        # diplomatica / interpretatova (d/i)
+        self.dipl_inter = None
         # prefisso di id per diplomarica / interpretativa
         self.before_id = None
         # HtmlBuilder
@@ -150,7 +153,8 @@ class Xml2Html:
         return {
             'id': id,
             'liv': self.node_liv(nd),
-            'tag': self.node_tag(nd).lower(),
+            # TODO 'tag': self.node_tag(nd).lower(),
+            'tag': self.node_tag(nd),
             'tail': self.node_tail(nd),
             'text': self.node_text(nd),
             'items': items,
@@ -307,9 +311,9 @@ class Xml2Html:
             [row_data (dict): dati estartti da csv
         """
         xml_tag = x_data['tag']
-        row_data = self.info_html_tags.get(xml_tag, None)
+        row_data = self.html_tag_cfg.get(xml_tag, None)
         if row_data is None:
-            row_data = self.info_html_tags.get('x', {})
+            row_data = self.html_tag_cfg.get('x', {})
             csv_tag = xml_tag
             self.csv_tag_ctrl = f'_x_{csv_tag}'
         else:
@@ -324,9 +328,9 @@ class Xml2Html:
                 lsv = [x_items[k] for k in lsk if k in x_items.keys()]
                 attrs_val = '+'.join(lsv)
                 csv_tag = xml_tag+'+'+attrs_val
-                row_data = self.info_html_tags.get(csv_tag, None)
+                row_data = self.html_tag_cfg.get(csv_tag, None)
                 if row_data is None:
-                    row_data = self.info_html_tags.get('x+y', None)
+                    row_data = self.html_tag_cfg.get('x+y', None)
                     self.csv_tag_ctrl = f'_xy_{csv_tag}'
                 else:
                     self.csv_tag_ctrl = csv_tag
@@ -340,12 +344,12 @@ class Xml2Html:
         t = f'<{tag} {attrs}>{text}</{tag}>{tail}'
         return t
 
-    def  get_tag_w_last(self):
+    def get_tag_w_last(self):
         tag_w_last = ''
-        le=len(self.hb.get_tag_lst())
-        if le==0:
+        le = len(self.hb.get_tag_lst())
+        if le == 0:
             return ""
-        x= 5 if le > 5 else le
+        x = 5 if le > 5 else le
         for i in range(1, x):
             tag_w_last = self.hb.get_tag_lst()[-i:][0].strip()
             if tag_w_last.find('id') > -1:
@@ -413,6 +417,8 @@ class Xml2Html:
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
+        if self.dipl_inter=='i':
+            html_text=html_text.lower()
         ####################
         html_data = {
             'tag': c_tag,
@@ -420,7 +426,7 @@ class Xml2Html:
             'text': html_text
         }
         # ERRORi nella gestione del files csv dei tag html
-        if self.csv_tag_ctrl.find('_x') > -1 :
+        if self.csv_tag_ctrl.find('_x') > -1:
             logcsverr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
             logcsverr.log(f"file: {self.xml_path}").prn()
             logcsverr.log("xml:", pp(x_data)).prn()
@@ -439,6 +445,8 @@ class Xml2Html:
             loginfo.log(">> ext_items").prn()
             loginfo.log(pp(ext_items)).prn()
         ################################
+        # TODO valutare se exit/1) al verificarsi dell'errore
+        # sys.exit(1)
         return html_data
 
     def html_append(self, nd):
@@ -486,7 +494,6 @@ class Xml2Html:
             print(self.hb.html_format())
             inp.inp()
 
-
     def set_html_pramas(self, html):
         """utilizzando il file json formatta i parametri residui
             es. il nome del manoscrittp _MAN_
@@ -496,7 +503,7 @@ class Xml2Html:
             html (str): html 
         Returns:
             html (str): html con settati i parametri         """
-        params = self.info_params.get("html_params", {})
+        params = self.html_cfg.get("html_params", {})
         for k, v in params.items():
             html = html.replace(k, v)
         return html
@@ -505,13 +512,13 @@ class Xml2Html:
         """ controlla tutte le righe htnl di HtmlBuilder
         per verificare che vi sda qualche parametro
         del tipo %param% non settato
-        """        
+        """
         ptrn = r"%[\w/,;:.?!^-]+%"
-        rows =self.hb.get_tag_lst()
+        rows = self.hb.get_tag_lst()
         for row in rows:
             ms = re.search(ptrn, row)
             if ms is not None:
-                loghtmlerr.log( f"ERROR nel parametro: {ms.group()}").prn()
+                loghtmlerr.log(f"ERROR nel parametro: {ms.group()}").prn()
                 loghtmlerr.log(f"file: {self.xml_path}")
                 loghtmlerr.log(row.strip()).prn()
                 # ultimo tag w prima dell'ERRORe
@@ -519,29 +526,36 @@ class Xml2Html:
                 loghtmlerr.log("last w: ", tag_w_last).prn()
                 loghtmlerr.log(os.linesep).prn()
                 inp.inp('!')
+                # TODO valutare se exit/1) al verificarsi dell'errore
+                # sys.exit(1)
 
-    
     def read_conf(self, json_path):
         try:
-            self.info_params = read_json(json_path)
-            logconf.log(pp(self.info_params).replace("'", '"')).prn(0)
+            self.html_cfg = read_json(json_path)
+            logconf.log(pp(self.html_cfg).replace("'", '"')).prn(0)
+            #
+            # hrml dipl./inter
+            self.dipl_inter = self.html_cfg.get("dipl_inter", None)
+            if self.dipl_inter is None or self.dipl_inter not in ['d', 'i']:
+                raise Exception(f"ERROR dipl_inter: {self.dipl_inter}")
             #
             # prefisso di  id per diplomatia e interpretativa
-            self.before_id = self.info_params.get("before_id", None)
+            self.before_id = self.html_cfg.get("before_id", None)
             if self.before_id is None:
-                raise Exception(f"ERROR before_id is null.")
+                raise Exception("ERROR before_id is null.")
             #
-            csv_path = self.info_params.get("html_tag_file", None)
+            csv_path = self.html_cfg.get("html_tag_file", None)
             if csv_path is None:
-                raise Exception("ERROR csv_path is null.")
+                raise Exception("ERROR html_tag_file is null.")
+            #
             # type : d:txt d:syn i:txt i:syn
-            html_tag_type = self.info_params.get("html_tag_type", None)
+            html_tag_type = self.html_cfg.get("html_tag_type", None)
             if html_tag_type is None:
                 raise Exception("ERROR html_tag_type is null.")
-            self.info_html_tags = read_html_conf(csv_path, html_tag_type)
-            logconf.log(pp(self.info_html_tags).replace("'", '"')).prn(0)
+            self.html_tag_cfg = read_html_conf(csv_path, html_tag_type)
+            logconf.log(pp(self.html_tag_cfg).replace("'", '"')).prn(0)
         except Exception as e:
-            logerr.log(os.linesep, "ERROR: read_conf())")
+            logerr.log("ERROR: read_conf())")
             logerr.log(e)
             sys.exit(1)
 
@@ -558,57 +572,56 @@ class Xml2Html:
         Returns:
             html_path (str): filr name html 
         """
-        inp.set(debug_liv)
-        self.xml_data_lst = []
-        self.xml_path = xml_path
-        self.html_path = html_path
-        write_append = write_append.lower()
-        if write_append not in ['w', 'a']:
-            raise Exception(f"ERROR in output write/append. {write_append}")
-        # lettur a file configurazione
-        self.read_conf(json_path)
-        # lib per costruziona html
-        self.hb = HtmlBuilder()
-        # dict dei dati xml con tag come key
-        self.xml_data_dict = {}
-        # stack dei nodi che sono si/no container
-        self.is_container_stack = [False for i in range(1, 20)]
-        # tag per controlo ERRORi
-        self.csv_tag_ctrl = ""
-        #
-        self.hb.init()
         try:
-            xml_root = etree.parse(self.xml_path)
+            inp.set(debug_liv)
+            self.xml_data_lst = []
+            self.xml_path = xml_path
+            self.html_path = html_path
+            if write_append not in ['w', 'a']:
+                raise Exception(f"ERROR in output write/append. {write_append}")
+            # lettur a file configurazione
+            self.read_conf(json_path)
+            # lib per costruziona html
+            self.hb = HtmlBuilder()
+            # dict dei dati xml con tag come key
+            self.xml_data_dict = {}
+            # stack dei nodi che sono si/no container
+            self.is_container_stack = [False for i in range(1, 20)]
+            # tag per controlo ERRORi
+            self.csv_tag_ctrl = ""
+            #
+            self.hb.init()
+            try:
+                xml_root = etree.parse(self.xml_path)
+            except Exception as e:
+                logerr.log("ERROR teixml2html.py write_html() parse_xml")
+                logerr.log(e)
+                sys.exit(1)
+            for nd in xml_root.iter():
+                self.html_append(nd)
+            self.hb.del_tags('XXX')
+            self.hb.end()
+            """gestisce il settaggio degli overflow
+            modifica il parametro html_lst
+            Returns:
+                str: html modificato
+            """
+            html_lst = self.hb.get_tag_lst()
+            html_over = HtmlOvweflow(
+                self.xml_data_lst, html_lst, self.html_tag_cfg)
+            html_over.set_overflow()
+            # controllo dei parametri %par% non settati
+            self.check_tml()
+            # html su una riga versione per produzione
+            html = self.hb.html_onerow()
+            html = self.set_html_pramas(html)
+            with open(self.html_path, write_append) as f:
+                f.write(html)
+            os.chmod(self.html_path, 0o666)
         except Exception as e:
             logerr.log("ERROR teixml2html.py write_html()")
             logerr.log(e)
             sys.exit(1)
-        for nd in xml_root.iter():
-            self.html_append(nd)
-        self.hb.del_tags('XXX')
-        self.hb.end()
-        #############################
-        """gestisce il settaggio degli overflow
-        modifica il parametro html_lst
-        Returns:
-            str: html modificato
-        """
-        html_lst = self.hb.get_tag_lst()
-        html_over = HtmlOvweflow(
-            self.xml_data_lst, html_lst, self.info_html_tags)
-        html_over.set_overflow()
-        # controllo dei parametri %par% non settati
-        self.check_tml()
-        # html su una riga versione per produzione
-        html = self.hb.html_onerow()
-        html = self.set_html_pramas(html)
-        # TODO  minscolo interpretativa
-        if self.before_id=='i':
-            html=html.lower()
-        
-        with open(self.html_path, write_append) as f:
-            f.write(html)
-        os.chmod(self.html_path, 0o666)
         return self.html_path
 
 
@@ -650,7 +663,4 @@ if __name__ == "__main__":
                         metavar="",
                         help="-o <file_out.html>")
     args = parser.parse_args()
-    if args.html == args.xml:
-        print("Name File output errato")
-        sys.exit(1)
     do_mauin(args.xml, args.html, args.cfg, args.wa, args.deb)

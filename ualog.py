@@ -2,6 +2,7 @@
 # coding: utf-8
 
 # import datetime
+from io import UnsupportedOperation
 import os
 
 """
@@ -16,21 +17,23 @@ import os
     prn(0)               disattivato localmente
                          ma resta valido il settaggio globale
 """
+
+
 class Log:
 
-    def __init__(self,aappend_write='w'):
+    def __init__(self, aappend_write='w'):
         self.used = False
-        self.path_log =None
-        self.aw=aappend_write
+        self.path_log = None
+        self.aw = aappend_write
         self.out = 0
         self.f = None
-        self.msg=''
+        self.msg = ''
 
-    def set_out(self,out):
-        self.out=out
+    def set_out(self, out):
+        self.out = out
         return self
 
-    def open (self, path_log, out=1):
+    def open(self, path_log, out=1):
         # ymd = str(datetime.datetime.today().strftime('%Y%m%d%H%M%S'))
         # ymd = str(datetime.datetime.today().strftime('%Y%m%d_%H_%M'))
         # self.path_log = path_log.replace('.log', f'_{ymd}.log')
@@ -45,19 +48,22 @@ class Log:
         self.f = open(self.path_log, self.aw)
         os.chmod(self.path_log, 0o666)
 
-    def prn(self,out=1):
-        if self.out <1 and out > 0:
+    def prn(self, out=1):
+        if self.out < 1 and out > 0:
             print(self.msg)
         return self
 
     def log(self, *args):
+        first = not self.used
         self.open_fie()
-        ls=["None" if x is None else str(x) for x in args]
-        s=f"{os.linesep}".join(ls)
+        ls = ["None" if x is None else str(x) for x in args]
+        s = f"{os.linesep}".join(ls)
+        if first:
+            s = os.linesep+s
         self.f.write(s)
         self.f.write(os.linesep)
         self.f.flush()
-        self.msg=s
+        self.msg = s
         if self.out > 0:
             print(s)
         return self

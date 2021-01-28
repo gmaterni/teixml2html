@@ -18,11 +18,10 @@ def read_file_json(json_path):
         js = json.loads(txt)
     except Exception as e:
         s=traceback.format_exc()
-        logerr.log("read_file_json()")
-        logerr.log(s)
+        logerr.log("ERROR read_file_json() ")
         logerr.log(str(e))
         logerr.log(txt)
-        sys.exit()
+        sys.exit(1)
     return js
 
 def parse_json(js):
