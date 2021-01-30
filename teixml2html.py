@@ -17,8 +17,8 @@ from readjson import read_json
 from uainput import Inp
 from ualog import Log
 
-__date__ = "27-01-2021"
-__version__ = "0.3.1"
+__date__ = "30-01-2021"
+__version__ = "0.3.2"
 __author__ = "Marta Materni"
 
 
@@ -150,10 +150,9 @@ class Xml2Html:
         if id != '':
             id_num = self.node_id_num(id)
             items['id_num'] = id_num
-        return {
+        js= {
             'id': id,
             'liv': self.node_liv(nd),
-            # TODO 'tag': self.node_tag(nd).lower(),
             'tag': self.node_tag(nd),
             'tail': self.node_tail(nd),
             'text': self.node_text(nd),
@@ -162,6 +161,10 @@ class Xml2Html:
             # 'val':self.node_val(nd),
             'is_parent': self.node_is_parent(nd)
         }
+        if self.dipl_inter=='i':
+            js['text']=js['text'].lower()
+            js['tail']=js['tail'].lower()
+        return js
 
     def text_format(self, text, pars):
         """settta pars su text
@@ -363,6 +366,9 @@ class Xml2Html:
         Returns:
             dict: dati necessari a costruire html
         """
+        if x_data['id']=="Gl62w1":
+            self.trace=True
+
         x_items = x_data['items']
         x_text = x_data['text']
         x_liv = x_data['liv']
@@ -387,11 +393,6 @@ class Xml2Html:
         h_attrs_str = self.attrs2html(html_attrs)
         #
         ext_items = self.items_extend(x_data, c_data)
-        """
-        if x_data['tag'] == 'pc':
-            # set_trace()
-            self.trace=True
-        """
         if h_attrs_str.find('%') > -1:
             # rimpiazza se esiste %text% con x_data['text']
             if h_attrs_str.find('%text%') > -1:
@@ -417,8 +418,9 @@ class Xml2Html:
                 c_text = self.text_format(c_text, c_params)
         #
         html_text = x_text+c_text
-        if self.dipl_inter=='i':
-            html_text=html_text.lower()
+        # TODO minuscole nel'interpretativa
+        # if self.dipl_inter=='i':
+        #    html_text=html_text.lower()
         ####################
         html_data = {
             'tag': c_tag,
