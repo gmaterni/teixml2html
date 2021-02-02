@@ -3,9 +3,11 @@
 
 import argparse
 import os
+from io import StringIO
 import pprint
 import re
 import sys
+import traceback
 from pdb import set_trace
 
 from lxml import etree
@@ -45,7 +47,7 @@ class Xml2Html:
         logerr.open("log/teixml2html.ERR.log", 1)
         logcsverr.open("log/csv.ERR.log", 1)
         loghtmlerr.open("log/html.ERR.log", 1)
-        logdeb.open("log/DEBUG.log", 0)
+        logdeb.open("log/DEBUG.log", 1)
         self.xml_path = None
         self.html_path = None
         self.html_cfg = None
@@ -57,9 +59,9 @@ class Xml2Html:
         # HtmlBuilder
         self.hb = None
         # lista x_data (dati xml)
-        self.xml_data_lst = None
+        self.x_data_lst = None
         # dizionario di x_data (dati xml)
-        self.xml_data_dict = None
+        self.x_data_dict = None
         # stack dei valori v/f dei container
         self.is_container_stack = None
         # tag di controllo per erroi csv _x_ _xy_
@@ -102,7 +104,7 @@ class Xml2Html:
         if p > 1:
             logerr.log("ERROR in  xml")
             logerr.log(nd.tag)
-            sys.exyt(1)
+            sys.exit(1)
         return tag.strip()
 
     def node_id(self, nd):
@@ -117,7 +119,7 @@ class Xml2Html:
     def node_id_num(self, id):
         if id == '':
             return ''
-        m = re.search('\d', id)
+        m = re.search(r'\d', id)
         if m is None:
             return -1
         p = m.start()
@@ -166,50 +168,106 @@ class Xml2Html:
             'is_parent': self.node_is_parent(nd)
         }
 
-    def text_format(self, text, pars):
+    def set_text_xitems(self, text, xitems):
+        """setta un testo parametrizzato con pars:
+        i parametri del testo sono nella forma 
+        %param% nel cso di parametri riferiti a xsata
+        %tag_paren@ù+param% nei parametri che si riferisocono
+        ad un tag parent
+        NB.
+        I parametri  non settati restano nella forma originale
+        Args:
+            text ([str]): [testo parametrizzato]
+            pars ([dict]): [parametri]
+        Raises:
+            Exception: [tag parent non troaton]
+        Returns:
+            [str]: [testo parametrizzato settato]
+        """       
+        logdeb.log('**  set_text_xitems')
+        logdeb.log(str(xitems))
+        logdeb.log(text)
+        ptrn = r"%[\w/@,;:.?!-]+%"
+        ms = re.findall(ptrn, text)
+        ks = [x.replace('%', '') for x in ms]
+        try:
+            for k in ks:
+                if k.find('@')> -1:
+                    pk=k.split('@')
+                    tag_p=pk[0]
+                    k_p=pk[1]
+                    x_data_p=self.x_data_dict.get(tag_p,None)
+                    if x_data_p is None:
+                        raise Exception(f"tag parent {tag_p} not found.")
+                    xitems_p=x_data_p['items']
+                    v = xitems_p.get(k_p, f'%{k}%')
+                else:
+                    v = xitems.get(k, f'%{k}%')
+                text = text.replace(f'%{k}%', v)
+            logdeb.log(text)
+            logdeb.log("")
+        except Exception as e:
+            logcsverr.log(f"ERROR in csv {str(e)}").prn()
+            logcsverr.log("text: {text}").prn()
+            logcsverr.log("params:",pp(xitems)).prn()
+            tag_w_last = self.get_tag_w_last()
+            logcsverr.log("last w: ", tag_w_last).prn()
+            logcsverr.log(os.linesep).prn()
+            inp.inp("!")
+        return text
+
+
+    def set_text_parans(self, text, pars):
         """settta pars su text
         vengono coniserati tutti gli elemnti di text dell
-        pattern [%][\w.?!+][%] e sono rimpiazzati utilizando il dict pars
+        pattern [%][w.?!+][%] e sono rimpiazzati utilizando il dict pars
+        NB.
         quelli per i quali non vi sono paramteri corrsipondenti
-        SONO lasciati nella loro forma originale
-
+        SONO lasciati nella loro forma original
         Args:
             text (str): testo con parametri da settare
-            pars (dict): parametri per settare text
-
+            pars (dict): parametri per settare textù
         Returns:
             str: testo formatato
         """
-        ptrn = r"%[\w/,;:.?!^-]+%"
+        if pars =={}:
+            return text
+        logdeb.log('**  set_text_parans')
+        logdeb.log(str(pars))
+        logdeb.log(text)
+        ptrn = r"%[\w/@,;:.?!-]+%"
         ms = re.findall(ptrn, text)
+        if ms is None:
+            return text
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
             v = pars.get(k, f'%{k}%')
             text = text.replace(f'%{k}%', v)
+        logdeb.log(text)
+        logdeb.log("")
         return text
 
-    def text_format_null(self, text, pars):
-        """
-        settta pars su text
-        vengono coniserati tutti gli elemnti di text selezoinati
-        dal pattern [%]\w[%] sono rimpiazzati utilizando il dict pars
-        quelli per i quali non vi sono paramteri corrsipondenti
-        sono rimossi
+    def remove_text_parans_null(self, text):
+        """rimuove parametri non settai
         Args:
-            text (str): testo con parametri da settare
-            pars (dict): parametri per settare text
+            texts ([str]): [testo parametrizzato]
         Returns:
-            str: testo formatato
-        """
-        ptrn = r"%[\w/,;:.?!^-]+%"
+            [str]: [testo con parametri rimossi]
+        """        
+        logdeb.log('**  remove_text_parans_null').prn()
+        logdeb.log(text)
+        ptrn = r"%[\w/@,;:.?!-]+%"
         ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         for k in ks:
-            v = pars.get(k, '')
-            text = text.replace(f'%{k}%', v)
+            text = text.replace(f'%{k}%','')
+        logdeb.log(text)
+        logdeb.log("")
         return text
 
     def class_adjust(self, text):
+        logdeb.log('**  class_adjust')
+        logdeb.log(text)
         text = text.replace(' "', '"')
         text = text.replace(' _int', '')
         p0 = text.find('class')
@@ -219,52 +277,44 @@ class Xml2Html:
             s0 = text[:p2]
             s1 = text[p2:]
             text = s0.replace('#', '')+s1
+        logdeb.log(text)
+        logdeb.log("")
         return text
 
-    def items_extend(self, x_data, csv_data,):
-        """unisce  
-            x_data.items 
-            csv_data.attrs
-            parent x_data.items
-            se in csv é settato parent aggiunge parent x_data.iitems
-            gli items del parent sono aggiunti con la key composta
-            dal tag del parent + la key nella forma parent_key
-            es. 
-            parent <pb key="valore" ..
-            nel iitems esteso del figlio ha la forma
-            pb_key=valore
-        Args:
-            x_data (dict): data estratto da xml
-            csv_data (dict): data estartto dat fiele html..:csv
-        Returns:
-            dict: unione dei due dict
-        """
-        attrs = {}
-        # parent x_data items
-        if self.trace:
-            # set_trace()
-            pass
-        csv_tag_parent = csv_data.get('parent', None)
-        if csv_tag_parent is not None:
-            x_data_parent = self.xml_data_dict.get(csv_tag_parent, None)
-            if x_data_parent is not None:
-                p_items = x_data_parent.get('items', {})
-                # modifica keys di items parent key = <parent>_key
-                for k, v in p_items.items():
-                    pk = f'{csv_tag_parent}_{k}'
-                    attrs[pk] = v
-        # x_data items
-        x_items = x_data.get('items', {})
-        for k, v in x_items.items():
-            attrs[k] = v
-        # csv_data attrs
-        c_attrs = csv_data.get('attrs', {})
-        for k, v in c_attrs.items():
-            attrs[k] = v
-        if self.trace:
-            # set_trace()
-            pass
-        return attrs
+    def replace_text(self, text, text_par):
+        logdeb.log('**  replace_text')
+        logdeb.log(text)
+        ptrn = r"%[\w/@,;:.?!-]+%"
+        ms = re.findall(ptrn, text)
+        ks = [x.replace('%', '') for x in ms]
+        ok=False
+        try:
+            for k in ks:
+                if k.find('@')> -1:
+                    pk=k.split('@')
+                    tag_p=pk[0]
+                    x_data_p=self.x_data_dict.get(tag_p,None)
+                    if x_data_p is None:
+                        raise Exception(f"replace_text tag parent {tag_p} not found.")
+                    text_par =x_data_p['text']
+                    ok=True
+                t0=text
+                text = text.replace(f'%{k}%', text_par)
+                if t0!= text:
+                    ok=True
+        except Exception as e:
+            logcsverr.log(f"ERROR in csv {str(e)}").prn()
+            logcsverr.log("text: {text}").prn()
+            logcsverr.log("text_par:",text_par).prn()
+            tag_w_last = self.get_tag_w_last()
+            logcsverr.log("last w: ", tag_w_last).prn()
+            logcsverr.log(os.linesep).prn()
+            inp.inp("!")
+        logdeb.log(text)
+        logdeb.log(ok)
+        logdeb.log("")
+        return text,ok
+
 
     def attrs2html(self, attrs):
         """trasforma in tag htnl attrs 
@@ -309,7 +359,7 @@ class Xml2Html:
         html_attrs = self.attrs2html(attrs)
         return html_attrs
 
-    def get_row_data_info_html(self, x_data):
+    def get_data_row_html_csv(self, x_data):
         """ ritorna dati della row di <tag>.csv individuata
             dall tag o tag+attr di x_data del in xml_data_dict
             la key è quella ottenuta dal tag xml 
@@ -346,12 +396,12 @@ class Xml2Html:
             else:
                 csv_tag = xml_tag
                 self.csv_tag_ctrl = csv_tag
-        self.xml_data_dict[csv_tag] = x_data
+        self.x_data_dict[csv_tag] = x_data
         return row_data
 
     def get_tag_w_last(self):
-        """ u
-        ltimo tag con id  significativo
+        """ 
+        ultimo tag con id  significativo
         correttamnte utilizzato.
         In caso di errore + l'ultimo tag corretto
         """        
@@ -378,7 +428,7 @@ class Xml2Html:
         x_tail = x_data['tail']
         x_liv = x_data['liv']
         self.is_container_stack[x_liv] = False
-        c_data = self. get_row_data_info_html(x_data)
+        c_data = self. get_data_row_html_csv(x_data)
         ################################
         if inp.prn:
             loginfo.log("============").prn()
@@ -393,35 +443,45 @@ class Xml2Html:
         c_attrs = c_data.get('attrs', {})
         c_text = c_data.get('text', "")
         c_params = c_data.get('params', {})
+        #
         # unisce x_items selezionato da c_keys + c_attrs
         html_attrs = self.html_attrs_builder(x_items, c_keys, c_attrs)
-        #
-        # dic esteso x_dta + c_data è parent.x_dta
-        ext_items = self.items_extend(x_data, c_data)
+        logdeb.log(str(x_data))
+        logdeb.log(str(c_data))
+        logdeb.log("XX ----------------")
         if html_attrs.find('%') > -1:
+            logdeb.log(".1 attrs")
             # rimpiazza se esiste %text% con x_data['text']
-            if html_attrs.find('%text%') > -1:
-                html_attrs = html_attrs.replace('%text%', x_text)
+            html_attrs,is_replace=self.replace_text(html_attrs,x_text)
             # setta parametri utilizzando c_params
-            # sono lascait quelli senza corrsipondenti
-            html_attrs = self.text_format(html_attrs, c_params)
-            # setta parametri attr. elimina quelli che non hanno corrisponedenti
-            html_attrs = self.text_format_null(html_attrs, x_items)
+            html_attrs= self.set_text_parans(html_attrs, c_params)
+            html_attrs = self.set_text_xitems(html_attrs, x_items)
+            html_attrs = self.remove_text_parans_null(html_attrs)
             html_attrs = self.class_adjust(html_attrs)
         #
-        # formatta c_text itilizzando ext_items :items + parent.items)
+        # setta c_text itilizzando ext_items :items + parent.items)
         if c_text.find('%') > -1:
-            c_text = self.text_format(c_text, ext_items)
-            # formatta c_text con %text% se esiste elimina x_text
-            if c_text.find('%text%') > -1:
-                if x_data.get('is_parent', None) is False:
-                    c_text = c_text.replace('%text%', x_text)
-                    x_text = ''
-                else:
-                    self.is_container_stack[x_liv] = True
+            logdeb.log(".2 c_text")         
+            c_text = self.set_text_parans(c_text,c_params)
+            c_text = self.set_text_xitems(c_text,x_items)
+
+            # setta c_text con %text% se esiste elimina x_text
+            logdeb.log(".3 c_text")  
+            c_text,is_replace=self.replace_text(c_text,x_text)
+            if is_replace:
+                x_text = ''
+
             # setta c_text utilizzando c_params
-            if c_text.find('%') > -1:
-                c_text = self.text_format(c_text, c_params)
+            logdeb.log(".4 c_text")         
+            c_text = self.set_text_parans(c_text, c_params)
+
+        logdeb.log(">><<")    
+        logdeb.log(x_text+c_text+x_tail)
+        logdeb.log(html_attrs)
+        logdeb.log("==============")
+        if self.dipl_inter=='i':
+            if x_data['tag']=='pc':
+                inp.inp('!')
         #
         html_text = x_text+c_text
         ####################
@@ -437,7 +497,6 @@ class Xml2Html:
             logcsverr.log(f"file: {self.xml_path}").prn()
             logcsverr.log("xml:", pp(x_data)).prn()
             logcsverr.log("csv:", self.csv_tag_ctrl).prn()
-            logcsverr.log("ext_items:", pp(ext_items)).prn()
             logcsverr.log("html:", pp(html_data)).prn()
             # ultimo tag w prima dell'ERRORe
             tag_w_last = self.get_tag_w_last()
@@ -448,39 +507,40 @@ class Xml2Html:
         if inp.prn:
             loginfo.log(">> html_data").prn()
             loginfo.log(pp(html_data)).prn()
-            loginfo.log(">> ext_items").prn()
-            loginfo.log(pp(ext_items)).prn()
         ################################
-        # TODO valutare se exit/1) al verificarsi dell'errore
+        #  valutare se exit/1) al verificarsi dell'errore
         # sys.exit(1)
         return html_data
 
     def set_pc(self, x_data):
-        if x_data['tag'] == 'pc':
+        x_tag=x_data['tag'] 
+        if self.w_liv==0 and x_tag=='w':
+            self.w_liv=x_data['liv']
+        if x_tag == 'pc':
             t=x_data['text'].strip()
             if t in ['.','?','!']:
                 self.pc_active = True
 
     def after_pc(self, x_data,h_data,text,tail):
-        if self.trace:
-            # set_trace()
-            pass
-        liv=x_data['liv']
-        tag=x_data['tag']
-        if tag =='w':
-            self.w_liv=liv
+        x_liv=x_data['liv']
+        x_tag=x_data['tag']
+        if x_tag =='w':
+            self.w_liv=x_liv
             if text.strip()!='':
-                text='X'+text
+                # text='X'+text
+                text=text.capitalize()
                 self.pc_active=False  
                 self.w_liv=100
         h_tag=h_data['tag']
-        if liv > self.w_liv and h_tag !='XXX':
+        if x_liv > self.w_liv and h_tag !='XXX':
             if text.strip()!='':
-                text='X'+text
+                # text='X'+text
+                text=text.capitalize()
                 self.pc_active=False  
                 self.w_liv=100
             elif tail.strip()!='':
                 tail='Y'+tail
+                # tail=tail.capitalize()
                 self.pc_active=False  
                 self.w_liv=100
         return text,tail
@@ -498,10 +558,11 @@ class Xml2Html:
 
         if self.dipl_inter=='d':
             if x_data['id']=="Gl12w4":
-                self.trace=True
+                # self.trace=True
+                pass
 
         # aggiorna xml_data_lst da utilzzare per HtmlOverflow
-        self.xml_data_lst.append(x_data)
+        self.x_data_lst.append(x_data)
         x_liv = x_data['liv']
         x_is_parent = x_data['is_parent']
         x_tag = x_data['tag']
@@ -514,6 +575,7 @@ class Xml2Html:
         # se il precedente è un parent contenitor
         prev_is_container = self.is_container_stack[x_liv-1]
         if prev_is_container:
+            set_trace()
             # rimpiazza text  nel tag precdente (il container)
             content = f'<{h_tag} {h_attrs}>{h_text}</{h_tag}>{h_tail}'
             s = self.hb.tag_last()
@@ -526,6 +588,13 @@ class Xml2Html:
         if self.dipl_inter == 'i':
             h_text = h_text.lower()
             h_tail = h_tail.lower()
+            
+            if x_data['id']=='Gl7pc1':
+                self.trace=True
+            if self.trace:
+                #set_trace()
+                pass
+
             self.set_pc(x_data)
             if self.pc_active:
                 h_text,h_tail=self.after_pc(x_data,h_data,h_text,h_tail)
@@ -534,6 +603,11 @@ class Xml2Html:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, h_tail)
         else:
             self.hb.ovc(x_liv, h_tag, h_attrs, h_text, h_tail)
+        
+        l=self.hb.get_tag_lst()
+        #logdeb.log(l)
+        logdeb.log("***************")
+
         if inp.prn:
             loginfo.log(">> html node").prn(1)
             loginfo.log(self.hb.tag_last()).prn(1)
@@ -590,7 +664,7 @@ class Xml2Html:
 
                 loghtmlerr.log(os.linesep).prn()
                 inp.inp('!')
-                # TODO valutare se exit/1) al verificarsi dell'errore
+                #  valutare se exit/1) al verificarsi dell'errore
                 # sys.exit(1)
 
     def read_conf(self, json_path):
@@ -637,8 +711,9 @@ class Xml2Html:
             html_path (str): filr name html 
         """
         try:
-            inp.set(debug_liv)
-            self.xml_data_lst = []
+            # inp.set(debug_liv)
+            inp.set(0)
+            self.x_data_lst = []
             self.xml_path = xml_path
             self.html_path = html_path
             if write_append not in ['w', 'a']:
@@ -649,7 +724,7 @@ class Xml2Html:
             # lib per costruziona html
             self.hb = HtmlBuilder()
             # dict dei dati xml con tag come key
-            self.xml_data_dict = {}
+            self.x_data_dict = {}
             # stack dei nodi che sono si/no container
             self.is_container_stack = [False for i in range(1, 20)]
             # tag per controlo ERRORi
@@ -671,9 +746,8 @@ class Xml2Html:
             Returns:
                 str: html modificato
             """
-            html_lst = self.hb.get_tag_lst()
-            html_over = HtmlOvweflow(
-                self.xml_data_lst, html_lst, self.html_tag_cfg)
+            html_rows = self.hb.get_tag_lst()
+            html_over = HtmlOvweflow(self.x_data_lst, html_rows, self.html_tag_cfg)
             html_over.set_overflow()
             # controllo dei parametri %par% non settati
             self.check_tml()
@@ -686,6 +760,13 @@ class Xml2Html:
         except Exception as e:
             logerr.log("ERROR teixml2html.py write_html()")
             logerr.log(e)
+
+            ou=StringIO()
+            traceback.print_exc(file=ou) 
+            st=ou.getvalue()
+            ou.close()            
+            logerr.log(st)
+
             sys.exit(1)
         return self.html_path
 

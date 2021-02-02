@@ -37,7 +37,8 @@ CSS_START='css_start'
 CSS_END='css_end'
 
 class HtmlOvweflow:
-    """gestisce propriet+ overflov
+    """
+    gestisce propriet+ overflov
     utilizzando <span from="<id>" to="<id>"  type0"<tipo>" 
 
     """

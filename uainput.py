@@ -19,7 +19,7 @@ class Inp:
     ?  visualiza html realizzato
 
         se debug_liv ==1:
-    !  attiva input e disattiva tag settato
+    !   attiva input e disattiva tag settato
 
     """
 
@@ -33,7 +33,7 @@ class Inp:
     def set(self, debug_liv='0'):
         """livello debig
         0: disattivato
-        1:  attivato solo per !
+        1: attivato solo per !
         2: attivato sempre input
         Args:
             debug_liv (int, optional): 0/1/2
@@ -58,8 +58,6 @@ class Inp:
             self.last = self.x
         if stop is False and self.debug is False:
             return
-        # if self.debug is False:
-        #   return
         enabled = False
         if self.x == '':
             enabled = True
