@@ -14,7 +14,7 @@ logerr = Log("a")
 
  
 if __name__ == "__main__":
-    logerr.open("log/writehtml.ERR.log", 1)
+    logerr.open_log("log/writehtml.ERR.log", 1)
     parser = argparse.ArgumentParser()
     if len(sys.argv) == 1:
         print("release: %s  %s" % (__version__, __date__))

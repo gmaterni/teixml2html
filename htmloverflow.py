@@ -50,7 +50,7 @@ class HtmlOvweflow:
             html_lst (lis): lista delle righe html
             html_conf (dict): dict del fie di configurazione csv
         """
-        logerr.open("log/overflow.ERR.log", 1)
+        logerr.open_log("log/overflow.ERR.log", 1)
         self.xml_lst = xml_lst
         self.html_lst = html_lst
         self.html_conf = html_conf

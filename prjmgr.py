@@ -27,6 +27,7 @@ loginfo = Log("a")
 
 def prn_es():
     js = {
+        "log":"1",
         "exe": [
             [
                 "teimxml.py",
@@ -109,8 +110,8 @@ def prn_es():
 class PrjMgr:
 
     def __init__(self):
-        logerr.open("log/prjmgr.ERR.log", 1)
-        loginfo.open("log/prjmgr.log", 0)
+        logerr.open_log("log/prjmgr.ERR.log", 1)
+        loginfo.open_log("log/prjmgr.log",0)
 
 
     def kv_split(self, s, sep):
@@ -287,7 +288,7 @@ class PrjMgr:
             with open(out_path, aw) as f:
                 f.write(text)
                 if aw == 'a':
-                    f.write(os.libnesep)
+                    f.write(os.linesep)
             os.chmod(out_path, 0o666)
             loginfo.log(out_path)
         except Exception as e:
@@ -305,7 +306,7 @@ class PrjMgr:
             with open(out_path, aw) as f:
                 f.write(text)
                 if aw == 'a':
-                    f.write(os.libnesep)
+                    f.write(os.linesep)
             os.chmod(out_path, 0o666)
             loginfo.log(out_path)
         except Exception as e:
@@ -335,6 +336,9 @@ class PrjMgr:
                 self.write_text(v)
             elif k == "copy_file":
                 self.copy_file(v)
+            elif k == "log":
+                l=int(v)
+                loginfo.set_liv(l)
             else:
                 logerr.log(f"ERROR option:{k} not implemented")
                     
@@ -349,7 +353,6 @@ class PrjMgr:
             logerr.log(e)
             sys.exit(1)
         self.parse_json(js)
-
 
 
 if __name__ == "__main__":

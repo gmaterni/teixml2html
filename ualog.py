@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# import datetime
-from io import UnsupportedOperation
 import os
 
 """
-    Log("w")     modalità wrie
-    Log("a")       modlaità append
+    Log("w")         modalità wrie
+    Log("a")          modlaità append
 
-    self.out > 0 print attivato globalmente
-    self.oout <1        disattivato
+    self.out_liv > 0   print attivato globalmente
+    self.out_liv  <1        disattivato
     
     prn()/prn()          attivato localmente anche  
                          se distattivato globalmente
@@ -25,20 +23,20 @@ class Log:
         self.used = False
         self.path_log = None
         self.aw = aappend_write
-        self.out = 0
+        self.out_liv = 0
         self.f = None
         self.msg = ''
 
-    def set_out(self, out):
-        self.out = out
+    def set_liv(self, liv):
+        self.out_liv = liv
         return self
 
-    def open(self, path_log, out=1):
+    def open_log(self, path_log, liv=1):
         # ymd = str(datetime.datetime.today().strftime('%Y%m%d%H%M%S'))
         # ymd = str(datetime.datetime.today().strftime('%Y%m%d_%H_%M'))
         # self.path_log = path_log.replace('.log', f'_{ymd}.log')
         self.path_log = path_log
-        self.out = int(out)
+        self.out_liv = int(liv)
         self.f = None
 
     def open_fie(self):
@@ -47,13 +45,15 @@ class Log:
         self.used = True
         self.f = open(self.path_log, self.aw)
         os.chmod(self.path_log, 0o666)
-
+        
     def prn(self, out=1):
-        if self.out < 1 and out > 0:
+        if self.out_liv < 1 and out > 0:
             print(self.msg)
         return self
 
     def log(self, *args):
+        if self.out_liv < 0:
+            return self
         first = not self.used
         self.open_fie()
         ls = ["None" if x is None else str(x) for x in args]
@@ -64,6 +64,6 @@ class Log:
         self.f.write(os.linesep)
         self.f.flush()
         self.msg = s
-        if self.out > 0:
+        if self.out_liv > 0:
             print(s)
         return self

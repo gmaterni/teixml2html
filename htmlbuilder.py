@@ -97,7 +97,7 @@ class HtmlBuilder:
     # lista dei tag
     def get_tag_lst(self):
         return self.tag_lst
-
+    
     # modifica ultimo tag costruito
     def upd_tag_last(self, tag):
         last = len(self.tag_lst)-1

@@ -7,7 +7,7 @@ import traceback
 import json
 
 logerr=Log("a")
-logerr.open("log/readjson.ERR.log",1)
+logerr.open_log("log/readjson.ERR.log",1)
 
 
 def read_file_json(json_path):

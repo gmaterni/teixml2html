@@ -40,9 +40,9 @@ class XmlSplitEps:
         self.sigla_man = sigla_man
         # path_err = dir_out + "_eps_ERR_.log"
         path_err = os.path.join(dir_out, "split_ERR.log")
-        logerr.open(path_err, out=1)
+        logerr.open_log(path_err, liv=1)
         path_info = os.path.join(dir_out, "spli.log")
-        loginfo.open(path_info, out=0)
+        loginfo.open_log(path_info, liv=0)
         self.body = None
         self.back = None
 

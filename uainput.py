@@ -4,85 +4,63 @@
 import sys
 from pdb import set_trace
 
+
 class Inp:
-    """
-    .   fine
-
-        se debug_liv == 2:
-    -   contimua senza print
-    --  continua con print
-            p='!' attiva input nel continua
-            setta x==''
-    ''  continua fino alla successiva
-        continua fino al successivo tag eguale
-    
-    ?  visualiza html realizzato
-
-        se debug_liv ==1:
-    !   attiva input e disattiva tag settato
-
+    """livello debig
+    0: disattivato attivato per !!
+    1: attivato solo per !
+    2: attivato sempre input
+    Args:
+        debug_liv (int, optional): 0/1/2
     """
 
     def __init__(self):
-        self.debug = False
-        self.pause = False
-        self.x = ''
-        self.last = ''
-        self.ok_prn = True
+        self.liv = 0
+        self.last = '$'
+        self.ok_prn = False
 
-    def set(self, debug_liv='0'):
-        """livello debig
-        0: disattivato
-        1: attivato solo per !
-        2: attivato sempre input
-        Args:
-            debug_liv (int, optional): 0/1/2
-        """       
-        lv=int(debug_liv) 
-        if lv == 1:
-            self.pause = True
-        elif lv == 2:
-            self.debug = True
+    def set_liv(self, liv='0'):
+        if self.liv < 0:
+            return
+        self.liv = int(liv)
+        self.ok_prn=(self.liv>0)
 
     def equals(self, s):
-        return self.x == s
+        return self.last == s
 
     @ property
     def prn(self):
-        return self.ok_prn and self.debug
+        return self.ok_prn
 
     def inp(self, p=''):
-        stop = False
-        if self.pause and p == '!':
-            stop = True
-            self.last = self.x
-        if stop is False and self.debug is False:
+        ok=False
+        if self.liv==0:
             return
-        enabled = False
-        if self.x == '':
-            enabled = True
-        if self.x == '!':
-            enabled = True
-            self.x = ''
-        elif self.x == p:
-            enabled = True
-        elif self.x == '?':
-            enabled = True
-            self.x = self.last
-        elif self.x in ['-', '--']:
-            enabled = False
-        if p == '!':
-            enabled = True
-            self.x = ''
-        if enabled or stop:
-            if enabled :
-                self.last = self.x
-            s = input(p+'>')
-            if s == '.':
+        elif self.liv==1:
+            if p=='!':
+                ok=True
+                self.last=p
+        elif self.liv==2:
+            ok=True
+        if not ok:
+            return
+        if self.last=='$':
+            self.last=p
+        if self.last==p:
+            v = input(p+'>')
+            if v == '.':
                 sys.exit()
-            if s != '':
-                self.x = s
-            if s == '-':
+            elif v == '-':
+                self.liv = -1
                 self.ok_prn = False
-            else:
+            elif v == '--':
+                self.liv = -1
                 self.ok_prn = True
+            elif v=='?':
+                pass
+            elif v!='':
+                self.last=v
+
+
+
+

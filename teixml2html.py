@@ -19,8 +19,8 @@ from readjson import read_json
 from uainput import Inp
 from ualog import Log
 
-__date__ = "30-01-2021"
-__version__ = "0.3.2"
+__date__ = "02-02-2021"
+__version__ = "0.4.0"
 __author__ = "Marta Materni"
 
 
@@ -42,12 +42,16 @@ inp = Inp()
 class Xml2Html:
 
     def __init__(self):
-        logconf.open("log/cfg.json", 0)
-        loginfo.open("log/teixml2html.log", 0)
-        logerr.open("log/teixml2html.ERR.log", 1)
-        logcsverr.open("log/csv.ERR.log", 1)
-        loghtmlerr.open("log/html.ERR.log", 1)
-        logdeb.open("log/DEBUG.log", 1)
+        logconf.open_log("log/cfg.json", 0)
+        
+        loginfo.open_log("log/teixml2html.log", 0)
+        
+        logerr.open_log("log/teixml2html.ERR.log", 1)
+        logcsverr.open_log("log/csv.ERR.log", 1)
+        loghtmlerr.open_log("log/html.ERR.log", 1)
+        
+        logdeb.open_log("log/DEBUG.log", -1)
+        
         self.xml_path = None
         self.html_path = None
         self.html_cfg = None
@@ -203,16 +207,18 @@ class Xml2Html:
                     v = xitems_p.get(k_p, f'%{k}%')
                 else:
                     v = xitems.get(k, f'%{k}%')
+                # elimina # dagli items
+                v=v.replace('#','')
                 text = text.replace(f'%{k}%', v)
             logdeb.log(text)
             logdeb.log("")
         except Exception as e:
-            logcsverr.log(f"ERROR in csv {str(e)}").prn()
-            logcsverr.log("text: {text}").prn()
-            logcsverr.log("params:",pp(xitems)).prn()
+            logcsverr.log(f"ERROR in csv {str(e)}")
+            logcsverr.log("text: {text}")
+            logcsverr.log("params:",pp(xitems))
             tag_w_last = self.get_tag_w_last()
-            logcsverr.log("last w: ", tag_w_last).prn()
-            logcsverr.log(os.linesep).prn()
+            logcsverr.log("last w: ", tag_w_last)
+            logcsverr.log(os.linesep)
             inp.inp("!")
         return text
 
@@ -254,7 +260,7 @@ class Xml2Html:
         Returns:
             [str]: [testo con parametri rimossi]
         """        
-        logdeb.log('**  remove_text_parans_null').prn()
+        logdeb.log('**  remove_text_parans_null')
         logdeb.log(text)
         ptrn = r"%[\w/@,;:.?!-]+%"
         ms = re.findall(ptrn, text)
@@ -276,6 +282,7 @@ class Xml2Html:
             p2 = text.find('"', p1+1)
             s0 = text[:p2]
             s1 = text[p2:]
+            # elimina # dagli attr in html
             text = s0.replace('#', '')+s1
         logdeb.log(text)
         logdeb.log("")
@@ -284,7 +291,7 @@ class Xml2Html:
     def replace_text(self, text, text_par):
         logdeb.log('**  replace_text')
         logdeb.log(text)
-        ptrn = r"%[\w/@,;:.?!-]+%"
+        ptrn=r"%[\w/@,;:.-]*text%"
         ms = re.findall(ptrn, text)
         ks = [x.replace('%', '') for x in ms]
         ok=False
@@ -303,12 +310,12 @@ class Xml2Html:
                 if t0!= text:
                     ok=True
         except Exception as e:
-            logcsverr.log(f"ERROR in csv {str(e)}").prn()
-            logcsverr.log("text: {text}").prn()
-            logcsverr.log("text_par:",text_par).prn()
+            logcsverr.log(f"ERROR in csv {str(e)}")
+            logcsverr.log("text: {text}")
+            logcsverr.log("text_par:",text_par)
             tag_w_last = self.get_tag_w_last()
-            logcsverr.log("last w: ", tag_w_last).prn()
-            logcsverr.log(os.linesep).prn()
+            logcsverr.log("last w: ", tag_w_last)
+            logcsverr.log(os.linesep)
             inp.inp("!")
         logdeb.log(text)
         logdeb.log(ok)
@@ -446,9 +453,9 @@ class Xml2Html:
         #
         # unisce x_items selezionato da c_keys + c_attrs
         html_attrs = self.html_attrs_builder(x_items, c_keys, c_attrs)
+        logdeb.log(f".0 -------- {x_data['tag']}  {x_data['liv']} ---------")
         logdeb.log(str(x_data))
         logdeb.log(str(c_data))
-        logdeb.log("XX ----------------")
         if html_attrs.find('%') > -1:
             logdeb.log(".1 attrs")
             # rimpiazza se esiste %text% con x_data['text']
@@ -475,13 +482,9 @@ class Xml2Html:
             logdeb.log(".4 c_text")         
             c_text = self.set_text_parans(c_text, c_params)
 
-        logdeb.log(">><<")    
+        logdeb.log(".5")    
         logdeb.log(x_text+c_text+x_tail)
         logdeb.log(html_attrs)
-        logdeb.log("==============")
-        if self.dipl_inter=='i':
-            if x_data['tag']=='pc':
-                inp.inp('!')
         #
         html_text = x_text+c_text
         ####################
@@ -493,15 +496,15 @@ class Xml2Html:
         }
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logcsverr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}").prn()
-            logcsverr.log(f"file: {self.xml_path}").prn()
-            logcsverr.log("xml:", pp(x_data)).prn()
-            logcsverr.log("csv:", self.csv_tag_ctrl).prn()
-            logcsverr.log("html:", pp(html_data)).prn()
+            logcsverr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}")
+            logcsverr.log(f"file: {self.xml_path}")
+            logcsverr.log("xml:", pp(x_data))
+            logcsverr.log("csv:", self.csv_tag_ctrl)
+            logcsverr.log("html:", pp(html_data))
             # ultimo tag w prima dell'ERRORe
             tag_w_last = self.get_tag_w_last()
-            logcsverr.log("last w: ", tag_w_last).prn()
-            logcsverr.log(os.linesep).prn()
+            logcsverr.log("last w: ", tag_w_last)
+            logcsverr.log(os.linesep)
             inp.inp("!")
         ################################
         if inp.prn:
@@ -555,12 +558,17 @@ class Xml2Html:
             nd (xml.node): nodo xml
         """
         x_data = self.get_node_data(nd)
-
-        if self.dipl_inter=='d':
-            if x_data['id']=="Gl12w4":
+        ########################## TODO
+        if self.dipl_inter=='i':
+            if x_data['id']=="Gl1w3":
                 # self.trace=True
+                # inp.set_liv(2)
+                #logdeb.set_liv(1)
+                set_trace()
                 pass
-
+        else:
+             logdeb.set_liv(0)
+        ##########################
         # aggiorna xml_data_lst da utilzzare per HtmlOverflow
         self.x_data_lst.append(x_data)
         x_liv = x_data['liv']
@@ -575,6 +583,7 @@ class Xml2Html:
         # se il precedente è un parent contenitor
         prev_is_container = self.is_container_stack[x_liv-1]
         if prev_is_container:
+            # TODO
             set_trace()
             # rimpiazza text  nel tag precdente (il container)
             content = f'<{h_tag} {h_attrs}>{h_text}</{h_tag}>{h_tail}'
@@ -588,29 +597,21 @@ class Xml2Html:
         if self.dipl_inter == 'i':
             h_text = h_text.lower()
             h_tail = h_tail.lower()
-            
-            if x_data['id']=='Gl7pc1':
-                self.trace=True
-            if self.trace:
-                #set_trace()
-                pass
-
             self.set_pc(x_data)
             if self.pc_active:
                 h_text,h_tail=self.after_pc(x_data,h_data,h_text,h_tail)
-
+        #
         if x_is_parent:
             self.hb.opn(x_liv, h_tag, h_attrs, h_text, h_tail)
         else:
             self.hb.ovc(x_liv, h_tag, h_attrs, h_text, h_tail)
-        
-        l=self.hb.get_tag_lst()
-        #logdeb.log(l)
-        logdeb.log("***************")
-
+        #######################
+        l=self.hb.tag_last()
+        logdeb.log(l)
+        #####################
         if inp.prn:
-            loginfo.log(">> html node").prn(1)
-            loginfo.log(self.hb.tag_last()).prn(1)
+            loginfo.log(">> html node").prn()
+            loginfo.log(self.hb.tag_last()).prn()
         inp.inp(x_tag)
         if inp.equals('?'):
             print(self.hb.html_format())
@@ -641,28 +642,26 @@ class Xml2Html:
         for i, row in enumerate(rows):
             ms = re.search(ptrn, row)
             if ms is not None:
-                loghtmlerr.log(f"ERROR nel parametro: {ms.group()}").prn()
+                loghtmlerr.log(f"ERROR nel parametro: {ms.group()}")
                 loghtmlerr.log(f"file: {self.xml_path}")
                 if i > 3:
-                    loghtmlerr.log(rows[i-3].strip()).prn()
+                    loghtmlerr.log(rows[i-3].strip())
                 if i > 2:
-                    loghtmlerr.log(rows[i-2].strip()).prn()
+                    loghtmlerr.log(rows[i-2].strip())
                 if i > 1:
-                    loghtmlerr.log(rows[i-1].strip()).prn()
+                    loghtmlerr.log(rows[i-1].strip())
                 loghtmlerr.log("**")
-                loghtmlerr.log("     "+row.strip()).prn()
+                loghtmlerr.log("     "+row.strip())
                 loghtmlerr.log("**")
                 if i < le-2:
-                    loghtmlerr.log(rows[i+1].strip()).prn()
+                    loghtmlerr.log(rows[i+1].strip())
                 if i < le-3:
-                    loghtmlerr.log(rows[i+2].strip()).prn()
+                    loghtmlerr.log(rows[i+2].strip())
                 if i < le-4:
-                    loghtmlerr.log(rows[i+3].strip()).prn()
-
+                    loghtmlerr.log(rows[i+3].strip())
                 #tag_w_last = self.get_tag_w_last()
-                #loghtmlerr.log("last w: ", tag_w_last).prn()
-
-                loghtmlerr.log(os.linesep).prn()
+                #loghtmlerr.log("last w: ", tag_w_last)
+                loghtmlerr.log(os.linesep)
                 inp.inp('!')
                 #  valutare se exit/1) al verificarsi dell'errore
                 # sys.exit(1)
@@ -711,8 +710,7 @@ class Xml2Html:
             html_path (str): filr name html 
         """
         try:
-            # inp.set(debug_liv)
-            inp.set(0)
+            inp.set_liv(debug_liv)
             self.x_data_lst = []
             self.xml_path = xml_path
             self.html_path = html_path
@@ -760,7 +758,6 @@ class Xml2Html:
         except Exception as e:
             logerr.log("ERROR teixml2html.py write_html()")
             logerr.log(e)
-
             ou=StringIO()
             traceback.print_exc(file=ou) 
             st=ou.getvalue()
