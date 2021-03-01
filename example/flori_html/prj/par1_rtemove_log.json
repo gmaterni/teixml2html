@@ -1,0 +1,21 @@
+{
+  "log": "1",
+  "remove_dir": [
+    {
+      "dir": "xml/par1",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "log",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "html/par1/txt",
+      "pattern": "par1_list.html"
+    },
+    {
+      "dir": "html/par1/syn",
+      "pattern": "par1_list.html"
+    }
+  ]
+}

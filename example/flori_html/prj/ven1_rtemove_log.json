@@ -1,0 +1,21 @@
+{
+  "log": "1",
+  "remove_dir": [
+    {
+      "dir": "xml/ven1",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "log",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "html/ven1/txt",
+      "pattern": "ven1_list.html"
+    },
+    {
+      "dir": "html/ven1/syn",
+      "pattern": "ven1_list.html"
+    }
+  ]
+}

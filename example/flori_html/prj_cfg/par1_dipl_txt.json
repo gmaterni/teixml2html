@@ -1,0 +1,12 @@
+{
+  "html_params": {
+    "_MAN_": "par1",
+    "text_null": "",
+    "_QA_": "\"",
+    "_QC_": "\""
+  },
+  "html_tag_file": "cfg/html.csv",
+  "html_tag_type": "d:txt",
+  "dipl_inter": "d",
+  "before_id": "d"
+}

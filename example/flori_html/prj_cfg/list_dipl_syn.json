@@ -1,0 +1,11 @@
+{
+  "html_params": {
+    "text_null": "",
+    "<null>": "",
+    "</null>": ""
+  },
+  "html_tag_file": "cfg/html.csv",
+  "html_tag_type": "d:syn",
+  "dipl_inter": "d",
+  "before_id": "d"
+}

@@ -1,0 +1,9 @@
+TYPE|TAG_FROM|TAG_TO|SIGLA_FROM|SIGLA_TO
+directspeech|{|}|ODRD|CDRD
+monologue|{_|_}|OMON|CMON
+agglutination|[|]|OAGLS|CAGLS
+agglutination_uncert|[_|_]|OAGLU|CAGLU
+damage|{0%|%0}|ODAM|CDAM
+damage_low|{1%|%1}|ODAML|CDAML
+damage_medium|{2%|%2}|ODAMM|CDAMM
+damage_high|{3%|%3}|ODAMH|CDAMH

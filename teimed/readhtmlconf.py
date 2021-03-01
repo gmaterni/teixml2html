@@ -8,7 +8,7 @@ import traceback
 TAG_COL_NUM = 12
 
 logerr = Log("w")
-logerr.open_log("log/htmlconf.ERR.log", 1)
+logerr.open("log/htmlconf.ERR.log", 1)
 
 
 def t_split(s):

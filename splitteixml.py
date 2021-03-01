@@ -7,7 +7,7 @@ import argparse
 import sys
 import pprint
 from ualog import Log
-from xml_const import *
+from teimed.xml_const import *
 import re
 
 
@@ -40,9 +40,9 @@ class XmlSplitEps:
         self.sigla_man = sigla_man
         # path_err = dir_out + "_eps_ERR_.log"
         path_err = os.path.join(dir_out, "split_ERR.log")
-        logerr.open_log(path_err, liv=1)
+        logerr.open(path_err, liv=1)
         path_info = os.path.join(dir_out, "spli.log")
-        loginfo.open_log(path_info, liv=0)
+        loginfo.open(path_info, liv=0)
         self.body = None
         self.back = None
 
@@ -128,9 +128,9 @@ class XmlSplitEps:
 
     def build_episode_name(self, eps):
         f = self.dir_out
-        dir = os.path.dirname(f)
-        # name = eps
-        path = os.path.join(dir, eps)
+        dirname = os.path.dirname(f)
+        s=str(dirname)
+        path = os.path.join(s, eps)
         return path
 
     def build_list_name(self, ext):
@@ -201,21 +201,22 @@ class XmlSplitEps:
 
         try:
             ep_prev = nd.getprevious()
+            if ep_prev is None:
+                raise Exception("Node previus Not Found.")
             pb = None
             for d in ep_prev.iterdescendants(tag="pb"):
                 pb = d
             if pb is None:
-                raise Exception("get_prev_pb_cb() pb Not Found")
+                raise Exception("pb Not Found")
             pb = build_node(pb)
             cb = None
             for d in ep_prev.iterdescendants(tag="cb"):
                 cb = d
             if cb is None:
-                raise Exception("get_prev_pb_cb() cb Not Found")
+                raise Exception("cb Not Found")
             cb = build_node(cb)
         except Exception as e:
-            logerr.log("splixml.py get_prev_pb_cb.")
-            logerr.log("pb not found.")
+            logerr.log("ERROR splixml.py get_prev_pb_cb()")
             logerr.log(str(e))
             sys.exit(1)
         return [pb, cb]

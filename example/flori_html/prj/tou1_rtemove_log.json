@@ -1,0 +1,21 @@
+{
+  "log": "1",
+  "remove_dir": [
+    {
+      "dir": "xml/tou1",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "log",
+      "pattern": "*.*"
+    },
+    {
+      "dir": "html/tou1/txt",
+      "pattern": "tou1_list.html"
+    },
+    {
+      "dir": "html/tou1/syn",
+      "pattern": "tou1_list.html"
+    }
+  ]
+}

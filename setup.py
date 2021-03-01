@@ -2,34 +2,29 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
-import __init__
+from setuptools import find_packages
+import teimed.__init__
 
 setup(
-    name='teimed2html',
-    version=__init__.__version__,
-    py_modules=['teimed2html'],
+    name='teixml2html',
+    version=teimed.__init__.__version__,
+    py_modules=['teixml2htmlinfo','ualog'],
+    packages=find_packages(),
     scripts=[
-        "copy2all.py",
-        "htmlbuilder.py",
-        "htmlformat.py",
-        "htmloverflow.py",
-        "info.py",
         "prjmgr.py",
-        "readhtmlconf.py",
-        "readjson.py",
+        "maketeimhtmlprj.py",
+        "copyxml.py",
         "splitteixml.py",
         "teixml2html.py",
-        "uainput.py",
-        "ualog.py",
         "writehtmlfile.py",
         "writehtml.py"
     ],
     author="Marta Materni",
     author_email="marta.materni@gmail.com",
-    description="Tools per trasformare TEIML in HTML",
+    description="Tools per trasformare XML TEI in HTML",
     long_description=open('README.rst').read(),
     include_package_data=True,
-    url='http://github.com/gmaterni/mmtei',
+    url='https://github.com/digiflor/',
     license="new BSD License",
     install_requires=['lxml'],
     classifiers=['Development Status :: 1 - Planing',
@@ -42,7 +37,7 @@ setup(
                  'Topic :: Utilities'],
     entry_points={
         'console_scripts': [
-            'teimed2htmlinfo = info:list_modules',
+            'teixml2htmlinfo = info:list_modules',
         ],
     },
 )

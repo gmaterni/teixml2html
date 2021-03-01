@@ -12,8 +12,7 @@ import re
 def pp(data):
     if data is None:
         return ""
-    s = pprint.pformat(data, indent=2, width=120)
-    return s+os.linesep
+    return  pprint.pformat(data, indent=2, width=120)
 
 
 logerr = Log("a")
@@ -50,7 +49,7 @@ class HtmlOvweflow:
             html_lst (lis): lista delle righe html
             html_conf (dict): dict del fie di configurazione csv
         """
-        logerr.open_log("log/overflow.ERR.log", 1)
+        logerr.open("log/overflow.ERR.log", 1)
         self.xml_lst = xml_lst
         self.html_lst = html_lst
         self.html_conf = html_conf
@@ -69,7 +68,7 @@ class HtmlOvweflow:
                 x_type = x_items.get('type', None)
                 if x_from is None or x_to is None or x_type is None:
                     logerr.log("fill_span_list ERROR.").prn()
-                    logerr.log(pp(x_data).prn())
+                    logerr.log(pp(x_data)).prn()
                     sys.exit(1)
                 item = {
                     "id0": x_from,
