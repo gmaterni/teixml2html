@@ -70,6 +70,17 @@ class MakeHtmlPrj(object):
         self.dir_html_witness_name = os.path.join(self.dir_html,self.witness_name)
         self.dir_xml_witness_name = os.path.join(self.dir_xml,self.witness_name)
 
+    def write_work_id(self):
+        name_id="__prj__"
+        text=f"{self.work_name}"
+        path_id=os.path.join(self.dir_work,name_id)
+        if os.path.exists(path_id):
+            return
+        with open(path_id,"w") as f:
+            f.write(text)
+        os.chmod(path_id, stat.S_IRWXG + stat.S_IRWXU + stat.S_IRWXO)
+
+
     def files_of_dir(self, path, ptrn):
         p = pl.Path(path)
         fs = sorted(list(p.glob(ptrn)))
@@ -138,6 +149,7 @@ class MakeHtmlPrj(object):
         # self.print_dir()
         self.copy_prj_from_witness()
         self.copy_prj_cfg_from_witness()
+        self.write_work_id()
 
 def do_main(work, witness):
     mk = MakeHtmlPrj(work, witness)
