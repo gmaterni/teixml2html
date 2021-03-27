@@ -3,16 +3,16 @@
 
 from setuptools import setup
 from setuptools import find_packages
-import teimed.__init__
+import teimx2hlib.__init__
 
 setup(
     name='teixml2html',
-    version=teimed.__init__.__version__,
+    version=teimx2hlib.__init__.__version__,
     py_modules=['teixml2htmlinfo','ualog'],
     packages=find_packages(),
     scripts=[
         "prjmgr.py",
-        "maketeimhtmlprj.py",
+        "teimprjhtmlmake.py",
         "copyxml.py",
         "splitteixml.py",
         "teixml2html.py",

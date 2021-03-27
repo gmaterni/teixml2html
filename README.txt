@@ -132,9 +132,10 @@ htmlformat.py
     formatta i file html  e gli eventuali errori
     html/par1/txt/eps<num>.html => htmlf/par1/txt/eps<num>_F.html
 
-copy_par12all.py
-    copya file di configurazione e di progetto di par1
-    in tor, tou e ven
+copyxml.py
+    copya file xml da un projetto xml ad un progetto html
+     es. copyxml.py flori
+        copia i files xml da flori_xml =>  flori_tml   
 
 libreire
 utilizzate da teixml2html.py

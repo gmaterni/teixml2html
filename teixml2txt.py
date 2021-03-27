@@ -40,12 +40,12 @@ logdeb = Log('a')
 inp = Inp()
 
 
-class Xml2Html:
+class Xml2Txt:
 
     def __init__(self):
         logconf.open("log/cfg.json", 0)
-        log.open("log/teixml2html.log", 0)
-        logerr.open("log/teixml2html.ERR.log", 1)
+        log.open("log/teixml2txt.log", 0)
+        logerr.open("log/teixml2txt.ERR.log", 1)
         logcsverr.open("log/csv.ERR.log", 1)
         loghtmlerr.open("log/html.ERR.log", 1)
         logdeb.open("log/DEBUG.log", -1)
@@ -737,7 +737,7 @@ class Xml2Html:
             try:
                 xml_root = etree.parse(self.xml_path)
             except Exception as e:
-                logerr.log("ERROR teixml2html.py write_html() parse_xml")
+                logerr.log("ERROR teixml2txt.py write_html() parse_xml")
                 logerr.log(e)
                 sys.exit(1)
             for nd in xml_root.iter():
@@ -765,7 +765,7 @@ class Xml2Html:
                 f.write(html)
             fu.chmod(self.html_path)
         except Exception as e:
-            logerr.log("ERROR teixml2html.py write_html()")
+            logerr.log("ERROR teixml2txt.py write_html()")
             logerr.log(e)
             ou = StringIO()
             traceback.print_exc(file=ou)
@@ -777,8 +777,8 @@ class Xml2Html:
         return self.html_path
 
 
-def do_mauin(xml, html, conf, wa='w', deb=False):
-    Xml2Html().write_html(xml, html, conf, wa, deb)
+def do_mauin(xml, txt, conf, wa='w', deb=False):
+    Xml2Txt().write_html(xml, txt, conf, wa, deb)
 
 
 if __name__ == "__main__":
@@ -810,9 +810,9 @@ if __name__ == "__main__":
                         metavar="",
                         help="-i <file_in.xml>")
     parser.add_argument('-o',
-                        dest="html",
+                        dest="txt",
                         required=True,
                         metavar="",
-                        help="-o <file_out.html>")
+                        help="-o <file_out.txt>")
     args = parser.parse_args()
-    do_mauin(args.xml, args.html, args.cfg, args.wa, args.deb)
+    do_mauin(args.xml, args.txt, args.cfg, args.wa, args.deb)

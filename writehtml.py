@@ -5,7 +5,7 @@ import sys
 import argparse
 import os
 from ualog import Log
-import teimed.file_utils as fut
+import teimx2hlib.file_utils as fut
 
 __date__ = "'4-01-2021"
 __version__ = "0.1.0"

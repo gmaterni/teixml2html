@@ -42,5 +42,9 @@ if __name__ == "__main__":
         copy_xml(name)        
     else:
         print("copy_xml.py <nome progetto>")
-        print("es. per  flori_xml,flori_html")
+        print("es. per  flori_xml")
         print("digitare copy_xml.py flori")
+
+
+
+

@@ -7,7 +7,7 @@ import argparse
 import sys
 import pprint
 from ualog import Log
-from teimed.xml_const import *
+from teimx2hlib.xml_const import *
 import re
 
 
