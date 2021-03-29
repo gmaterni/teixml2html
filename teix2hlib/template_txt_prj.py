@@ -38,7 +38,7 @@ prj = {
                     "teixml2txt.py",
                     "-i xml/witness/$F.xml",
                     "-o txt/witness/txt/$F.txt",
-                    "-c prj_cfg/witness_inter_txt.json",
+                    "-c prj_cfg/witness_txt.json",
                     "-wa w "
                 ]
             ]
@@ -69,7 +69,7 @@ prj = {
 
 prj_cfg = {
 
-    "list_inter_txt": {
+    "list_txt": {
         "txt_params": {
             "text_null": "",
             "<null>": "",
@@ -79,7 +79,7 @@ prj_cfg = {
         "before_id": "i"
     },
 
-    "witness_inter_txt": {
+    "witness_txt": {
         "txt_params": {
             "text_null": "",
             "_QA_": "\"",

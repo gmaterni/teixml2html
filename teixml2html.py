@@ -10,13 +10,13 @@ import sys
 import traceback
 from pdb import set_trace
 from lxml import etree
-from teimx2hlib.htmlbuilder import HtmlBuilder
-from teimx2hlib.htmloverflow import HtmlOvweflow
-from teimx2hlib.readhtmlconf import read_html_conf
-from teimx2hlib.readjson import read_json
-from teimx2hlib.uainput import Inp
+from teix2hlib.htmlbuilder import HtmlBuilder
+from teix2hlib.htmloverflow import HtmlOvweflow
+from teix2hlib.readhtmlconf import read_html_conf
+from teix2hlib.readjson import read_json
+from teix2hlib.uainput import Inp
 from ualog import Log
-from teimx2hlib import file_utils as fu
+from teix2hlib import file_utils as fu
 
 __date__ = "01-03-2021"
 __version__ = "0.4.1"

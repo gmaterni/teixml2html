@@ -5,34 +5,32 @@ import sys
 import stat
 import pathlib as pl
 from pdb import set_trace
-from teimx2hlib import template_txt_prj
+from teix2hlib import template_html_prj
 import json
 
-__date__ = "01-03-2021"
-__version__ = "0.1.0"
+__date__ = "29-03-2021"
+__version__ = "0.1.1"
 __author__ = "Marta Materni"
 
 help = """
 prjmgr.py prj/<prj.json>
-
-witness_checkover.json
-witness_checktxt.json
-witness_rmovelog.json
-witness_merge.json
-witness_txt.json
+witness_removelog.json
 witness_xml.json
+witness_syn.json
+witness_syn_pannel.json
+witness_txt.json
+witness_txt_pannel.json
 witness.json
 -------------------------------
-prjmgr.py witness_prj/<prj.json>
-
-text_checkover.json
-text_checktxt.json
-text_removelog.json
-text_txt.json
-text_lineword.json
-text_note.json
-text_over.json
-text.json
+prj_cfg&
+list_dipl_syn.json
+list_dipl_txt.json
+list_inter_syn.json
+list_inter_txt.json
+witness_dipl_syn.json
+witness_dipl_txt.json
+witness_inter_syn.json
+witness_inter_txt.json
 """
 
 TEIM_WORK = "teim_work"
@@ -41,11 +39,11 @@ LOG = "log"
 CFG = "cfg"
 PRJ_CFG = "prj_cfg"
 XML = "xml"
-TXT = "txt"
+HTML = "html"
 WITNESS = "witness"
 
 
-class TeimPrjTxtMake(object):
+class TeiPrjHtmlMake(object):
 
     def __init__(self,
                  work_name,
@@ -59,15 +57,15 @@ class TeimPrjTxtMake(object):
         self.dir_work = work_name
         self.witness_name = witness_name
         #self.witness_log_x = f"{witness_name}_log"
-        # dir progetto  work work/prj work/cfg work/log work/xml work/txt
+        # dir progetto  work work/prj work/cfg work/log work/xml work/html
         self.dir_prj = os.path.join(self.dir_work, PRJ)
         self.dir_prj_cfg = os.path.join(self.dir_work, PRJ_CFG)
         self.dir_cfg = os.path.join(self.dir_work, CFG)
         self.dir_xml = os.path.join(self.dir_work, XML)
         self.dir_log = os.path.join(self.dir_work, LOG)
-        self.dir_txt = os.path.join(self.dir_work, TXT)
-        # dir txt/witness xml/witness
-        self.dir_txt_witness_name = os.path.join(self.dir_txt,self.witness_name)
+        self.dir_html = os.path.join(self.dir_work, HTML)
+        # dir html/witness xml/witness
+        self.dir_html_witness_name = os.path.join(self.dir_html,self.witness_name)
         self.dir_xml_witness_name = os.path.join(self.dir_xml,self.witness_name)
 
     def write_work_id(self):
@@ -96,7 +94,7 @@ class TeimPrjTxtMake(object):
     # copia dal template per progetti witntnes
     ######################
     def copy_prj_from_witness(self):
-        for k, v in template_txt_prj.prj.items():
+        for k, v in template_html_prj.prj.items():
             prj = os.path.join(self.tmpl_prj, k)
             x = prj.replace(TEIM_WORK, self.work_name)
             x = x.replace(WITNESS, self.witness_name)
@@ -112,7 +110,7 @@ class TeimPrjTxtMake(object):
     # copia dal template per configurazione witntnes
     ######################
     def copy_prj_cfg_from_witness(self):
-        for k, v in template_txt_prj.prj_cfg.items():
+        for k, v in template_html_prj.prj_cfg.items():
             prj = os.path.join(self.tmpl_prj_cfg, k)
             x = prj.replace(TEIM_WORK, self.work_name)
             x = x.replace(WITNESS, self.witness_name)
@@ -132,7 +130,7 @@ class TeimPrjTxtMake(object):
         print(self.dir_prj)
         print(self.dir_prj_cfg)
         print(self.dir_xml)
-        print(self.dir_txt)
+        print(self.dir_html)
         print(self.dir_log)
 
     def make_dirs(self):
@@ -141,10 +139,10 @@ class TeimPrjTxtMake(object):
         self.make_dir(self.dir_prj)
         self.make_dir(self.dir_prj_cfg)
         self.make_dir(self.dir_xml)
-        self.make_dir(self.dir_txt)
+        self.make_dir(self.dir_html)
         self.make_dir(self.dir_log)
         #
-        self.make_dir(self.dir_txt_witness_name)
+        self.make_dir(self.dir_html_witness_name)
         self.make_dir(self.dir_xml_witness_name)
         # self.print_dir()
         self.copy_prj_from_witness()
@@ -152,7 +150,7 @@ class TeimPrjTxtMake(object):
         self.write_work_id()
 
 def do_main(work, witness):
-    mk = TeimPrjTxtMake(work, witness)
+    mk = TeiPrjHtmlMake(work, witness)
     mk.make_dirs()
 
 def do_main_csv(project):
@@ -186,8 +184,8 @@ if __name__ == "__main__":
         work, witness = sys.argv[1:]
         do_main_args(work, witness)
     else:
-        print("teimprjtxtmake.py <project.csv>")
+        print("maketeimhtmlprj.py <project.csv>")
         print("or if exists work")
-        print("teimprjtxtmake.py <work> <witnes>")
+        print("maketeimhtmlprj.py <work> <witnes>")
         print(help)
         sys.exit(0)
