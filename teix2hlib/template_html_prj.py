@@ -194,8 +194,8 @@ prj = {
         ]
     },
 
-    "witness_rtemove_log": {
-        "log": "1",
+    "witness_remove_log": {
+        "log": "0",
         "remove_dir": [
             {
                 "dir": "xml/witness",

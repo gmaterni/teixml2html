@@ -12,7 +12,7 @@ setup(
     packages=find_packages(),
     scripts=[
         "prjmgr.py",
-        "teiprjhtmlmake.py",
+        "teimprjhtmlmake.py",
         "copyxml.py",
         "splitteixml.py",
         "teixml2html.py",

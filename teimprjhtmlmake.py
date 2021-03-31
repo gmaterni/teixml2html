@@ -8,8 +8,8 @@ from pdb import set_trace
 from teix2hlib import template_html_prj
 import json
 
-__date__ = "29-03-2021"
-__version__ = "0.1.1"
+__date__ = "31-03-2021"
+__version__ = "0.1.3"
 __author__ = "Marta Materni"
 
 help = """
@@ -43,7 +43,7 @@ HTML = "html"
 WITNESS = "witness"
 
 
-class TeiPrjHtmlMake(object):
+class TeimPrjHtmlMake(object):
 
     def __init__(self,
                  work_name,
@@ -124,7 +124,7 @@ class TeiPrjHtmlMake(object):
 
 
     def print_dir(self):
-        print("======================")
+        print(f">>> {self.witness_name}")
         print(self.dir_work)
         print(self.dir_cfg)
         print(self.dir_prj)
@@ -132,6 +132,7 @@ class TeiPrjHtmlMake(object):
         print(self.dir_xml)
         print(self.dir_html)
         print(self.dir_log)
+        print("")
 
     def make_dirs(self):
         self.make_dir(self.dir_work)
@@ -150,8 +151,9 @@ class TeiPrjHtmlMake(object):
         self.write_work_id()
 
 def do_main(work, witness):
-    mk = TeiPrjHtmlMake(work, witness)
+    mk = TeimPrjHtmlMake(work, witness)
     mk.make_dirs()
+    mk.print_dir()
 
 def do_main_csv(project):
     try:
@@ -161,7 +163,8 @@ def do_main_csv(project):
             sp = row.strip().split("|")
             if len(sp) < 2:
                 return
-            work, witness = sp
+
+            work, witness = sp[0:2]
             do_main(work, witness)
     except Exception as e:
         print("EROROR in <name>_prj.csv")
