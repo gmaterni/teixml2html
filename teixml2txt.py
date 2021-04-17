@@ -10,7 +10,7 @@ import sys
 import traceback
 from lxml import etree
 from teixml2lib.txtbuilder import TxtBuilder
-from teixml2lib.readtxtconf import read_tag_csvf
+from teixml2lib.readtxtconf import read_text_tag
 from teixml2lib.readjson import read_json
 from teixml2lib.uainput import Inp
 from teixml2lib.ualog import Log
@@ -147,7 +147,17 @@ class Xml2Txt:
             'is_parent': self.node_is_parent(nd)
         }
 
-    def get_data_row_txt_csv(self, x_data):
+
+    def get_data_row_text_csv(self, x_data):
+        """ ritorna dati della row di <tag>.csv individuata
+            dall tag o tag+attr di x_data del in xml_data_dict
+            la key è quella ottenuta dal tag xml 
+            e l'eventuale/i attributo
+        Args:
+            x_data (dict):xml data
+        Returns:
+            [row_data (dict): dati estartti da csv
+        """
         xml_tag = x_data['tag']
         row_data = self.txt_tag_cfg.get(xml_tag, None)
         if row_data is None:
@@ -175,9 +185,10 @@ class Xml2Txt:
         self.x_data_dict[csv_tag] = x_data
         return row_data
 
+
     def build_txt_data(self, nd):
         x_data = self.get_node_data(nd)
-        c_data = self. get_data_row_txt_csv(x_data)
+        c_data = self. get_data_row_text_csv(x_data)
         txt_data = {
             'id': x_data.get('id',0),
             'is_parent':x_data.get('is_parent',False),
@@ -277,7 +288,10 @@ class Xml2Txt:
             log.log(f"csv_path:{csv_path}")
             if csv_path is None:
                 raise Exception("ERROR txt.csv is null.")
-            self.txt_tag_cfg = read_tag_csvf(csv_path, "i:txt")
+            # type : d:txt d:syn i:txt i:syn
+            self.txt_tag_cfg = read_text_tag(csv_path, "i:txt")
+            #logconf.log(pp(self.html_tag_cfg).replace("'", '"')).prn(0)
+
         except Exception as e:
             logerr.log("ERROR: read_conf())")
             logerr.log(e)

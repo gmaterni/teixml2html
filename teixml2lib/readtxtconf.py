@@ -3,7 +3,7 @@
 from pdb import set_trace
 import os
 import sys
-from teixml2lib.ualog import Log
+from ualog import Log
 import traceback
 TAG_COL_NUM = 12
 
@@ -138,18 +138,11 @@ def tags_cvs2json(csv, html_tag_type):
             sys.exit(1)
     return js
 
-"""
-def read_html_conf(csv_path, html_tag_type):
-    with open(csv_path, "r+") as f:
-        csv = f.readlines()
-    js = tags_cvs2json(csv, html_tag_type)
-    return js
-"""
 
-def read_tag_csvf(csv_path, html_tag_type):
+def read_text_tag(csv_path, html_tag_type):
     with open(csv_path, "r+") as f:
         txt = f.read()
-    txt=txt.replace(f'{os.linesep}','')
+    txt=txt.replace(f'\{os.linesep}','')
     csv=txt.split(os.linesep)
     js = tags_cvs2json(csv, html_tag_type)
     return js

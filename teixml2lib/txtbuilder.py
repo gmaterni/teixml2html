@@ -167,7 +167,7 @@ class TxtBuilder:
                 self._data_txt_lst.append(data_txt)
         #
         self.fill_span_list()
-        à
+        
         for i,data_txt in enumerate(self._data_txt_lst):
             self.set_data_txt(i,data_txt)
         #

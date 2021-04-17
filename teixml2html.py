@@ -12,7 +12,7 @@ from pdb import set_trace
 from lxml import etree
 from teixml2lib.htmlbuilder import HtmlBuilder
 from teixml2lib.htmloverflow import HtmlOvweflow
-from teixml2lib.readhtmlconf import read_html_conf
+from teixml2lib.readhtmlconf import read_html_tag
 from teixml2lib.readjson import read_json
 from teixml2lib.uainput import Inp
 from ualog import Log
@@ -688,7 +688,8 @@ class Xml2Html:
             html_tag_type = self.html_cfg.get("html_tag_type", None)
             if html_tag_type is None:
                 raise Exception("ERROR html_tag_type is null.")
-            self.html_tag_cfg = read_html_conf(csv_path, html_tag_type)
+            self.html_tag_cfg = read_html_tag(csv_path, html_tag_type)
+
             logconf.log(pp(self.html_tag_cfg).replace("'", '"')).prn(0)
         except Exception as e:
             logerr.log("ERROR: read_conf())")
