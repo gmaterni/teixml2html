@@ -4,8 +4,7 @@ import os
 import sys
 import stat
 import pathlib as pl
-from pdb import set_trace
-from teimx2hlib import witness_text_prj
+from teixml2lib import template_txt_prj
 import json
 
 __date__ = "29-03-2021"
@@ -34,7 +33,7 @@ TXT = "txt"
 WITNESS = "witness"
 
 
-class TeimPrjTxtMake(object):
+class TeiPrjTxtMake(object):
 
     def __init__(self,
                  work_name,
@@ -85,7 +84,7 @@ class TeimPrjTxtMake(object):
     # copia dal template per progetti witntnes
     ######################
     def copy_prj_from_witness(self):
-        for k, v in witness_text_prj.prj.items():
+        for k, v in template_txt_prj.prj.items():
             prj = os.path.join(self.tmpl_prj, k)
             x = prj.replace(TEIM_WORK, self.work_name)
             x = x.replace(WITNESS, self.witness_name)
@@ -101,7 +100,7 @@ class TeimPrjTxtMake(object):
     # copia dal template per configurazione witntnes
     ######################
     def copy_prj_cfg_from_witness(self):
-        for k, v in witness_text_prj.prj_cfg.items():
+        for k, v in template_txt_prj.prj_cfg.items():
             prj = os.path.join(self.tmpl_prj_cfg, k)
             x = prj.replace(TEIM_WORK, self.work_name)
             x = x.replace(WITNESS, self.witness_name)
@@ -141,7 +140,7 @@ class TeimPrjTxtMake(object):
         self.write_work_id()
 
 def do_main(work, witness):
-    mk = TeimPrjTxtMake(work, witness)
+    mk = TeiPrjTxtMake(work, witness)
     mk.make_dirs()
 
 def do_main_csv(project):
@@ -175,8 +174,8 @@ if __name__ == "__main__":
         work, witness = sys.argv[1:]
         do_main_args(work, witness)
     else:
-        print("teimprjtxtmake.py <project.csv>")
+        print("teiprjtxtmake.py <project.csv>")
         print("or if exists work")
-        print("teimprjtxtmake.py <work> <witnes>")
+        print("teiprjtxtmake.py <work> <witnes>")
         print(help)
         sys.exit(0)

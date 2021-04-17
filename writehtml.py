@@ -4,8 +4,8 @@ from pdb import set_trace
 import sys
 import argparse
 import os
-from ualog import Log
-import teix2hlib.file_utils as fut
+from teixml2lib.ualog import Log
+import teixml2lib.file_utils as fut
 
 __date__ = "'4-01-2021"
 __version__ = "0.1.0"

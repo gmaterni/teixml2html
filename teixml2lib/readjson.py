@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #import os
 import sys
-from ualog import Log
+from teixml2lib.ualog import Log
 import traceback 
 import json
 

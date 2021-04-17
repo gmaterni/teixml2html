@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pdb import set_trace
-from ualog import Log
+from teixml2lib.ualog import Log
 import pprint
 import os
 import sys
@@ -15,7 +15,6 @@ def pp(data):
     return  pprint.pformat(data, indent=2, width=120)
 
 
-logerr = Log("a")
 
 """
 text_start, txt_end 
@@ -49,7 +48,8 @@ class HtmlOvweflow:
             html_lst (lis): lista delle righe html
             html_conf (dict): dict del fie di configurazione csv
         """
-        logerr.open("log/overflow.ERR.log", 1)
+        self.logerr = Log("a")
+        self.logerr.open("log/overflow.ERR.log", 1)
         self.xml_lst = xml_lst
         self.html_lst = html_lst
         self.html_conf = html_conf
@@ -67,8 +67,8 @@ class HtmlOvweflow:
                 x_to = x_items.get('to', None)
                 x_type = x_items.get('type', None)
                 if x_from is None or x_to is None or x_type is None:
-                    logerr.log("fill_span_list ERROR.").prn()
-                    logerr.log(pp(x_data)).prn()
+                    self.logerr.log("fill_span_list ERROR.").prn()
+                    self.logerr.log(pp(x_data)).prn()
                     sys.exit(1)
                 item = {
                     "id0": x_from,
@@ -169,8 +169,8 @@ class HtmlOvweflow:
                         s=f'{s}{c_text}'
             return s
         except Exception as e:
-            logerr.log(e)
-            logerr.log(html_row)
+            self.logerr.log(e)
+            self.logerr.log(html_row)
             sys.exit(1)
 
     def find_w_id(self, r, id):
@@ -222,7 +222,7 @@ class HtmlOvweflow:
                     self.html_lst[i] = row
         if flag == 0:
             # errroe nlla gestione inizio gine
-            logerr.log(f"{id_from} {id_to}  {span_type}   Not Found")
+            self.logerr.log(f"{id_from} {id_to}  {span_type}   Not Found")
 
     def set_overflow(self):
         self.fill_span_list()

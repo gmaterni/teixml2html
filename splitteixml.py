@@ -6,8 +6,8 @@ import os
 import argparse
 import sys
 import pprint
-from ualog import Log
-from teix2hlib.xml_const import *
+from teixml2lib.ualog import Log
+from teixml2lib.xml_const import *
 import re
 
 

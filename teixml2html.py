@@ -10,13 +10,13 @@ import sys
 import traceback
 from pdb import set_trace
 from lxml import etree
-from teix2hlib.htmlbuilder import HtmlBuilder
-from teix2hlib.htmloverflow import HtmlOvweflow
-from teix2hlib.readhtmlconf import read_html_conf
-from teix2hlib.readjson import read_json
-from teix2hlib.uainput import Inp
+from teixml2lib.htmlbuilder import HtmlBuilder
+from teixml2lib.htmloverflow import HtmlOvweflow
+from teixml2lib.readhtmlconf import read_html_conf
+from teixml2lib.readjson import read_json
+from teixml2lib.uainput import Inp
 from ualog import Log
-from teix2hlib import file_utils as fu
+from teixml2lib import file_utils as fu
 
 __date__ = "01-03-2021"
 __version__ = "0.4.1"
@@ -562,7 +562,6 @@ class Xml2Html:
                 # inp.set_liv(2)
                 # set_trace()
                 # logdeb.set_liv(1)
-
                 # set_trace()
                 pass
         else:
@@ -584,7 +583,7 @@ class Xml2Html:
         prev_is_container = self.is_container_stack[x_liv-1]
         if prev_is_container:
             # TODO
-            set_trace()
+            # set_trace()
             # rimpiazza text  nel tag precdente (il container)
             content = f'<{h_tag} {h_attrs}>{h_text}</{h_tag}>{h_tail}'
             s = self.hb.tag_last()
@@ -735,7 +734,8 @@ class Xml2Html:
             #
             self.hb.init()
             try:
-                xml_root = etree.parse(self.xml_path)
+                parser = etree.XMLParser(ns_clean=True)
+                xml_root = etree.parse(self.xml_path,parser)
             except Exception as e:
                 logerr.log("ERROR teixml2html.py write_html() parse_xml")
                 logerr.log(e)

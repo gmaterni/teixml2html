@@ -4,8 +4,7 @@ import os
 import sys
 import stat
 import pathlib as pl
-from pdb import set_trace
-from teix2hlib import template_html_prj
+from teixml2lib import template_html_prj
 import json
 
 __date__ = "31-03-2021"
@@ -43,7 +42,7 @@ HTML = "html"
 WITNESS = "witness"
 
 
-class TeimPrjHtmlMake(object):
+class TeiPrjHtmlMake(object):
 
     def __init__(self,
                  work_name,
@@ -151,7 +150,7 @@ class TeimPrjHtmlMake(object):
         self.write_work_id()
 
 def do_main(work, witness):
-    mk = TeimPrjHtmlMake(work, witness)
+    mk = TeiPrjHtmlMake(work, witness)
     mk.make_dirs()
     mk.print_dir()
 
@@ -187,8 +186,8 @@ if __name__ == "__main__":
         work, witness = sys.argv[1:]
         do_main_args(work, witness)
     else:
-        print("maketeimhtmlprj.py <project.csv>")
+        print("teiprjhtmlmake.py <project.csv>")
         print("or if exists work")
-        print("maketeimhtmlprj.py <work> <witnes>")
+        print("teiprjhtmlmake.py <work> <witnes>")
         print(help)
         sys.exit(0)

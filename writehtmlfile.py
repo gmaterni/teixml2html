@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import argparse
-from ualog import Log
+from teixml2lib.ualog import Log
 
 __date__ = "04-01-2021"
 __version__ = "0.1.0"
