@@ -15,6 +15,7 @@ from teixml2lib.readjson import read_json
 from teixml2lib.uainput import Inp
 from teixml2lib.ualog import Log
 from teixml2lib import file_utils as fu
+from pdb import set_trace
 
 __date__ = "17-04-2021"
 __version__ = "0.1.1"
@@ -39,15 +40,13 @@ class Xml2Txt:
     def __init__(self):
         log.open("log/teixml2txt.log", 0)
         logerr.open("log/teixml2txt.ERR.log", 1)
-
         self.xml_path = ''
         self.txt_path = None
         self.txt_cfg = None
         self.txt_tag_cfg = None
         self.txt_builder = None
-
-        self.x_data_dict = {}
-        
+        self.csv_tag_ctrl=""
+        self.x_data_dict = {}      
         self.trace = False
 
     def node_liv(self, node):
@@ -147,7 +146,6 @@ class Xml2Txt:
             'is_parent': self.node_is_parent(nd)
         }
 
-
     def get_data_row_text_csv(self, x_data):
         """ ritorna dati della row di <tag>.csv individuata
             dall tag o tag+attr di x_data del in xml_data_dict
@@ -189,6 +187,16 @@ class Xml2Txt:
     def build_txt_data(self, nd):
         x_data = self.get_node_data(nd)
         c_data = self. get_data_row_text_csv(x_data)
+        # ERRORi nella gestione del files csv dei tag html
+        if self.csv_tag_ctrl.find('_x') > -1:
+            logerr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}")
+            logerr.log(f"file: {self.xml_path}")
+            logerr.log("xml:", pp(x_data))
+            logerr.log("csv:", self.csv_tag_ctrl)
+            logerr.log(os.linesep)
+            inp.inp("!")
+            set_trace()
+        #############################################
         txt_data = {
             'id': x_data.get('id',0),
             'is_parent':x_data.get('is_parent',False),
@@ -218,7 +226,7 @@ class Xml2Txt:
             }
         return txt_data
 
-    def prn_data(self,d):
+    def prn_data(self,d,v=1):
         txt_id = d['id']
         is_parent = d['is_parent']
         txt_items = d['items']
@@ -243,41 +251,66 @@ class Xml2Txt:
         t_sp = d['t_sp']
         t_ln = d['t_ln']
         t_flag = d['t_flag']
-        
-        log.log("--- txt_data").prn()
-        log.log(f"id: {txt_id}").prn()
-        log.log(f"is_parent: {is_parent}").prn()
-        log.log(f"liv: {txt_liv     }").prn()
-        log.log(f"txt_items: {txt_items}").prn()
-        log.log(f"txt_tag: {txt_tag}").prn()
-        log.log(f"txt_text: {txt_text}").prn()
-        log.log(f"txt_tail: {txt_tail}").prn()
+        if v==0 :
+            log.log(">> xml_data").prn()
+            log.log(f"id: {txt_id}").prn()
+            log.log(f"is_parent: {is_parent}").prn()
+            log.log(f"liv: {txt_liv     }").prn()
+            log.log(f"txt_items: {txt_items}").prn()
+            log.log(f"txt_tag: {txt_tag}").prn()
+            log.log(f"txt_text: {txt_text}").prn()
+            log.log(f"txt_tail: {txt_tail}").prn()
 
-        log.log("--- c_data").prn()
-        #log.log(f"c_xml_tag: {c_xml_tag}").prn()
-        # log.log(f"c_tag: {c_tag}").prn()
-        log.log(f"c_keys: {c_keys}").prn()
-        log.log(f"c_attrs: {c_attrs}").prn()
-        log.log(f"c_text: {c_text}").prn()
-        log.log(f"c_params: {c_params}").prn()
-        log.log(f"c_paren: {c_parent}").prn()
+            log.log(">> csv_data").prn()
+            #log.log(f"c_xml_tag: {c_xml_tag}").prn()
+            # log.log(f"c_tag: {c_tag}").prn()
+            log.log(f"c_keys: {c_keys}").prn()
+            log.log(f"c_attrs: {c_attrs}").prn()
+            log.log(f"c_text: {c_text}").prn()
+            log.log(f"c_params: {c_params}").prn()
+            log.log(f"c_paren: {c_parent}").prn()
 
-        log.log("--- t_data").prn()
-        log.log(f"t_i: {t_i}").prn()
-        log.log(f"t_type: {t_type}").prn()
-        log.log(f"t_up: {t_up}").prn()
-        log.log(f"t_start: {t_start}").prn()
-        log.log(f"t_end: {t_end}").prn()
-        log.log(f"t_sp: {t_sp}").prn()
-        log.log(f"t_ln: {t_ln}").prn()
-        log.log(f"t_flag: {t_flag}").prn()
+            log.log(">> t_data").prn()
+            log.log(f"t_i: {t_i}").prn()
+            log.log(f"t_type: {t_type}").prn()
+            log.log(f"t_up: {t_up}").prn()
+            log.log(f"t_start: {t_start}").prn()
+            log.log(f"t_end: {t_end}").prn()
+            log.log(f"t_sp: {t_sp}").prn()
+            log.log(f"t_ln: {t_ln}").prn()
+            log.log(f"t_flag: {t_flag}").prn()
+        elif v==1:
+            log.log(">> xml_data").prn()
+            log.log(f"id: {txt_id}").prn()
+            log.log(f"is_parent: {is_parent}").prn()
+            log.log(f"liv: {txt_liv     }").prn()
+            log.log(f"txt_items: {txt_items}").prn()
+            log.log(f"txt_tag: {txt_tag}").prn()
+            log.log(f"txt_text: {txt_text}").prn()
+            log.log(f"txt_tail: {txt_tail}").prn()
 
+            log.log(">> csv_data").prn()
+            #log.log(f"c_keys: {c_keys}").prn()
+            log.log(f"c_attrs: {c_attrs}").prn()
+            log.log(f"c_text: {c_text}").prn()
+            log.log(f"c_params: {c_params}").prn()
+            #log.log(f"c_paren: {c_parent}").prn()
 
+            log.log(">> t_data").prn()
+            log.log(f"t_i: {t_i}").prn()
+            #log.log(f"t_type: {t_type}").prn()
+            log.log(f"t_up: {t_up}").prn()
+            #log.log(f"t_start: {t_start}").prn()
+            #log.log(f"t_end: {t_end}").prn()
+            log.log(f"t_sp: {t_sp}").prn()
+            #log.log(f"t_ln: {t_ln}").prn()
+            log.log(f"t_flag: {t_flag}").prn()
+            
     def prn_data_lst(self):
         log.log('===============').prn()
         for d in self.txt_builder._data_lst:
-            self.prn_data(d)
             log.log('').prn()
+            self.prn_data((d))
             inp.inp('!')
 
 
@@ -304,8 +337,9 @@ class Xml2Txt:
                   write_append = 'w',
                   debug_liv = '0'):
         try:
-            debug_liv=2
+            debug_liv=1
             inp.set_liv(debug_liv)
+
             self.xml_path=xml_path
             self.txt_path=txt_path
             if write_append not in ['w', 'a']:
