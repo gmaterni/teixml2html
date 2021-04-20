@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 import argparse
 import os
 from io import StringIO
@@ -19,7 +18,7 @@ from teixml2lib import file_utils as fu
 from pdb import set_trace
 
 __date__ = "20-04-2021"
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __author__ = "Marta Materni"
 
 
@@ -38,11 +37,7 @@ class Xml2Txt:
         self.logerr.open("log/teixml2txt.ERR.log", 1)
         self.xml_path = ''
         self.txt_path = None
-        self.txt_cfg = None
-        self.txt_tag_cfg = None
         self.txt_builder = None
-        self.csv_tag_ctrl=""
-        self.x_data_dict = {}      
         self.trace = False
 
     def node_liv(self, node):
@@ -71,14 +66,17 @@ class Xml2Txt:
         return js
 
     def node_tag(self, nd):
-        tag = nd.tag
-        tag = tag if type(nd.tag) is str else "XXX"
-        p = tag.rfind('}')
-        if p > 1:
-            self.logerr.log("ERROR in  xml")
-            self.logerr.log(nd.tag)
-            sys.exit(1)
-        return tag.strip()
+        try:
+            tag = nd.tag
+            tag = tag if type(nd.tag) is str else "XXX"
+            pid = tag.find('}')
+            if pid > 0:
+                tag = tag[pid + 1:]
+            return tag.strip()
+        except Exception as e:
+            self.logerr.log("ERROR in xml")
+            self.logerr.log(str(e))
+            return "XXX"
 
     def node_id(self, nd):
         s = ''
@@ -129,7 +127,7 @@ class Xml2Txt:
         if id != '':
             id_num = self.node_id_num(id)
             items['id_num'] = id_num
-        return {
+        js={
             'id': id,
             'liv': self.node_liv(nd),
             'tag': self.node_tag(nd),
@@ -141,79 +139,18 @@ class Xml2Txt:
             'val': "",
             'is_parent': self.node_is_parent(nd)
         }
-
-    def get_data_row_text_csv(self, x_data):
-        """ ritorna dati della row di <tag>.csv individuata
-            dall tag o tag+attr di x_data del in xml_data_dict
-            la key è quella ottenuta dal tag xml 
-            e l'eventuale/i attributo
-        Args:
-            x_data (dict):xml data
-        Returns:
-            [row_data (dict): dati estartti da csv
-        """
-        xml_tag = x_data['tag']
-        row_data = self.txt_tag_cfg.get(xml_tag, None)
-        if row_data is None:
-            row_data = self.txt_tag_cfg.get('x', {})
-            csv_tag = xml_tag
-            self.csv_tag_ctrl = f'_x_{csv_tag}'            
-        else:
-            tag = row_data.get('tag', f"_x_{xml_tag}")
-            p = tag.find('+')
-            if p > -1:
-                x_items = x_data['items']
-                lsk = tag.split('+')[1:]
-                lsv = [x_items[k] for k in lsk if k in x_items.keys()]
-                attrs_val = '+'.join(lsv)
-                csv_tag = xml_tag+'+'+attrs_val
-                row_data = self.txt_tag_cfg.get(csv_tag, None)
-                if row_data is None:
-                    row_data = self.txt_tag_cfg.get('x+y', None)
-                    self.csv_tag_ctrl = f'_xy_{csv_tag}'
-                else:
-                    self.csv_tag_ctrl = csv_tag
-            else:
-                csv_tag = xml_tag
-                self.csv_tag_ctrl = csv_tag
-        # TODO aggiunta a row_data csv_data  utilizzata come key
-        # nella ricerca del json risultante dalla lettura di csc
-        # può sosituire self.csv_tag_ctrl
-        # verificato csvtaga=self.csv_tag_ctrl
-        if csv_tag != self.csv_tag_ctrl:
-            print(csv_tag)
-            print(self.csv_tag_ctrl)
-            print(pp(x_data))
-            set_trace()
-        row_data['csv_tag']=self.csv_tag_ctrl
-        self.x_data_dict[csv_tag] = x_data
-        return row_data
-
+        return js
 
     def build_txt_data(self, nd):
         """ crea un json contenente
         x_data (estratto da xml)
-        c_data (estratto da tag.csv)
         t_data (empty per la furua elaborazione)
         Args:
             nd : nod xml
-
         Returns:
             json: json=x_data + c_data + t_data
         """        
         x_data = self.get_node_data(nd)
-        # c_data corrisponde a row_data
-        c_data = self. get_data_row_text_csv(x_data)
-        # ERRORi nella gestione del files csv dei tag html
-        if self.csv_tag_ctrl.find('_x') > -1:
-            self.logerr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}")
-            self.logerr.log(f"file: {self.xml_path}")
-            self.logerr.log("xml:", pp(x_data))
-            self.logerr.log("csv:", self.csv_tag_ctrl)
-            self.logerr.log(os.linesep)
-            inp.inp("!")
-            set_trace()
-        #############################################
         txt_data = {
             'id': x_data.get('id',0),
             'is_parent':x_data.get('is_parent',False),
@@ -223,16 +160,6 @@ class Xml2Txt:
             'text': x_data.get('text',''),
             'tail': x_data.get('tail',''),
             'val': x_data.get('val',''),
-
-            #'c_xml_tag': c_data.get('xml_tag',''),
-            # 'c_tag': c_data.get('tag',''),
-            'c_csv_tag': c_data.get('csv_tag',''),
-            'c_keys':c_data.get('keys',[]),
-            'c_attrs':c_data.get('',{}),
-            'c_text': c_data.get('text',''),
-            'c_params': c_data.get('params',''),
-            'c_parent': c_data.get('parent',''),
-
             't_i':0,
             't_type':'',
             't_up':False,
@@ -243,38 +170,13 @@ class Xml2Txt:
             't_flag':False
             }
         return txt_data
-            
-    def prn_data_lst(self):
-        pd.set_log_liv(1)
-        self.log.log('===============').prn()
-        for d in self.txt_builder.data_lst:
-            self.log.log('').prn()
-            pd.prn_data(d,1)
-            inp.inp('!')
-
-    def read_conf(self, json_path):
-        try:
-            self.txt_cfg = read_json(json_path)
-            csv_path = self.txt_cfg.get("txt_tag_file", None)
-            self.log.log(f"csv_path:{csv_path}")
-            if csv_path is None:
-                raise Exception("ERROR txt.csv is null.")
-            # type : d:txt d:syn i:txt i:syn
-            self.txt_tag_cfg = read_text_tag(csv_path, "i:txt")
-            #logconf.log(pp(self.html_tag_cfg).replace("'", '"')).prn(0)
-        except Exception as e:
-            self.logerr.log("ERROR: read_conf())")
-            self.logerr.log(e)
-            sys.exit(str(e))
     
     def write_txt(self,
                   xml_path='',
                   txt_path='',
-                  json_path='',
                   write_append = 'w',
                   debug_liv = '0'):
         try:
-            debug_liv=1
             inp.set_liv(debug_liv)
             self.xml_path=xml_path
             self.txt_path=txt_path
@@ -287,8 +189,7 @@ class Xml2Txt:
             except Exception as e:
                 self.logerr.log("ERROR teixml2txt.py write_txt() parse_xml")
                 self.logerr.log(e)
-                sys.exit(1)
-            self.read_conf(json_path)
+                sys.exit(str(e))
             self.txt_builder=TxtBuilder()
             ########################
             for nd in xml_root.iter():
@@ -296,13 +197,12 @@ class Xml2Txt:
                 self.txt_builder.add(txt_data)
             ########################
             self.txt_builder.elab()           
-            #self.prn_data_lst()
             txt=self.txt_builder.txt
-            #print(txt)
             fu.make_dir_of_file(self.txt_path)
             with open(self.txt_path, write_append) as f:
                 f.write(txt)
             fu.chmod(self.txt_path)
+
         except Exception as e:
             self.logerr.log("ERROR teixml2txt.py write_html()")
             self.logerr.log(e)
@@ -314,8 +214,8 @@ class Xml2Txt:
             sys.exit(1)
         return self.txt_path
 
-def do_mauin(xml, txt, conf, wa = 'w', deb = False):
-    Xml2Txt().write_txt(xml, txt, conf, wa, deb)
+def do_mauin(xml, txt, wa = 'w', deb = False):
+    Xml2Txt().write_txt(xml, txt, wa, deb)
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
@@ -335,11 +235,6 @@ if __name__ == "__main__":
                         metavar = "",
                         default = "w",
                         help = "[-wa w/a (w)rite a)ppend) default w")
-    parser.add_argument('-c',
-                        dest = "cfg",
-                        required = True,
-                        metavar = "",
-                        help = "-c <file_conf.json")
     parser.add_argument('-i',
                         dest = "xml",
                         required = True,
@@ -351,4 +246,4 @@ if __name__ == "__main__":
                         metavar = "",
                         help = "-o <file_out.txt>")
     args=parser.parse_args()
-    do_mauin(args.xml, args.txt, args.cfg, args.wa, args.deb)
+    do_mauin(args.xml, args.txt, args.wa, args.deb)

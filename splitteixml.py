@@ -11,8 +11,8 @@ from teixml2lib.xml_const import *
 import re
 
 
-__date__ = "15-01-2021"
-__version__ = "0.2.0"
+__date__ = "20-04-2021"
+__version__ = "0.2.1"
 __author__ = "Marta Materni"
 
 
@@ -158,11 +158,17 @@ class XmlSplitEps:
         return s
 
     def node_tag(self, nd):
-        tag = nd.tag if type(nd.tag) is str else "XXX_no_tag"
-        pid = tag.find('}')
-        if pid > 0:
-            tag = tag[pid + 1:]
-        return tag.strip()
+        try:
+            tag = nd.tag
+            tag = tag if type(nd.tag) is str else "XXX"
+            pid = tag.find('}')
+            if pid > 0:
+                tag = tag[pid + 1:]
+            return tag.strip()
+        except Exception as e:
+            logerr.log("ERROR in xml")
+            logerr.log(str(e))
+            return "XXX"
 
     def prn_node(self, nd):
         # TODO stampa nodo nel log

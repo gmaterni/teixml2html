@@ -47,7 +47,6 @@ END = 't_end'
 MONOLOG = 'monologue'
 DIRECT = 'directspeech'
 
-
 class TxtBuilder:
 
     def __init__(self):
@@ -92,7 +91,7 @@ class TxtBuilder:
             x_to = x_items.get('to', None)
             x_type = x_items.get('type', None)
             if x_from is None or x_to is None or x_type is None:
-                self.logerr.log("fill_span_list ERROR.").prn()
+                self.logerr.log("fill_from_to_list ERROR.").prn()
                 self.logerr.log(pp(data_span)).prn()
                 sys.exit(1)
             item = {

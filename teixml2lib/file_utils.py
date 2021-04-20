@@ -5,6 +5,8 @@ import os
 
 def make_dir_of_file(path):
     dirname=os.path.dirname(path)
+    if dirname.strip() =='':
+        return
     make_dir(dirname)
 
 def make_dir(dirname):

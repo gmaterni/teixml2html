@@ -18,8 +18,8 @@ from teixml2lib.uainput import Inp
 from ualog import Log
 from teixml2lib import file_utils as fu
 
-__date__ = "18-04-2021"
-__version__ = "0.4.2"
+__date__ = "20-04-2021"
+__version__ = "0.4.3"
 __author__ = "Marta Materni"
 
 
@@ -98,14 +98,18 @@ class Xml2Html:
         return js
 
     def node_tag(self, nd):
-        tag = nd.tag
-        tag = tag if type(nd.tag) is str else "XXX"
-        p = tag.rfind('}')
-        if p > 1:
-            logerr.log("ERROR in  xml")
-            logerr.log(nd.tag)
-            sys.exit(1)
-        return tag.strip()
+        try:
+            tag = nd.tag
+            tag = tag if type(nd.tag) is str else "XXX"
+            pid = tag.find('}')
+            if pid > 0:
+                tag = tag[pid + 1:]
+            return tag.strip()
+        except Exception as e:
+            logerr.log("ERROR in xml")
+            logerr.log(str(e))
+            return "XXX"
+
 
     def node_id(self, nd):
         s = ''
