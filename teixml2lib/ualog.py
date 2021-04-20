@@ -25,10 +25,10 @@ __author__ = "Marta Materni"
 
 class Log(object):
 
-    def __init__(self, aappend_write='w'):
+    def __init__(self, append_write='w'):
         self.path_log = ""
         self.dirname=""
-        self.aw = aappend_write
+        self.aw = append_write.lower()
         self.out_liv = 0
         self.used = False
         self.msg = ''

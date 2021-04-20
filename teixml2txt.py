@@ -14,32 +14,28 @@ from teixml2lib.readtxtconf import read_text_tag
 from teixml2lib.readjson import read_json
 from teixml2lib.uainput import Inp
 from teixml2lib.ualog import Log
+import teixml2lib.prndata as pd
 from teixml2lib import file_utils as fu
 from pdb import set_trace
 
-__date__ = "17-04-2021"
-__version__ = "0.1.1"
+__date__ = "20-04-2021"
+__version__ = "0.2.0"
 __author__ = "Marta Materni"
 
 
-def pp(data):
-    if data is None:
-        return ""
+def pp(data,w=40):
     s = pprint.pformat(data, indent=2, width=40)
     return s
 
-
-log = Log("w")
-logerr = Log("a")
-
 inp = Inp()
-
 
 class Xml2Txt:
 
     def __init__(self):
-        log.open("log/teixml2txt.log", 0)
-        logerr.open("log/teixml2txt.ERR.log", 1)
+        self.log=Log("w")
+        self.log.open("log/teixml2txt.log", 0)
+        self.logerr = Log("a")
+        self.logerr.open("log/teixml2txt.ERR.log", 1)
         self.xml_path = ''
         self.txt_path = None
         self.txt_cfg = None
@@ -79,8 +75,8 @@ class Xml2Txt:
         tag = tag if type(nd.tag) is str else "XXX"
         p = tag.rfind('}')
         if p > 1:
-            logerr.log("ERROR in  xml")
-            logerr.log(nd.tag)
+            self.logerr.log("ERROR in  xml")
+            self.logerr.log(nd.tag)
             sys.exit(1)
         return tag.strip()
 
@@ -161,7 +157,7 @@ class Xml2Txt:
         if row_data is None:
             row_data = self.txt_tag_cfg.get('x', {})
             csv_tag = xml_tag
-            self.csv_tag_ctrl = f'_x_{csv_tag}'
+            self.csv_tag_ctrl = f'_x_{csv_tag}'            
         else:
             tag = row_data.get('tag', f"_x_{xml_tag}")
             p = tag.find('+')
@@ -180,20 +176,41 @@ class Xml2Txt:
             else:
                 csv_tag = xml_tag
                 self.csv_tag_ctrl = csv_tag
+        # TODO aggiunta a row_data csv_data  utilizzata come key
+        # nella ricerca del json risultante dalla lettura di csc
+        # può sosituire self.csv_tag_ctrl
+        # verificato csvtaga=self.csv_tag_ctrl
+        if csv_tag != self.csv_tag_ctrl:
+            print(csv_tag)
+            print(self.csv_tag_ctrl)
+            print(pp(x_data))
+            set_trace()
+        row_data['csv_tag']=self.csv_tag_ctrl
         self.x_data_dict[csv_tag] = x_data
         return row_data
 
 
     def build_txt_data(self, nd):
+        """ crea un json contenente
+        x_data (estratto da xml)
+        c_data (estratto da tag.csv)
+        t_data (empty per la furua elaborazione)
+        Args:
+            nd : nod xml
+
+        Returns:
+            json: json=x_data + c_data + t_data
+        """        
         x_data = self.get_node_data(nd)
+        # c_data corrisponde a row_data
         c_data = self. get_data_row_text_csv(x_data)
         # ERRORi nella gestione del files csv dei tag html
         if self.csv_tag_ctrl.find('_x') > -1:
-            logerr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}")
-            logerr.log(f"file: {self.xml_path}")
-            logerr.log("xml:", pp(x_data))
-            logerr.log("csv:", self.csv_tag_ctrl)
-            logerr.log(os.linesep)
+            self.logerr.log(f"ERROR in csv tag:{self.csv_tag_ctrl}")
+            self.logerr.log(f"file: {self.xml_path}")
+            self.logerr.log("xml:", pp(x_data))
+            self.logerr.log("csv:", self.csv_tag_ctrl)
+            self.logerr.log(os.linesep)
             inp.inp("!")
             set_trace()
         #############################################
@@ -209,6 +226,7 @@ class Xml2Txt:
 
             #'c_xml_tag': c_data.get('xml_tag',''),
             # 'c_tag': c_data.get('tag',''),
+            'c_csv_tag': c_data.get('csv_tag',''),
             'c_keys':c_data.get('keys',[]),
             'c_attrs':c_data.get('',{}),
             'c_text': c_data.get('text',''),
@@ -225,110 +243,29 @@ class Xml2Txt:
             't_flag':False
             }
         return txt_data
-
-    def prn_data(self,d,v=1):
-        txt_id = d['id']
-        is_parent = d['is_parent']
-        txt_items = d['items']
-        txt_liv = d['liv']
-        txt_tag = d['tag']
-        txt_text = d['text']
-        txt_tail = d['tail']
-        
-        #c_xml_tag = txt_data['c_xml_tag']
-        # c_tag = txt_data['c_div']
-        c_keys = d['c_keys']
-        c_attrs = d['c_attrs']
-        c_text = d['c_text']
-        c_params = d['c_params']
-        c_parent = d['c_parent']
-
-        t_i = d['t_i']
-        t_type = d['t_type']
-        t_up = d['t_up']
-        t_start = d['t_start']
-        t_end = d['t_end']
-        t_sp = d['t_sp']
-        t_ln = d['t_ln']
-        t_flag = d['t_flag']
-        if v==0 :
-            log.log(">> xml_data").prn()
-            log.log(f"id: {txt_id}").prn()
-            log.log(f"is_parent: {is_parent}").prn()
-            log.log(f"liv: {txt_liv     }").prn()
-            log.log(f"txt_items: {txt_items}").prn()
-            log.log(f"txt_tag: {txt_tag}").prn()
-            log.log(f"txt_text: {txt_text}").prn()
-            log.log(f"txt_tail: {txt_tail}").prn()
-
-            log.log(">> csv_data").prn()
-            #log.log(f"c_xml_tag: {c_xml_tag}").prn()
-            # log.log(f"c_tag: {c_tag}").prn()
-            log.log(f"c_keys: {c_keys}").prn()
-            log.log(f"c_attrs: {c_attrs}").prn()
-            log.log(f"c_text: {c_text}").prn()
-            log.log(f"c_params: {c_params}").prn()
-            log.log(f"c_paren: {c_parent}").prn()
-
-            log.log(">> t_data").prn()
-            log.log(f"t_i: {t_i}").prn()
-            log.log(f"t_type: {t_type}").prn()
-            log.log(f"t_up: {t_up}").prn()
-            log.log(f"t_start: {t_start}").prn()
-            log.log(f"t_end: {t_end}").prn()
-            log.log(f"t_sp: {t_sp}").prn()
-            log.log(f"t_ln: {t_ln}").prn()
-            log.log(f"t_flag: {t_flag}").prn()
-        elif v==1:
-            log.log(">> xml_data").prn()
-            log.log(f"id: {txt_id}").prn()
-            log.log(f"is_parent: {is_parent}").prn()
-            log.log(f"liv: {txt_liv     }").prn()
-            log.log(f"txt_items: {txt_items}").prn()
-            log.log(f"txt_tag: {txt_tag}").prn()
-            log.log(f"txt_text: {txt_text}").prn()
-            log.log(f"txt_tail: {txt_tail}").prn()
-
-            log.log(">> csv_data").prn()
-            #log.log(f"c_keys: {c_keys}").prn()
-            log.log(f"c_attrs: {c_attrs}").prn()
-            log.log(f"c_text: {c_text}").prn()
-            log.log(f"c_params: {c_params}").prn()
-            #log.log(f"c_paren: {c_parent}").prn()
-
-            log.log(">> t_data").prn()
-            log.log(f"t_i: {t_i}").prn()
-            #log.log(f"t_type: {t_type}").prn()
-            log.log(f"t_up: {t_up}").prn()
-            #log.log(f"t_start: {t_start}").prn()
-            #log.log(f"t_end: {t_end}").prn()
-            log.log(f"t_sp: {t_sp}").prn()
-            #log.log(f"t_ln: {t_ln}").prn()
-            log.log(f"t_flag: {t_flag}").prn()
             
     def prn_data_lst(self):
-        log.log('===============').prn()
-        for d in self.txt_builder._data_lst:
-            log.log('').prn()
-            self.prn_data((d))
+        pd.set_log_liv(1)
+        self.log.log('===============').prn()
+        for d in self.txt_builder.data_lst:
+            self.log.log('').prn()
+            pd.prn_data(d,1)
             inp.inp('!')
-
 
     def read_conf(self, json_path):
         try:
             self.txt_cfg = read_json(json_path)
             csv_path = self.txt_cfg.get("txt_tag_file", None)
-            log.log(f"csv_path:{csv_path}")
+            self.log.log(f"csv_path:{csv_path}")
             if csv_path is None:
                 raise Exception("ERROR txt.csv is null.")
             # type : d:txt d:syn i:txt i:syn
             self.txt_tag_cfg = read_text_tag(csv_path, "i:txt")
             #logconf.log(pp(self.html_tag_cfg).replace("'", '"')).prn(0)
-
         except Exception as e:
-            logerr.log("ERROR: read_conf())")
-            logerr.log(e)
-            sys.exit(1)
+            self.logerr.log("ERROR: read_conf())")
+            self.logerr.log(e)
+            sys.exit(str(e))
     
     def write_txt(self,
                   xml_path='',
@@ -339,7 +276,6 @@ class Xml2Txt:
         try:
             debug_liv=1
             inp.set_liv(debug_liv)
-
             self.xml_path=xml_path
             self.txt_path=txt_path
             if write_append not in ['w', 'a']:
@@ -349,20 +285,18 @@ class Xml2Txt:
                 parser = etree.XMLParser(ns_clean=True)
                 xml_root=etree.parse(self.xml_path,parser)
             except Exception as e:
-                logerr.log("ERROR teixml2txt.py write_txt() parse_xml")
-                logerr.log(e)
+                self.logerr.log("ERROR teixml2txt.py write_txt() parse_xml")
+                self.logerr.log(e)
                 sys.exit(1)
             self.read_conf(json_path)
             self.txt_builder=TxtBuilder()
             ########################
             for nd in xml_root.iter():
                 txt_data=self.build_txt_data(nd)
-                #self.prn_txt_data(txt_data)
-                #inp.inp('!')
                 self.txt_builder.add(txt_data)
             ########################
             self.txt_builder.elab()           
-            self.prn_data_lst()
+            #self.prn_data_lst()
             txt=self.txt_builder.txt
             #print(txt)
             fu.make_dir_of_file(self.txt_path)
@@ -370,13 +304,13 @@ class Xml2Txt:
                 f.write(txt)
             fu.chmod(self.txt_path)
         except Exception as e:
-            logerr.log("ERROR teixml2txt.py write_html()")
-            logerr.log(e)
+            self.logerr.log("ERROR teixml2txt.py write_html()")
+            self.logerr.log(e)
             ou=StringIO()
             traceback.print_exc(file = ou)
             st=ou.getvalue()
             ou.close()
-            logerr.log(st)
+            self.logerr.log(st)
             sys.exit(1)
         return self.txt_path
 

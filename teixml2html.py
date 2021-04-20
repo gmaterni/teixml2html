@@ -18,14 +18,12 @@ from teixml2lib.uainput import Inp
 from ualog import Log
 from teixml2lib import file_utils as fu
 
-__date__ = "01-03-2021"
-__version__ = "0.4.1"
+__date__ = "18-04-2021"
+__version__ = "0.4.2"
 __author__ = "Marta Materni"
 
 
-def pp(data):
-    if data is None:
-        return ""
+def pp(data,w=40):
     s = pprint.pformat(data, indent=2, width=120)
     return s+os.linesep
 
@@ -222,14 +220,14 @@ class Xml2Html:
 
     def set_text_parans(self, text, pars):
         """settta pars su text
-        vengono coniserati tutti gli elemnti di text dell
+        vengono consiserati tutti gli elemnti di text dell
         pattern [%][w.?!+][%] e sono rimpiazzati utilizando il dict pars
         NB.
         quelli per i quali non vi sono paramteri corrsipondenti
         SONO lasciati nella loro forma original
         Args:
             text (str): testo con parametri da settare
-            pars (dict): parametri per settare textù
+            pars (dict): parametri per settare text
         Returns:
             str: testo formatato
         """
@@ -285,7 +283,16 @@ class Xml2Html:
         logdeb.log("")
         return text
 
+    # TODO  controllare se non può essere semplifictao
     def replace_text(self, text, text_par):
+        """sostiyuisce in text i parametyri %par%
+        con i corrisponednti parametri definiti in csv
+        il simbolo @ serve ad indicare una diversa riga
+        da cui predere iil parametro.
+        tag@parm indica di prendere dalla riga corrispondente
+        a tag il parametro param
+        """        
+        text0=text
         logdeb.log('**  replace_text')
         logdeb.log(text)
         ptrn = r"%[\w/@,;:.-]*text%"
@@ -315,6 +322,12 @@ class Xml2Html:
             logcsverr.log("last w: ", tag_w_last)
             logcsverr.log(os.linesep)
             inp.inp("!")
+        # if ok:
+        #     print(f"text_orig: {text0}")
+        #     print(f"text_par:{text_par}")
+        #     print(f"text     :{text}")
+        #     set_trace()
+
         logdeb.log(text)
         logdeb.log(ok)
         logdeb.log("")
@@ -400,6 +413,12 @@ class Xml2Html:
             else:
                 csv_tag = xml_tag
                 self.csv_tag_ctrl = csv_tag
+        # TODO forse bisoggna usrare self.csv_tag_ctrl
+        # nel test non si è mai verificato
+        if self.csv_tag_ctrl != csv_tag:
+            print(csv_tag)
+            print(self.csv_tag_ctrl)
+            print(pp(x_data))
         self.x_data_dict[csv_tag] = x_data
         return row_data
 
@@ -453,6 +472,7 @@ class Xml2Html:
         logdeb.log(f".0 -------- {x_data['tag']}  {x_data['liv']} ---------")
         logdeb.log(str(x_data))
         logdeb.log(str(c_data))
+
         if html_attrs.find('%') > -1:
             logdeb.log(".1 attrs")
             # rimpiazza se esiste %text% con x_data['text']
@@ -462,14 +482,17 @@ class Xml2Html:
             html_attrs = self.set_text_xitems(html_attrs, x_items)
             html_attrs = self.remove_text_parans_null(html_attrs)
             html_attrs = self.class_adjust(html_attrs)
-        #
+        
         # setta c_text itilizzando ext_items :items + parent.items)
         if c_text.find('%') > -1:
             logdeb.log(".2 c_text")
             c_text = self.set_text_parans(c_text, c_params)
             c_text = self.set_text_xitems(c_text, x_items)
 
-            # setta c_text con %text% se esiste elimina x_text
+            # quando in c_data tetx=%%text%% il text di x_data 
+            # sostituisce %text$ . Es:
+            # x_data x_text='c' ==>  in c_data c_text=%c$
+            # se la sostituzione avviene viene posto x_text=''
             logdeb.log(".3 c_text")
             c_text, is_replace = self.replace_text(c_text, x_text)
             if is_replace:
