@@ -19,8 +19,7 @@ setup(
         "splitteixml.py",
         "teixml2html.py",
         "writehtmlfile.py",
-        "writehtml.py",
-        "teixml2txt.py"
+        "writehtml.py"
     ],
     author="Marta Materni",
     author_email="marta.materni@gmail.com",
