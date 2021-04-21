@@ -7,10 +7,14 @@ from setuptools import find_packages
 setup(
     name='teixml2html',
     version="0.2.0",
-    py_modules=['teixml2htmlinfo'],
+    py_modules=['teixml2htmlinfo',
+                 'teixml2html',
+                 'teixml2txt'
+                  ],
     packages=find_packages(),
     scripts=[
         "teiprjhtmlmake.py",
+        "teiprjtxtmake.py",
         "copyxml.py",
         "splitteixml.py",
         "teixml2html.py",
